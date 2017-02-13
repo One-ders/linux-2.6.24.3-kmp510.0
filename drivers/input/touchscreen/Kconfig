@@ -11,6 +11,25 @@ menuconfig INPUT_TOUCHSCREEN
 
 if INPUT_TOUCHSCREEN
 
+
+
+config TOUCHSCREEN_JZ
+	tristate "JZ touchscreen"
+	default y
+	help
+	  Say Y here to enable JZ SAR A/D controller if you use touchscreen
+          on JZ platform.
+
+	  To compile this driver as a module, choose M here, and the
+	  module jz_ts should be called.
+
+config JZ_ADKEY
+	bool "JZ ADKEY"
+	depends on TOUCHSCREEN_JZ
+	help
+          The AD value of the key is get by JZ SAR A/D controller when any ad key
+          is pressed down.
+
 config TOUCHSCREEN_ADS7846
 	tristate "ADS7846/TSC2046 and ADS7843 based touchscreens"
 	depends on SPI_MASTER
@@ -28,6 +47,15 @@ config TOUCHSCREEN_ADS7846
 
 	  To compile this driver as a module, choose M here: the
 	  module will be called ads7846.
+
+config TOUCHSCREEN_AK4183
+	tristate "AK4183 based touchscreen for volans board"
+	depends on SOC_JZ4750L
+	help
+	  Say Y here if you have a touchscreen interface using the
+	  Ak4183 touch screen controller.
+
+	  If unsure, say N (but it's safe to say "Y").
 
 config TOUCHSCREEN_BITSY
 	tristate "Compaq iPAQ H3600 (Bitsy) touchscreen"
