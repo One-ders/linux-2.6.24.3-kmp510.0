@@ -32,6 +32,10 @@
 #endif
 /* Add other platform definition here ... */
 
+#ifdef CONFIG_JZ4750D_KMP510
+#include <asm/mach-jz4750d/board-kmp510.h>
+#endif
+
 
 /*------------------------------------------------------------------
  * Follows are related to platform definitions

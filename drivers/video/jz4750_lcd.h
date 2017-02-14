@@ -117,7 +117,7 @@ struct jz4750lcd_info {
 	#define SPCK		(32*3+26)       /*LCD_SCL*/
 	#define SPDA		(32*3+27)       /*LCD_SDA*/
 	#define LCD_RET 	(32*5+2)       /*LCD_DISP_N use for lcd reset*/
-#elif defined(CONFIG_JZ4750D_CETUS) /* board pavo */
+#elif defined(CONFIG_JZ4750D_CETUS) || defined(CONFIG_JZ4750D_KMP510) /* board pavo */
 	#define SPEN		(32*5+13)       /*LCD_CS*/
 	#define SPCK		(32*5+10)       /*LCD_SCL*/
 	#define SPDA		(32*5+11)       /*LCD_SDA*/
@@ -727,7 +727,11 @@ do { \
 do { \
 	__lcd_special_off();	 \
 } while (0)
-
+#elif defined(CONFIG_JZ4750D_KMP510)
+#define __lcd_display_pin_init() \
+do { \
+        __gpio_as_output((2*32)+23);     \
+} while (0)
 #elif defined(CONFIG_JZ4750D_CETUS)/* board apus */
 #define __lcd_display_pin_init() \
 do { \

@@ -13,6 +13,7 @@ obj-$(CONFIG_PROC_FS)		+= proc.o
 
 obj-$(CONFIG_JZ4750D_FUWA1)	+= board-fuwa1.o
 obj-$(CONFIG_JZ4750D_CETUS)	+= board-cetus.o
+obj-$(CONFIG_JZ4750D_KMP510)	+= board-kmp510.o
 
 # PM support
 

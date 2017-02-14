@@ -219,6 +219,95 @@ static int partition_reserved_badblocks[] = {
 };
 #endif				/* CONFIG_JZ4750_APUS */
 
+#if defined(CONFIG_JZ4750D_KMP510)
+struct mtd_partition partition_info[] = {
+        {name:"NAND BOOT partition",
+         offset:0 * 0x100000,
+         size:4 * 0x100000,
+         cpu_mode: 0,
+         use_planes: 0,
+         mtdblock_jz_invalid: 1},
+        {name:"NAND KERNEL partition",
+         offset:4 * 0x100000,
+         size:4 * 0x100000,
+         cpu_mode: 0,
+         use_planes: 0,
+         mtdblock_jz_invalid: 1},
+        {name:"Failsafe KERNEL partition",
+         offset:8 * 0x100000,
+         size:4 * 0x100000,
+         cpu_mode: 0,
+         use_planes: 0,
+         mtdblock_jz_invalid: 1},
+        {name:"System DATA partition",
+         offset:12 * 0x100000,
+         size:4 * 0x100000,
+         cpu_mode: 0,
+         use_planes: 0,
+         mtdblock_jz_invalid: 1},
+        {name:"ALT FS partition",
+         offset:16 * 0x100000,
+         size:128 * 0x100000,
+         cpu_mode: 0,
+         use_planes: 0,
+         mtdblock_jz_invalid: 1},
+        {name:"NAND ROOTFS partition",
+         offset:144 * 0x100000,
+         size:256 * 0x100000,
+         cpu_mode: 0,
+         use_planes: 0,
+         mtdblock_jz_invalid: 1},
+        {name:"NAND DATA1 partition",
+         offset:400 * 0x100000,
+         size:12 * 0x100000,
+         cpu_mode: 0,
+         use_planes: 0,
+         mtdblock_jz_invalid: 1},
+        {name:"NAND DATA2 partition",
+         offset:412 * 0x100000,
+         size:32 * 0x100000,
+         cpu_mode: 0,
+         use_planes: 0,
+         mtdblock_jz_invalid: 1},
+        {name:"NAND DATA2 partition",
+         offset:444 * 0x100000,
+         size:32 * 0x100000,
+         cpu_mode: 0,
+         use_planes: 0,
+         mtdblock_jz_invalid: 1},
+        {name:"NAND VFAT partition",
+         offset:476 * 0x100000,
+         size:36 * 0x100000,
+         cpu_mode: 0,
+         use_planes: 0,
+         mtdblock_jz_invalid: 0},
+};
+
+/* Define max reserved bad blocks for each partition.
+ * This is used by the mtdblock-jz.c NAND FTL driver only.
+ *
+ * The NAND FTL driver reserves some good blocks which can't be
+ * seen by the upper layer. When the bad block number of a partition
+ * exceeds the max reserved blocks, then there is no more reserved
+ * good blocks to be used by the NAND FTL driver when another bad
+ * block generated.
+ */
+static int partition_reserved_badblocks[] = {
+        2,                      /* reserved blocks of mtd0 */
+        2,                      /* reserved blocks of mtd1 */
+        2,                      /* reserved blocks of mtd2 */
+        2,                      /* reserved blocks of mtd3 */
+        20,                     /* reserved blocks of mtd4 */
+        20,                     /* reserved blocks of mtd5 */
+        10,                     /* reserved blocks of mtd6 */
+        10,                     /* reserved blocks of mtd7 */
+        10,                     /* reserved blocks of mtd8 */
+        10                      /* reserved blocks of mtd9 */
+};
+#endif                          /* CONFIG_JZ4750D_KMP510 */
+
+
+
 #if defined(CONFIG_JZ4750L_VOLANS)
 struct mtd_partition partition_info[] = {
 	{name:"NAND BOOT partition",
