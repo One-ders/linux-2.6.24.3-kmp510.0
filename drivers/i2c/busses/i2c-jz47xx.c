@@ -47,6 +47,7 @@ struct jz_i2c {
 	struct clk		*clk;
 };
 
+#ifndef CONFIG_COLMAN_USE_SOFT_I2C
 /*
  * I2C bus protocol basic routines
  */
@@ -263,6 +264,195 @@ static int i2c_jz_xfer(struct i2c_adapter *adap, struct i2c_msg *pmsg, int num)
 	return i;
 }
 
+#else
+static void i2c_soft_delay(void) {
+        udelay(4);
+}
+
+static int i2c_soft_scl(int i) {
+
+        if (i&0xff) {
+                unsigned int sclpin;
+                int retry=100;
+                REG_GPIO_PXDIRC(4)=0x2000;
+again:
+                udelay(1);
+                sclpin=REG_GPIO_PXPIN(4);
+                if (!(sclpin&0x2000)) {
+                        retry--;
+                        if (retry<0) goto err;
+                        goto again;
+                }
+                return 0;
+        } else {
+                REG_GPIO_PXDATC(4)=0x2000;
+                REG_GPIO_PXDIRS(4)=0x2000;
+                return 0;
+        }
+err:
+        printk("Colman: I2C SCL always low\n");
+        return -145;
+}
+
+static int i2c_soft_get_sda(void) {
+        unsigned int sdapin=REG_GPIO_PXPIN(4);
+        return ((sdapin>>0xc)&1);
+}
+
+static void i2c_soft_sda(unsigned int i) {
+#if 0
+        unsigned int sdapin=i&0xff;
+        if (sdapin) {
+#endif
+        if (i) {
+                REG_GPIO_PXDIRC(4)=0x1000;
+        } else {
+                REG_GPIO_PXDATC(4)=0x1000;
+                REG_GPIO_PXDIRS(4)=0x1000;
+        }
+        return;
+}
+
+static void i2c_soft_send_start(void) {
+        i2c_soft_sda(1);
+        i2c_soft_delay();
+        i2c_soft_scl(1);
+        i2c_soft_delay();
+        i2c_soft_sda(0);
+        i2c_soft_delay();
+        i2c_soft_scl(0);
+}
+
+static int i2c_put_data(unsigned int data) {
+        int i;
+        int rc;
+        for(i=0;i<8;i++) {
+                i2c_soft_delay();
+                i2c_soft_sda(data&0x80);
+                i2c_soft_delay();
+                rc=i2c_soft_scl(1);
+                if (rc<0) {
+                        goto err;
+                }
+                i2c_soft_delay();
+                i2c_soft_scl(0);
+                data=data<<1;
+        }
+        i2c_soft_sda(1);
+        i2c_soft_delay();
+        rc=i2c_soft_scl(1);
+        if(rc<0) {
+                goto err;
+        }
+        i2c_soft_delay();
+        rc=i2c_soft_get_sda();
+        i2c_soft_scl(0);
+        if (rc) goto err;
+        return 0;
+
+err:
+        printk("i2c_put_data: err\n");
+        return -145;
+
+}
+
+static int i2c_jz_xfer(struct i2c_adapter *adap, struct i2c_msg *pmsg, int num){
+        int ret, i;
+        for (i = 0; i < num; i++) {
+                int len=pmsg->len;
+                if (pmsg->flags & I2C_M_RD) {
+                        int l;
+                        i2c_soft_send_start();
+                        if (i2c_put_data((pmsg->addr<<1)|1)<0)
+                                goto rd_put_data_err;
+                        for(l=0;l<pmsg->len;l++) {
+                                unsigned char b0=0;
+                                int b;
+                                for(b=0;b<8;b++) {
+                                        i2c_soft_delay();
+                                        ret=i2c_soft_scl(1);
+                                        if (ret<0) goto scl_err;
+                                        i2c_soft_delay();
+                                        b0=(b0<<1);
+                                        ret=i2c_soft_get_sda();
+                                        if (ret) b0|=1;
+                                        i2c_soft_scl(0);
+                                }
+
+#if 0
+                                if (((num-i)==1)&&((pmsg->len-l)==1)) {
+#endif
+                                if ((pmsg->len-l)==1) {
+                                        i2c_soft_sda(1);
+                                } else {
+                                        i2c_soft_sda(0);
+                                }
+                                i2c_soft_delay();
+                                ret=i2c_soft_scl(1);
+                                if (ret<0) goto scl_err;
+                                i2c_soft_delay();
+                                i2c_soft_scl(0);
+                                i2c_soft_delay();
+                                i2c_soft_sda(1);
+                                pmsg->buf[l]=b0;
+                        }
+                } else {
+                        int l;
+                        i2c_soft_send_start();
+                        if (i2c_put_data(pmsg->addr<<1)<0) {
+                                goto wr_put_data_err;
+                        }
+                        for(l=0;l<pmsg->len;l++) {
+                                ret=i2c_put_data(pmsg->buf[l]);
+                                if (ret<0) {
+                                        goto wr_put_data_err;
+                                }
+                        }
+
+                }
+
+                if (len<0) {
+                        ret=len;
+                        printk("len<0: returning early\n");
+                        goto out;
+                }
+                pmsg++;
+        }
+
+        ret=i;
+
+out:
+        i2c_soft_scl(0);
+        i2c_soft_delay();
+        i2c_soft_sda(0);
+        i2c_soft_delay();
+        i2c_soft_scl(1);
+        i2c_soft_delay();
+        i2c_soft_sda(1);
+        return ret;
+
+
+wr_put_data_err:
+        printk("Write I2C device 0x%2x failed.\n", 2);
+        goto out2;
+
+rd_put_data_err:
+scl_err:
+        printk("Read I2C device 0x%2x failed.\n", 111);
+out2:
+        ret=-19;
+        i2c_soft_scl(0);
+        i2c_soft_delay();
+        i2c_soft_sda(0);
+        i2c_soft_delay();
+        i2c_soft_scl(1);
+        i2c_soft_delay();
+        i2c_soft_sda(1);
+        return ret;
+}
+
+#endif
+
 static u32 i2c_jz_functionality(struct i2c_adapter *adap)
 {
 	return I2C_FUNC_I2C | I2C_FUNC_SMBUS_EMUL;
@@ -279,9 +469,15 @@ static int i2c_jz_probe(struct platform_device *dev)
 	struct jz_i2c *i2c;
 	struct i2c_jz_platform_data *plat = dev->dev.platform_data;
 	int ret;
+
+#ifdef CONFIG_COLMAN_USE_SOFT_I2C
+        __gpio_as_input((4*32)+12);
+        __gpio_as_input((4*32)+13);
+#else
 	__gpio_as_i2c(); // open i2c 20091027
 	__i2c_set_clk(jz_clocks.extalclk, 10000); /* default 10 KHz */
 	__i2c_enable();
+#endif
 
 	i2c = kzalloc(sizeof(struct jz_i2c), GFP_KERNEL);
 	if (!i2c) {
@@ -317,7 +513,12 @@ static int i2c_jz_probe(struct platform_device *dev)
 	}
 
 	platform_set_drvdata(dev, i2c);
+#ifdef CONFIG_COLMAN_USE_SOFT_I2C
+        dev_info(&dev->dev, "Soft i2c bus driver.\n");
+#else
 	dev_info(&dev->dev, "JZ47xx i2c bus driver.\n");
+#endif
+
 	return 0;
 eadapt:
 	__i2c_disable();

@@ -378,12 +378,15 @@ config FB_JZ4750_SLCD
 	bool
 	depends on FB_JZ4750_LCD
 	default n
+
 choice
 	depends on FB_JZ4750_LCD
 	prompt "JZ4750 LCD Panels Support"
+	default JZ4750D_KMP510_LCD if JZ4750D_KMP510
 	default JZ4750_LCD_SAMSUNG_LTP400WQF02
 	---help---
 	   Please select the lcd panel in you board
+
 
 config JZ4750_LCD_SAMSUNG_LTP400WQF01
 	bool "SAMSUNG LTP400WQF01 TFT panel (480x272)(16bits)"
@@ -416,9 +419,13 @@ config JZ4750_SLCD_KGM701A3_TFT_SPFD5420A
 	bool "KGM701A3_TFT_SPFD5420A (400x240) (Smart LCD 18bit)"
 	select FB_JZ4750_SLCD
 
+config JZ4750D_KMP510_LCD
+	bool "KMP510 internet radio"
+
 config JZ4750D_VGA_DISPLAY
 	depends on SOC_JZ4750D
 	bool "Jz4750D VGA Display"
+
 endchoice
 
 config FB_CIRRUS

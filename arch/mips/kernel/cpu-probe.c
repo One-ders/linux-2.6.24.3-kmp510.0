@@ -160,7 +160,7 @@ static inline void check_wait(void)
 	case CPU_25KF:
 	case CPU_PR4450:
 	case CPU_BCM3302:
-	case CPU_JZRISC:
+//	case CPU_JZRISC:
 		cpu_wait = r4k_wait;
 		break;
 

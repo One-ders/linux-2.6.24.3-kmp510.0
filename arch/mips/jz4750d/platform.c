@@ -125,12 +125,42 @@ static struct platform_device jz_mmc_device = {
 	.resource       = jz_mmc_resources,
 };
 
+/** I2C controller **/
+static struct resource jz_i2c_resources[] = {
+        [0] = {
+                .start          = CPHYSADDR(I2C_BASE),
+                .end            = CPHYSADDR(I2C_BASE) + 0x10000 - 1,
+                .flags          = IORESOURCE_MEM,
+        }
+#if 0
+        [1] = {
+                .start          = IRQ_I2C,
+                .end            = IRQ_I2C,
+                .flags          = IORESOURCE_IRQ,
+        }
+#endif
+};
+
+static u64 jz_i2c_dmamask =  ~(u32)0;
+
+static struct platform_device jz_i2c_device = {
+        .name = "jz_i2c",
+        .id = 0,
+        .dev = {
+                .dma_mask               = &jz_i2c_dmamask,
+                .coherent_dma_mask      = 0xffffffff,
+        },
+        .num_resources  = ARRAY_SIZE(jz_i2c_resources),
+        .resource       = jz_i2c_resources,
+};
+
 /* All */
 static struct platform_device *jz_platform_devices[] __initdata = {
 //	&jz_usb_ohci_device,
 	&jz_lcd_device,
 	&jz_usb_gdt_device,
 	&jz_mmc_device,
+	&jz_i2c_device,
 };
 
 static int __init jz_platform_init(void)

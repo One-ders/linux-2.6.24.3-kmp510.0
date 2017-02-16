@@ -135,6 +135,13 @@ static inline void __lcd_pwm_start(void)
 	return;
 }
 
+#define __lcd_set_backlight_max()	\
+do {					\
+	__gpio_as_output(GPIO_LCD_PWM);	\
+	__gpio_set_pin(GPIO_LCD_PWM);	\
+} while (0)
+
+
 static inline void __lcd_pwm_stop(void)
 {
 	__tcu_stop_counter(LCD_PWM_CHN);

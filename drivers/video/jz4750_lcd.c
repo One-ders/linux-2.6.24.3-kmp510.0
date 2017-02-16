@@ -336,6 +336,33 @@ struct jz4750lcd_info jz4750_lcd_panel = {
 		 .fg0 = {32, 0, 0, 640, 480}, /* bpp, x, y, w, h */
 		 .fg1 = {32, 0, 0, 640, 480}, /* bpp, x, y, w, h */
 	 },
+#elif defined(CONFIG_JZ4750D_KMP510_LCD)
+        .panel = {
+                .cfg =  LCD_CFG_MODE_TFT_18BIT |
+                        LCD_CFG_VSP | LCD_CFG_DEP |
+                        LCD_CFG_PCP | LCD_CFG_HSP |
+                        LCD_CFG_RECOVER | LCD_CFG_NEWDES,
+                .slcd_cfg = 0,
+                .ctrl = LCD_CTRL_BPP_18_24 |
+                        LCD_CTRL_OFUM |
+                        LCD_CTRL_BST_8,
+                320, 240, 60, 2, 1, 78, 6, 20, 1
+        },
+        .osd = {
+                 .osd_cfg = LCD_OSDC_OSDEN | /* Use OSD mode */
+                                LCD_OSDC_F0EN, /* enable Foreground0 */
+                 .osd_ctrl = 5,         /* disable ipu,  */
+                 .rgb_ctrl = 0,
+                 .bgcolor = 0x000000, /* set background color Black */
+                 .colorkey0 = 0, /* disable colorkey */
+                 .colorkey1 = 0, /* disable colorkey */
+                 .alpha = 0xA0, /* alpha value */
+                 .ipu_restart = 0x00001000, /* ipu restart */
+                 .fg_change = 0,
+                 .fg0 = {32, 0, 0, 320, 240}, /* bpp, x, y, w, h */
+                 .fg1 = {32, 0, 0, 720, 573}, /* bpp, x, y, w, h */
+         },
+
 #else
 #error "Select LCD panel first!!!"
 #endif
@@ -733,7 +760,7 @@ static int jz4750fb_ioctl(struct fb_info *info, unsigned int cmd, unsigned long 
 		break;
 #endif
 	default:
-		printk("%s, unknown command(0x%x)", __FILE__, cmd);
+		dprintk("%s, unknown command(0x%x)", __FILE__, cmd);
 		break;
 	}
 
@@ -2153,13 +2180,13 @@ static int jz4750fb_lcd_display_off(void)
 static int jz4750fb_lcd_display_on(void)
 {
 	struct lcd_cfb_info *cfb = jz4750fb_info;
-	
+
 	__lcd_display_on();
 	
 	/* Really restore LCD backlight when LCD backlight is turned on. */
 	if (cfb->backlight_level) {
 #ifdef HAVE_LCD_PWM_CONTROL
-		if (!cfb->b_lcd_pwm) {		
+		if (!cfb->b_lcd_pwm) {
 			__lcd_pwm_start();
 			cfb->b_lcd_pwm = 1;
 		}
@@ -2185,13 +2212,17 @@ static int jz4750fb_set_backlight_level(int n)
 		
 		/* Really change the value of backlight when LCDC is enabled. */
 		if (cfb->b_lcd_display) {
+			if (n<LCD_MAX_BACKLIGHT) {
 #ifdef HAVE_LCD_PWM_CONTROL		
-			if (!cfb->b_lcd_pwm) {
-				__lcd_pwm_start(); 
-				cfb->b_lcd_pwm = 1;
-			}
+				if (!cfb->b_lcd_pwm) {
+					__lcd_pwm_start(); 
+					cfb->b_lcd_pwm = 1;
+				}
 #endif		
-			__lcd_set_backlight_level(n);
+				__lcd_set_backlight_level(n);
+			} else {
+				__lcd_set_backlight_max();
+			}
 		}
 	}else{
 		/* Turn off LCD backlight. */
