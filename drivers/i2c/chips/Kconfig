@@ -163,4 +163,10 @@ config MENELAUS
 	  and other features that are often used in portable devices like
 	  cell phones and PDAs.
 
+config EZ_I2CKEY4622
+	tristate "KMP510 keyboard controller"
+	depends on I2C=y
+	help
+		Say yes or you cant start the radio.
+
 endmenu
