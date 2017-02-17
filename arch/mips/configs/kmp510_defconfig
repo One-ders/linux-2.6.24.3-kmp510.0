@@ -1,7 +1,7 @@
 #
 # Automatically generated make config: don't edit
 # Linux kernel version: 2.6.24.3
-# Thu Feb 16 23:01:51 2017
+# Fri Feb 17 00:50:43 2017
 #
 CONFIG_MIPS=y
 
@@ -486,6 +486,7 @@ CONFIG_BLK_DEV_LOOP=y
 # CONFIG_ATA_OVER_ETH is not set
 CONFIG_MISC_DEVICES=y
 # CONFIG_EEPROM_93CX6 is not set
+CONFIG_SYS_IO_SKY=y
 # CONFIG_IDE is not set
 
 #
@@ -618,6 +619,7 @@ CONFIG_COLMAN_USE_SOFT_I2C=y
 # CONFIG_SENSORS_PCF8591 is not set
 # CONFIG_SENSORS_MAX6875 is not set
 # CONFIG_SENSORS_TSL2550 is not set
+CONFIG_EZ_I2CKEY4622=y
 # CONFIG_I2C_DEBUG_CORE is not set
 # CONFIG_I2C_DEBUG_ALGO is not set
 # CONFIG_I2C_DEBUG_BUS is not set

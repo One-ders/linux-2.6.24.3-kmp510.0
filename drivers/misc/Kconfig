@@ -232,4 +232,12 @@ config ATMEL_SSC
 
 	  If unsure, say N.
 
+config SYS_IO_SKY
+	bool "sky io"
+	default n
+	---help---
+	   This options enables sky io
+
+	   If unsure, say N
+
 endif # MISC_DEVICES
