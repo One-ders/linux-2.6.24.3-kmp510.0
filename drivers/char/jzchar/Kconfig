@@ -20,11 +20,11 @@ config JZ_TPANEL_ATA2508
 	tristate 'JzSOC MPEG4 TOUCH PANEL ATA2508 support'
 	depends on JZCHAR
 
-#config JZ_TPANEL
-#	tristate 'JzSOC touchpanel driver support' 
-#	depends on JZCHAR
-#	select JZ_SADC if SOC_JZ4740
-#	select JZ_TPANEL_AK4182 if SOC_JZ4730
+config JZ_TPANEL
+	tristate 'JzSOC touchpanel driver support' 
+	depends on JZCHAR
+	select JZ_SADC if SOC_JZ4740
+	select JZ_TPANEL_AK4182 if SOC_JZ4730
 
 choice
 	prompt "Touch Panel ADC type"

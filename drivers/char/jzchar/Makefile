@@ -11,7 +11,7 @@ obj-$(CONFIG_JZ_I2C_EEPROM)	+= eeprom.o
 obj-$(CONFIG_JZ_EJTAG)		+= ejtag.o
 obj-$(CONFIG_JZ_POWEROFF)	+= poweroff.o
 
-#obj-$(CONFIG_JZ_TPANEL)		+= jz_ts.o
+obj-$(CONFIG_JZ_TPANEL)		+= jz_ts.o
 obj-$(CONFIG_JZ_TPANEL_UCB1400)	+= ucb1400.o
 obj-$(CONFIG_JZ_TPANEL_WM9712)	+= wm9712.o
 obj-$(CONFIG_JZ_TPANEL_AK4182)	+= ak4182.o

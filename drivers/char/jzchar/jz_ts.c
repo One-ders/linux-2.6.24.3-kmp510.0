@@ -46,6 +46,7 @@ MODULE_LICENSE("GPL");
 static struct jz_ts_t jz_ts;
 
 unsigned int (*codec_read_battery)(void) = NULL;
+unsigned int (*codec_read_adin1)(void) = NULL;
 
 // hold the spinlock before calling.
 static void event_add(struct jz_ts_t *ts, struct ts_event *event)
@@ -185,6 +186,24 @@ jz_acq_timer(unsigned long data)
 
 	spin_unlock(&ts->lock);
 }
+
+/* +++++++++++++ Read adin1 routine ++++++++++++++*/
+
+unsigned int jz_read_adin1(void)
+{
+	unsigned int v = 0;
+	struct jz_ts_t *ts = &jz_ts;
+
+	spin_lock(&ts->lock);
+
+	if (codec_read_adin1)
+		v = codec_read_adin1();
+
+	spin_unlock(&ts->lock);
+
+	return v;
+}
+
 
 /* +++++++++++++ Read battery voltage routine ++++++++++++++*/
 

@@ -67,6 +67,7 @@ static datasource_t data_s;
 static unsigned int p;
 static unsigned int old_x, old_y;
 extern unsigned int (*codec_read_battery)(void);
+extern unsigned int (*codec_read_adin1)(void);
 
 /* 
  * set adc clock to 12MHz/div. A/D works at freq between 500KHz to 6MHz.
@@ -89,7 +90,7 @@ static void sadc_init_clock(int div)
 
 void start_sadcin(void)
 {
-	REG_SADC_CTRL &= ~SADC_CTRL_SRDYM; /* enable interrupt */
+//	REG_SADC_CTRL &= ~SADC_CTRL_SRDYM; /* enable interrupt */
 	REG_SADC_ENA |= SADC_ENA_SADCINEN;
 }
 
@@ -134,6 +135,28 @@ static int  jz4740_adc_read(struct jz_ts_t *ts)
   	REG_SADC_STATE &= ~SADC_STATE_TSRDY;
 	return 0;
 }
+
+/*------------------------------------------------------------
+ * Read the adin1
+ */
+unsigned int jz4740_read_adin1(void)
+{
+	unsigned int v;
+	unsigned int timeout = 0x3ff;
+	u16 val;
+
+	if(!(REG_SADC_STATE & SADC_STATE_SRDY) ==1)
+		start_sadcin();
+
+	while(!(REG_SADC_STATE & SADC_STATE_SRDY) && --timeout)
+		;
+
+	val = REG_SADC_SADDAT;
+	v = val & 0x0fff;
+	REG_SADC_STATE = SADC_STATE_SRDY;
+	return v;
+}
+
 
 /*------------------------------------------------------------
  * Read the battery voltage
@@ -560,6 +583,7 @@ static int __init sadc_init(void)
 		return ret;
 	}
 
+	codec_read_adin1 = jz4740_read_adin1;
 	codec_read_battery = jz4740_read_battery;
 	sadc_init_clock(3);
 

@@ -1,7 +1,7 @@
 #
 # Automatically generated make config: don't edit
 # Linux kernel version: 2.6.24.3
-# Fri Feb 17 00:50:43 2017
+# Sat Feb 18 18:16:37 2017
 #
 CONFIG_MIPS=y
 
@@ -580,6 +580,11 @@ CONFIG_RTC_JZ=y
 CONFIG_JZCHAR=y
 # CONFIG_JZ_CIM is not set
 # CONFIG_JZ_TPANEL_ATA2508 is not set
+CONFIG_JZ_TPANEL=y
+CONFIG_JZ_SADC=y
+# CONFIG_JZ_TPANEL_AK4182 is not set
+# CONFIG_JZ_TPANEL_UCB1400 is not set
+# CONFIG_JZ_TPANEL_WM9712 is not set
 CONFIG_JZ_UDC_HOTPLUG=y
 CONFIG_JZ_POWEROFF=y
 # CONFIG_JZ_OW is not set
