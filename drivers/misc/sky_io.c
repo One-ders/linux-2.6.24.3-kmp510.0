@@ -127,7 +127,7 @@ static const struct file_operations sky_io_fops = {
 };
 
 static struct miscdevice sky_io_dev = {
-	.minor = 63,
+	.minor = 255,
 	.name  = "sky_io",
 	.fops  = &sky_io_fops
 };

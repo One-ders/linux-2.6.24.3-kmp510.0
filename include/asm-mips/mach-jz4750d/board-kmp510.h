@@ -36,7 +36,8 @@
 #define GPIO_SD0_CD_N		(32*4+1) /* CIM_D1 */
 #define GPIO_SD0_WP		(32*4+2) /* CIM_D2 */
 #define GPIO_SD1_VCC_EN_N	(32*4+3) /* CIM_D3 */
-#define GPIO_SD1_CD_N		(32*4+4) /* CIM_D4 */
+//#define GPIO_SD1_CD_N		(32*4+4) /* CIM_D4 */
+#define GPIO_SD1_CD_N		(32*2+17)
 
 #define GPIO_USB_DETE		(32*4+6) /* CIM_D6 */
 #define GPIO_DC_DETE_N		(32*4+8) /* CIM_MCLK */
@@ -85,7 +86,7 @@
 #define ACTIVE_LOW_SW10		1
 #define ACTIVE_LOW_ADKEY	1
 #define ACTIVE_LOW_MSC0_CD	1 /* work when GPIO_SD0_CD_N = 0 */
-#define ACTIVE_LOW_MSC1_CD	0 /* work when GPIO_SD1_CD_N = 0 */
+#define ACTIVE_LOW_MSC1_CD	1 /* work when GPIO_SD1_CD_N = 0 */
 #define ACTIVE_WAKE_UP 		1
 
 
@@ -225,9 +226,9 @@ do {						\
 
 #define __msc1_card_detected(s)			\
 ({						\
-	int detected = 0;			\
+	int detected = 1;			\
 	if (__gpio_get_pin(GPIO_SD1_CD_N))	\
-		detected = 1;			\
+		detected = 0;			\
 	detected;				\
 })
 

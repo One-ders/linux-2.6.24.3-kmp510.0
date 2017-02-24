@@ -714,7 +714,7 @@ static int jz_mmc_slot_is_empty(int slot)
 	if (empty) {
 
 		/* wait for card insertion */
-#if defined(CONFIG_SOC_JZ4750) || defined(CONFIG_SOC_JZ4750D)
+#if defined(CONFIG_SOC_JZ4750)
 #ifdef CONFIG_MSC1_JZ4750
 		__gpio_as_irq_rise_edge(MSC_HOTPLUG_PIN);
 #else
@@ -726,7 +726,7 @@ static int jz_mmc_slot_is_empty(int slot)
 
 	} else {
 		/* wait for card removal */
-#if defined(CONFIG_SOC_JZ4750) || defined(CONFIG_SOC_JZ4750D)
+#if defined(CONFIG_SOC_JZ4750)
 #ifdef CONFIG_MSC1_JZ4750
 		__gpio_as_irq_fall_edge(MSC_HOTPLUG_PIN);
 #else

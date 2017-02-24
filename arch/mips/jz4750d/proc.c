@@ -547,7 +547,7 @@ static int udc_read_proc(char *page, char **start, off_t off,
  */
 
 #ifndef MSC_HOTPLUG_PIN
-#define MSC_HOTPLUG_PIN 90
+#define MSC_HOTPLUG_PIN 81
 #endif
 
 static int mmc_read_proc (char *page, char **start, off_t off,
