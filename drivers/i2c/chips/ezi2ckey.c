@@ -395,12 +395,14 @@ static int i2cio_ioctl(struct inode *inode, struct file *file,
 	int nr=_IOC_NR(cmd)-1;
 	unsigned int rc;
 	unsigned long v0, v1, a0, a1;
-	unsigned char key_event;
-	unsigned char key_code;
-#if 0
-	printk("i2cio_ioctl: cmd %x, arg %x\n", cmd,arg);
-	printk("i2cio_ioctl: dir=%d,type=%d,nr=%d,size%d\n",
+	unsigned int key_event;
+	unsigned int key_code;
+#if 1
+	if (_IOC_NR(cmd)!=5) {
+		printk("i2cio_ioctl: cmd %x, arg %lx\n", cmd,arg);
+		printk("i2cio_ioctl: dir=%d,type=%d,nr=%d,size%d\n",
 		_IOC_DIR(cmd), _IOC_TYPE(cmd), _IOC_NR(cmd), _IOC_SIZE(cmd));
+	}
 #endif
 
 	if (_IOC_TYPE(cmd)!=178) {
@@ -448,7 +450,7 @@ static int i2cio_ioctl(struct inode *inode, struct file *file,
 				i2c_smbus_write_word_data(i2c_client,22,0x5aa5);
 			}
 			//if (a0!=0xff) printk("case 4: v1=%x,a0=%x,a1=%x\n",v1,a0,a1);
-			printk("case 4: key_code=%lx,key_event=%lx\n",key_code,key_event);
+			printk("case 4: key_code=%x,key_event=%x\n",key_code,key_event);
 			if (mcu_id.version_major>=3) {
 //nb8
 				if (key_event==0x10) {	// Key pad key down
@@ -555,6 +557,9 @@ nb8_out:
 				goto ioctl_nb12;
 			}
 		}
+		case 13: {
+// func 14:
+		}
 		case  15: {
 // func 16:
 			char ebuf[20];
@@ -606,6 +611,54 @@ nb8_out:
 			rc=i2c_smbus_read_byte_data(i2c_client,24);
 			goto ioctl_nb12;
 		}
+		case 45: {
+// func 46:
+			unsigned int a2;
+			if (mcu_id.version_major<2) {
+				return -EINVAL;
+			}
+			if (mcu_id.version_major==2) {
+				//f46_l2
+				a2=(arg&0x1f);
+				if (arg&0x8000) {
+					a2=a2|0x80;
+				}
+				a2=-a2;
+				printk("f46_l2: arg=%lx, a2=%x\n",arg,a2);
+				rc=i2c_smbus_write_word_data(i2c_client,14,a2);
+				return rc;
+			} else if (mcu_id.version_major==3) {
+				if (mcu_id.version_minor<2) {
+					return -EINVAL;
+				}
+			}
+//f46_l3.1
+			a2=arg&0xffff;
+			v1=a2&0x7fff;
+			v0=v1-192;
+			v0&=0xffff;
+			if (v0>=32) { //f46_l4
+				v0=v1-288;
+				v0=v0&0xffff;
+				if (v0>=224) {
+					return -EINVAL;
+				}
+				v0=a2&0xff;
+				a2=~v0;
+			} else {
+				v0=a2&0x1f;
+				a2=~v0;
+			}
+			a2=a2<<8;
+			a2=a2&0x7f00;
+			a2=a2|v0;
+			if (arg&0x8000) {
+				a2=a2|0x8000;
+			}
+		printk("f46_l5:arg=%lx, a2=%x\n", arg,a2);
+			rc=i2c_smbus_write_word_data(i2c_client,14,a2);
+			return rc;
+ 		}
 		default:
 			printk("i2cio_ioctl: unandled cmd %d\n", nr);
 			return -EINVAL;

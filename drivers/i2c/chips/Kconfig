@@ -169,4 +169,10 @@ config EZ_I2CKEY4622
 	help
 		Say yes or you cant start the radio.
 
+config KMP510_RDA580X
+	tristate "KMP510 keyboard controller"
+	depends on I2C=y && JZ4750D_KMP510
+	help
+		use the fm radio on the kmp
+
 endmenu
