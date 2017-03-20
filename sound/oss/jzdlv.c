@@ -53,6 +53,7 @@ extern void (*i2s_resume_codec)(void);
 extern void (*i2s_suspend_codec)(void);
 extern void (*set_codec_direct_mode)(void);
 extern void (*clear_codec_direct_mode)(void);
+extern void (*set_codec_outsource)(int,int,int);
 
 
 void set_dlv_mode(void);
@@ -83,12 +84,12 @@ void printk_codec_files(void)
 	int cnt;
 
 	printk("\n");
-	
+
 	printk("REG_CPM_I2SCDR=0x%08x\n",REG_CPM_I2SCDR);
 	printk("REG_CPM_CLKGR=0x%08x\n",REG_CPM_CLKGR);
 	printk("REG_CPM_CPCCR=0x%08x\n",REG_CPM_CPCCR);
 	printk("REG_AIC_FR=0x%08x\n",REG_AIC_FR);
-	printk("REG_AIC_CR=0x%08x\n",REG_AIC_CR);		
+	printk("REG_AIC_CR=0x%08x\n",REG_AIC_CR);
 	printk("REG_AIC_I2SCR=0x%08x\n",REG_AIC_I2SCR);
 	printk("REG_AIC_SR=0x%08x\n",REG_AIC_SR);
 	printk("REG_ICDC_RGDATA=0x%08x\n",REG_ICDC_RGDATA);
@@ -131,13 +132,14 @@ int write_codec_file_bit(int addr, int bitval, int mask_bit)
 
 	while (__icdc_rgwr_ready());
 	__icdc_set_addr(addr);
-	val = __icdc_get_value(); /* read */	
-	
+	val = __icdc_get_value(); /* read */
+
 	if (((val >> mask_bit) & bitval) == bitval)
 		return 1;
-	else 
+	else
 		return 0;
 }
+
 void set_dlv_mode(void)
 {
 	/*REG_CPM_CPCCR &= ~(1 << 31);
@@ -199,10 +201,10 @@ void set_audio_data_replay(void)
 	write_codec_file_bit(1, 0, 4);//CR1.HP_DIS->0
 	write_codec_file_bit(5, 1, 3);//PMR1.SB_LIN->1
 	write_codec_file_bit(5, 1, 0);//PMR1.SB_IND->1
-	
+
 	write_codec_file_bit(1, 0, 2);//CR1.BYPASS->0
 	write_codec_file_bit(1, 1, 3);//CR1.DACSEL->1
-	
+
 	write_codec_file_bit(5, 0, 5);//PMR1.SB_MIX->0
 	//mdelay(100);
 	//write_codec_file_bit(5, 0, 6);//PMR1.SB_OUT->0
@@ -222,16 +224,16 @@ void set_record_mic_input_audio_without_playback(void)
 	mdelay(10);
 	write_codec_file_bit(1, 1, 2);
 	//write_codec_file_bit(1, 1, 6);//CR1.MONO->1
-	
+
 	write_codec_file(22, 0x40);//mic 1
 	write_codec_file_bit(3, 1, 7);//CR1.HP_DIS->1
 	write_codec_file_bit(5, 1, 3);//PMR1.SB_LIN->1
 	write_codec_file_bit(5, 1, 0);//PMR1.SB_IND->1
-	
+
 	write_codec_file_bit(1, 0, 2);//CR1.BYPASS->0
 	write_codec_file_bit(1, 0, 3);//CR1.DACSEL->0
 	//write_codec_file_bit(6, 1, 3);// gain set
-	
+
 	write_codec_file_bit(5, 0, 5);//PMR1.SB_MIX->0
 	mdelay(100);
 	write_codec_file_bit(5, 0, 6);//PMR1.SB_OUT->0
@@ -259,7 +261,7 @@ void unset_record_mic_input_audio_without_playback(void)
 /* set Record LINE input audio without playback */
 void set_record_line_input_audio_without_playback(void)
 {
-	/* ADC path for LINE IN */	
+	/* ADC path for LINE IN */
 	jz_mic_only = 1;
 	write_codec_file(9, 0xff);
 	write_codec_file(8, 0x3f);
@@ -269,7 +271,7 @@ void set_record_line_input_audio_without_playback(void)
 	write_codec_file_bit(3, 1, 7);//CR1.HP_DIS->1
 	write_codec_file_bit(5, 0, 3);//PMR1.SB_LIN->0
 	write_codec_file_bit(5, 1, 0);//PMR1.SB_IND->1
-	
+
 	write_codec_file_bit(1, 0, 2);//CR1.BYPASS->0
 	write_codec_file_bit(1, 0, 3);//CR1.DACSEL->0
 	mdelay(10);
@@ -280,14 +282,14 @@ void set_record_line_input_audio_without_playback(void)
 }
 #endif
 
-#if 0 /* mask warning */ 
+#if 0 /* mask warning */
 /* unset Record LINE input audio without playback */
 void unset_record_line_input_audio_without_playback(void)
 {
 	/* ADC path for LINE IN */
 	write_codec_file_bit(5, 1, 4);//SB_ADC->1
 	write_codec_file_bit(5, 1, 3);//ONR1.SB_LIN->1
-	
+
 	write_codec_file(22, 0xc0);//CR3.SB_MIC1
 	write_codec_file_bit(5, 1, 6);//PMR1.SB_OUT->1
 	write_codec_file_bit(1, 1, 5);//DAC_MUTE->1
@@ -340,24 +342,24 @@ void unset_playback_line_input_audio_direct_only(void)
 #if 0 /* mask warning */
 /* set Record MIC input audio with direct playback */
 void set_record_mic_input_audio_with_direct_playback(void)
-{		
+{
 	write_codec_file_bit(23, 0, 7);//AGC1.AGC_EN->0
 	jz_mic_only = 0;
 	write_codec_file(9, 0xff);
 	write_codec_file(8, 0x3f);
 	mdelay(10);
-	
+
 	write_codec_file(22, 0x60);//mic 1
 	write_codec_file_bit(23, 0, 7);//AGC1.AGC_EN->0
 	write_codec_file_bit(5, 1, 3);//PMR1.SB_LIN->1
 	write_codec_file_bit(5, 1, 0);//PMR1.SB_IND->1
 	write_codec_file_bit(1, 0, 7);//CR1.SB_MICBIAS->0
 	write_codec_file_bit(1, 0, 4);//CR1.HP_DIS->0
-	
+
 	write_codec_file_bit(1, 0, 2);//CR1.BYPASS->0
 	write_codec_file_bit(1, 0, 3);//CR1.DACSEL->0
 	write_codec_file_bit(6, 1, 3);// gain set
-	
+
 	write_codec_file_bit(5, 0, 5);//PMR1.SB_MIX->0
 	mdelay(100);
 	write_codec_file_bit(5, 0, 6);//PMR1.SB_OUT->0
@@ -390,13 +392,13 @@ void set_record_playing_audio_mixed_with_mic_input_audio(void)
 	//write_codec_file(8, 0x30);
 	write_codec_file(8, 0x20);
 	mdelay(10);
-	
+
 	write_codec_file(22, 0x63);//mic 1
-	
+
 	write_codec_file_bit(1, 0, 2);//CR1.BYPASS->0
 	write_codec_file_bit(6, 1, 3);// gain set
 
-	write_codec_file_bit(1, 0, 4);//CR1.HP_DIS->0	
+	write_codec_file_bit(1, 0, 4);//CR1.HP_DIS->0
 	write_codec_file_bit(5, 1, 3);//PMR1.SB_LIN->1
 	write_codec_file_bit(5, 1, 0);//PMR1.SB_IND->1
 	write_codec_file_bit(1, 0, 7);//CR1.SB_MICBIAS->0
@@ -428,12 +430,12 @@ void unset_record_playing_audio_mixed_with_mic_input_audio(void)
 #if 1 /* mask warning */
 /* set Record MIC input audio with Audio data replay (full duplex) */
 void set_record_mic_input_audio_with_audio_data_replay(void)
-{		
+{
 	write_codec_file_bit(23, 0, 7);//AGC1.AGC_EN->0
 	write_codec_file(9, 0xff);
 	//write_codec_file(8, 0x30);
 	write_codec_file(8, 0x20);
-	write_codec_file_bit(1, 0, 4);//CR1.HP_DIS->0	
+	write_codec_file_bit(1, 0, 4);//CR1.HP_DIS->0
 	write_codec_file_bit(5, 1, 3);//PMR1.SB_LIN->1
 	write_codec_file_bit(5, 1, 0);//PMR1.SB_IND->1
 
@@ -464,18 +466,17 @@ void unset_record_mic_input_audio_with_audio_data_replay(void)
 #if 1 /* mask warning */
 /* set Record LINE input audio with Audio data replay (full duplex for linein) */
 void set_record_line_input_audio_with_audio_data_replay(void)
-{		
+{
 	write_codec_file(9, 0xff);
 	//write_codec_file(8, 0x30);
 	write_codec_file(8, 0x20);
-	write_codec_file_bit(1, 0, 4);//CR1.HP_DIS->0	
+	write_codec_file_bit(1, 0, 4);//CR1.HP_DIS->0
 	write_codec_file_bit(5, 0, 3);//PMR1.SB_LIN->0
 	write_codec_file_bit(5, 1, 0);//PMR1.SB_IND->1
 	write_codec_file_bit(1, 1, 7);//CR1.SB_MICBIAS->1
 	//write_codec_file_bit(22, 1, 7);//CR3.SB_MIC->1
 	write_codec_file_bit(1, 1, 3);//CR1.DACSEL->1
 	write_codec_file_bit(5, 0, 5);//PMR1.SB_MIX->0
- 
 
 	//jz_mic_only = 1;
 	write_codec_file(22, 0xc6);//line in 1
@@ -585,12 +586,52 @@ void dlv_mixer_info_id_name(void)
 	strncpy(old_info.name,"Jz internal codec dlv on jz4750", sizeof(old_info.name));
 }
 
+void set_dlv_outsource(int a, int b, int c) {
+
+	if (a) {
+		printk("Enable PCM to out\n");
+		write_codec_file_bit(1,0,3);
+	} else {
+		printk("Deselect PCM to out\n");
+		write_codec_file_bit(1,1,3);
+	}
+
+	if (b) {
+		printk("Enable Line to out\n");
+		write_codec_file_bit(23,0,7);
+		write_codec_file_bit(1,1,2);
+		write_codec_file_bit(5,0,3);
+	} else {
+		printk("Deselect LINE to out\n");
+		write_codec_file_bit(1,0,2);
+		write_codec_file_bit(5,1,3);
+	}
+
+	if (c) {
+		printk("Support Mic Later\n");
+	}
+
+	mdelay(100);
+
+	if (a|b|c) {
+		write_codec_file_bit(1,0,4);
+		write_codec_file_bit(5,0,5);
+		write_codec_file_bit(5,0,6);
+	} else {
+		write_codec_file_bit(1,1,4);
+		write_codec_file_bit(5,1,6);
+		write_codec_file_bit(5,1,5);
+	}
+
+	return;
+}
+
 void set_dlv_mic(int val)
 {
 	int cur_vol ;
 	/* set gain */
 	//write_codec_file_bit(6, 1, 3);//GIM
-	cur_vol = 31 * val / 100; 
+	cur_vol = 31 * val / 100;
 	cur_vol |= cur_vol << 4;
 	write_codec_file(19, cur_vol);//GIL,GIR
 }
@@ -599,7 +640,7 @@ void set_dlv_line(int val)
 {
 	int cur_vol;
 	/* set gain */
-	cur_vol = 31 * val / 100; 
+	cur_vol = 31 * val / 100;
 	cur_vol &= 0x1f;
 	write_codec_file(11, cur_vol);//GO1L
 	write_codec_file(12, cur_vol);//GO1R
@@ -608,7 +649,7 @@ void set_dlv_line(int val)
 void set_dlv_volume(int val)
 {
 	unsigned long cur_vol;
-	cur_vol = 31 * (100 - val) / 100; 
+	cur_vol = 31 * (100 - val) / 100;
 	write_codec_file(17, cur_vol | 0xc0);
 	write_codec_file(18, cur_vol);
 }
@@ -630,6 +671,7 @@ static int __init init_dlv(void)
 	set_codec_volume = set_dlv_volume;
 	set_codec_mic = set_dlv_mic;
 	set_codec_line = set_dlv_line;
+	set_codec_outsource = set_dlv_outsource;
 
 	return 0;
 }

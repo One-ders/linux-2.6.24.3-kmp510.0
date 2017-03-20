@@ -49,7 +49,6 @@ static int sky_io_ioctl(struct inode *inode, struct file *filp,
 			}
 			preempt_enable();
 			return 0;
-			break;
 		}
 		case 2: {
 			unsigned int vbat;
@@ -63,10 +62,9 @@ static int sky_io_ioctl(struct inode *inode, struct file *filp,
 				return -14;
 			}
 			return 0;
-			break;
 		}
 		case 4: {
-			printk("toggle port 3 0x4000000\nr");
+			printk("toggle port 3 0x4000000\n");
 			preempt_disable();
 			if (arg==0) { /* disable */
 				__gpio_clear_pin((3*32)+26);
@@ -75,7 +73,6 @@ static int sky_io_ioctl(struct inode *inode, struct file *filp,
 			}
 			preempt_enable();
 			return 0;
-			break;
 		}
 		case 11: {
 			unsigned int adin1;
@@ -89,7 +86,6 @@ static int sky_io_ioctl(struct inode *inode, struct file *filp,
 				return -14;
 			}
 			return 0;
-			break;
 		}
 		default:
 			printk("bad command\n");
@@ -110,12 +106,17 @@ static int sky_io_open(struct inode *inode, struct file *filp) {
 		atomic_dec(&a_7314);
 		return -13;
 	}
-	return -EIO;
 }
 
 static int sky_io_release(struct inode *inode, struct file *filp) {
 	printk("sky_io_release:called\n");
-	return -EIO;
+
+	atomic_dec(&a_7314);
+
+	if (!atomic_read(&a_7314)) {
+		clear_bit(0,&ul_7310);
+	}
+	return 0;
 }
 
 static const struct file_operations sky_io_fops = {

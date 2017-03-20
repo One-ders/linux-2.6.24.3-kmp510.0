@@ -392,7 +392,7 @@ static int i2cio_ioctl(struct inode *inode, struct file *file,
 	void __user *p=(void __user *)arg;
 
 	int bub=-0xb201;
-	int nr=_IOC_NR(cmd)-1;
+	int nr=_IOC_NR(cmd);
 	unsigned int rc;
 	unsigned long v0, v1, a0, a1;
 	unsigned int key_event;
@@ -411,10 +411,10 @@ static int i2cio_ioctl(struct inode *inode, struct file *file,
 
 	if (!i2c_client) goto err;
 
-	if (nr>=100) goto err;
+	if (nr>100) goto err;
 
 	switch(nr) {
-		case 0: {
+		case 1: {
 			if (!(arg<2)) goto err;
 			if (mcu_id.version_major<2) {
 				printk("ioctl: nr %d\n set 77d0=0, mcu_id.version_major=%x\n", nr, mcu_id.version_major);
@@ -425,11 +425,11 @@ static int i2cio_ioctl(struct inode *inode, struct file *file,
 			}
 			return 0;
 		}
-		case 2: {
+		case 3: {
 			return i2c_smbus_write_byte_data(i2c_client,3,arg&0xff);
 			break;
 		}
-		case 4: {
+		case 5: {
 //func5:
 			if (i_77c8) {
 				if (!(REG_GPIO_PXPIN(4) & 0x80000)) {
@@ -541,13 +541,13 @@ nb8_out:
 			ui_af64=rc;
 			goto ioctl_nb12;
 		}
-		case  9: {
+		case  10: {
 // func 10:
 			rc=i2c_smbus_read_word_data(i2c_client, 10);
 			printk("read_word_data returned %x\n",rc);
 			goto ioctl_nb12;
 		}
-		case  10: {
+		case  11: {
 // func 11:
 			if (mcu_id.version_major<2) {
 				return -EINVAL;
@@ -557,10 +557,20 @@ nb8_out:
 				goto ioctl_nb12;
 			}
 		}
-		case 13: {
+		case 14: {
 // func 14:
+			break;
 		}
-		case  15: {
+		case 15: {
+// func 15:
+			if (mcu_id.version_major<2) {
+				return -EINVAL;
+			}
+			rc=i2c_smbus_write_word_data(i2c_client,15,arg&0xffff);
+			return rc;
+			break;
+		}
+		case  16: {
 // func 16:
 			char ebuf[20];
 			int rc;
@@ -574,17 +584,17 @@ nb8_out:
 			}
 			return 0;
 		}
-		case 16: case 99: {
+		case 17: case 100: {
 // func 17: send magic key
 //			
 			unsigned char bstr[17];
-			if (nr==16)  {
+			if (nr==17)  {
 				bstr[0]=17;
 			} else {
 				bstr[0]=25;
 			}
 			if (copy_from_user(&bstr[1],(void *)arg,16)) {
-				printk("i2cio_ctl: nr 16 err, copy_from_user\n");
+				printk("i2cio_ctl: nr 17 err, copy_from_user\n");
 				return -14;
 			}
 			rc=i2c_master_send(i2c_client,bstr,17);
@@ -594,7 +604,7 @@ nb8_out:
 			}
 			return 0;
 		}
-		case 17: {
+		case 18: {
 // func 18:
 			unsigned char buf[17];
 			int rc;
@@ -606,12 +616,12 @@ nb8_out:
 			}
 			return 0;
 		}
-		case 23: {
+		case 24: {
 // func 24:
 			rc=i2c_smbus_read_byte_data(i2c_client,24);
 			goto ioctl_nb12;
 		}
-		case 45: {
+		case 46: {
 // func 46:
 			unsigned int a2;
 			if (mcu_id.version_major<2) {

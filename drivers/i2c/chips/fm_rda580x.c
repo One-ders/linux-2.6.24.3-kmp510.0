@@ -24,6 +24,103 @@ I2C_CLIENT_INSMOD;
 
 typedef void (*WQ_HANDLER)(void);
 
+#define REG0_CHIP_ID_MASK 0xff00
+
+#define REG2		2
+#define REG2_DHIZ	0x8000	// Disable HighZ output
+#define REG2_DMUTE	0x4000	// Disable Mute
+#define REG2_MONO	0x2000	// Force Mono
+#define REG2_BASS	0x1000	// Bass boost
+#define REG2_RCLK_NCALIBMODE 0x0800
+#define REG2_RCL_DIRECT	0x0400	// Clock direct input
+#define REG2_SEEKUP	0x0200	// Seek up
+#define REG2_SEEK	0x0100	// Seek, result in STC
+#define REG2_SKMODE	0x0080	// Seek dont wrap at edge freq
+#define REG2_CLK_MODE_MASK 0x0070 // 
+#define REG2_CLK_MODE_SHIFT(a)	(a<<4)
+#define REG2_CLK_MODE_32_768Khz	CLK_MODE_SHIFT(0)
+#define REG2_CLK_MODE_12MHz	CLK_MODE_SHIFT(1)
+#define REG2_CLK_MODE_13MHz	CLK_MODE_SHIFT(2)
+#define REG2_CLK_MODE_19_2MHz	CLK_MODE_SHIFT(3)
+#define REG2_CLK_MODE_24MHz	CLK_MODE_SHIFT(5)
+#define REG2_CLK_MODE_26MHz	CLK_MODE_SHIFT(6)
+#define REG2_CLK_MODE_38_4MHz	CLK_MODE_SHIFT(7)
+#define REG2_ENA_RDS	0x0008
+#define REG2_NEW_METHOD	0x0004
+#define REG2_SOFT_RESET 0x0002
+#define REG2_ENABLE	0x0001
+
+#define REG3			3
+#define REG3_CHANNEL_MASK	0xffc0
+#define REG3_CHANNEL_SHIFT	6
+#define REG3_DIRECT_MODE	0x0020
+#define REG3_TUNE		0x0010	// Auto clear 
+#define REG3_BAND_MASK		0x000c
+#define REG3_BAND_SHIFT		2
+#define REG3_BAND(a)		(a<<REG3_BAND_SHIFT)
+#define REG3_BAND_EU		REG3_BAND(0)
+#define REG3_BAND_JP		REG3_BAND(1)
+#define REG3_BAND_WW		REG3_BAND(2)
+#define REG3_BAND_EEU		REG3_BAND(3)
+#define REG3_SPACE_MASK		0x0003
+#define REG3_SPACE_100KHZ	0
+#define REG3_SPACE_200KHZ	1
+#define REG3_SPACE_50KHZ	2
+#define REG3_SPACE_25KHZ	3
+
+#define REG4			4
+#define REG4_RSVD_15		0x8000
+#define REG4_RSVD_12_13		0x3000
+#define REG4_DE			0x0800	// 0=75s, 1=50s
+#define REG4_RSVD_10		0x0400
+#define REG4_SOFTMUTE		0x0200
+#define REG4_AFCD		0x0100  // afc disable
+
+#define REG5			5
+#define REG5_INT_MODE		0x8000 // ack irq by read 0x0c
+#define REG5_RSVD_12_14		0x7000
+#define REG5_SEEKTH_MASK	0x0f00
+#define REG5_RSVD_4_5		0x0030
+#define REG5_VOL_MASK		0x000f
+
+#define REG6			6
+#define REG6_RSVD_15		0x8000
+#define REG6_OPEN_MODE_MASK	0x6000		_
+
+#define REG7			7
+#define REG7_RSVD_15		0x8000
+#define REG7_TH_SOFRBLEND_MASK  0x7c00
+#define REG7_65_50_MODE		0x0200
+#define REG7_RSVD_8		0x0100
+#define REG7_SEEK_TH_OLD_MASK	0x00fc
+#define REG7_SOFTBLEND_EN	0x0002
+#define REG7_FREQ_MODE		0x0001
+
+#define REGA			10
+#define REGA_RDSR		0x8000 // RDS Ready
+#define REGA_STC		0x4000 // Seek/tune complete
+#define REGA_SF			0x2000 // Seek fail
+#define REGA_RDSS		0x1000 // RDS SYNCED
+#define REGA_BLK_E		0x0800 //
+#define REGA_STEREO		0x0400
+#define REGA_READ_CHAN_MASK	0x03ff
+
+#define REGB			11
+#define REGB_RSSI_MASK		0xfe00
+#define REGB_RSSI_SHIFT		9
+#define REGB_FM_TRUE		0x0100
+#define REGB_FM_READY		0x0080
+#define REGB_RSVD_6_5		0x0060
+#define REGB_ABCD_E		0x0010
+#define REGB_BLERA_MASK		0x000c
+#define REGB_BLERB_MASK		0x0003
+
+#define REGC_RDSA		12
+#define REGD_RDSB		13
+#define REGE_RDSC		14
+#define REGF_RDSD		15
+
+
 struct FM_DATA {
 	struct workqueue_struct *wqp;		// 0
 	struct work_struct	work;		// 4
@@ -38,8 +135,7 @@ struct FM_DATA {
 	unsigned char pad2[1];			// 201
 	unsigned short int freq;		// 202
 	unsigned char pad3[4];			// 204
-	unsigned short wbuf[8];			// 208
-	unsigned short rbuf[8];			// 224
+	unsigned short regfile[0x3a];		// 208
 };
 
 static struct i2c_driver fm_rda580x_driver;
@@ -55,7 +151,7 @@ static int rda580x_reg_write(struct FM_DATA *fm_data, int xx, unsigned char len)
 	if (len) {
 		int i;
 		unsigned short *hwp;
-		hwp=fm_data->wbuf;
+		hwp=&fm_data->regfile[2];
 		for(i=0;i<len;i++) {
 			unsigned short hw=hwp[i];
 			mbuf[i*2]=hw>>8;
@@ -77,18 +173,18 @@ static int rda580x_reg_write(struct FM_DATA *fm_data, int xx, unsigned char len)
 	return 0;
 }
 
-static int rda580x_reg_read(struct FM_DATA *fm_data, int xx, int len) {
+static int rda580x_reg_read(struct FM_DATA *fm_data, 
+				int xx, unsigned char len) {
 	struct i2c_client *client=fm_data->client;
 	struct i2c_msg msg;
 	unsigned char mbuf[10];
 	int rc;
 
-	len&=0xff;
 	if (len>16) {
 		len=16;
 	}
-	len=len-9;
-	len=len*2;
+	len=len-9;	// len = 1 if orig was 10
+	len=len*2;	// len = 2 if orig was 10
 
 	msg.addr=client->addr;
 	msg.flags=(client->flags&I2C_M_TEN)|I2C_M_RD;
@@ -103,13 +199,13 @@ static int rda580x_reg_read(struct FM_DATA *fm_data, int xx, int len) {
 	}
 	if (len>0) {
 		int i;
-		for(i=0;i<len;i++) {
+		for(i=0;(i*2)<len;i++) {
 			unsigned char b0,b1;
 			
 			b0=mbuf[i*2];
 			b1=mbuf[(i*2)+1];
 		
-			fm_data->rbuf[i]=(b0<<8)|b1;
+			fm_data->regfile[i+0xa]=(b0<<8)|b1;
 		}
 	}
 
@@ -117,12 +213,12 @@ static int rda580x_reg_read(struct FM_DATA *fm_data, int xx, int len) {
 }
 
 static int fm_powerup(struct FM_DATA *fm_data) {
-	unsigned short regData=fm_data->wbuf[0];
+	unsigned short reg2=fm_data->regfile[REG2];
 	
-	if (!(regData&0x1)) {
-		fm_data->wbuf[0]|=3;	
+	if (!(reg2&REG2_ENABLE)) {
+		fm_data->regfile[REG2]|=(REG2_ENABLE|REG2_SOFT_RESET);	
 		rda580x_reg_write(fm_data,2,2);
-		fm_data->wbuf[0]&=0xfffd;
+		fm_data->regfile[REG2]&=~REG2_SOFT_RESET;
 		rda580x_reg_write(fm_data,2,2);
 		msleep(110);
 	} 
@@ -132,54 +228,54 @@ static int fm_powerup(struct FM_DATA *fm_data) {
 	return 0;
 }
 
+/* 
+ * Region 0, Us
+ * Region 1, Eu
+ * Region 2, JP
+ * Region 3, World
+ * Region 4, EEU
+ */
+
 static void fm_regional_cfg(struct FM_DATA *fm_data, int region) {
-	unsigned short w0;
-	unsigned short w1;
-	unsigned short w2;
 
-	w0=fm_data->wbuf[0];
-	w1=fm_data->wbuf[1];
-	w2=fm_data->wbuf[2];
-
-	w0&=0xfff7;	// zero out bit 0
-	w1&=0xfff0;	// zero out bit 3,2,1,0
-	w2&=0xf7ff;	// zero out bit 11
-
-	fm_data->wbuf[0]=w0;
-	fm_data->wbuf[1]=w1;
-	fm_data->wbuf[2]=w2;
+	fm_data->regfile[2]&=
+		(~REG2_ENA_RDS);      // 0xfff7;	// zero out bit 3
+	fm_data->regfile[3]&=
+		~(REG3_BAND_MASK|REG3_SPACE_MASK); //0xfff0; zero out bit 3,2,1,0
+	fm_data->regfile[4]&=
+		~(REG4_DE); //0xf7ff;// zero out bit 11
 
 	switch(region) {
 		case 0: {
-			fm_data->wbuf[0]=w0|0x8;
-			fm_data->wbuf[1]=w1|0x1;
+			fm_data->regfile[2]|=REG2_ENA_RDS;  //0x8;
+			fm_data->regfile[3]|=REG3_SPACE_200KHZ; //0x1;
 			break;
 		}
 		case 1: {
-			fm_data->wbuf[0]=w0|0x8;
-			fm_data->wbuf[2]=w2|0x800;
+			fm_data->regfile[2]|=REG2_ENA_RDS; //0x8;
+			fm_data->regfile[4]|=REG4_DE;	   //0x800;
 			break;
 		}
 		case 2: {
-			fm_data->wbuf[1]=w1|0x4;
-			fm_data->wbuf[2]=w2|0x800;
+			fm_data->regfile[3]|=REG3_BAND_JP; //0x4;
+			fm_data->regfile[4]|=REG4_DE;	   //0x800;
 			break;
 		}
 		case 3: {
-			fm_data->wbuf[1]=w1|0x8;
-			fm_data->wbuf[2]=w2|0x800;
+			fm_data->regfile[3]|=REG3_BAND_WW; //0x8;
+			fm_data->regfile[4]|=REG4_DE;	   //0x800;
 			break;
 		}
 		case 4: {
-			fm_data->wbuf[0]=w0|0x8;
-			fm_data->wbuf[1]=w1|0xc;
-			fm_data->wbuf[2]=w2|0x800;
+			fm_data->regfile[2]|=REG2_ENA_RDS; //0x8;
+			fm_data->regfile[3]|=REG3_BAND_EEU;//0xc;
+			fm_data->regfile[4]|=REG4_DE;	   //0x800;
 			break;
 		}
 		default: {
-			fm_data->wbuf[0]=w0|0x8;
-			fm_data->wbuf[1]=w1|0xa;
-			fm_data->wbuf[2]=w2|0x800;
+			fm_data->regfile[2]|=REG2_ENA_RDS; //0x8;
+			fm_data->regfile[3]|=(REG3_BAND_WW|REG3_SPACE_50KHZ);//0xa;
+			fm_data->regfile[4]|=REG4_DE;	   // 0x800;
 			break;
 		}
 
@@ -187,111 +283,92 @@ static void fm_regional_cfg(struct FM_DATA *fm_data, int region) {
 	return;
 }
 
-static int fm_set_volume(struct FM_DATA *fm_data, unsigned char vol) {
-	unsigned short int wreg3;
-	unsigned short int wreg0;
-	printk("<6>FM_RDA580X: volume = %d\n", vol);
-	vol=vol/2;
+#if 0
+wreg2=208
+wreg3=210
+wreg4=212
+wreg5=214
+#endif
 
-	wreg3=fm_data->wbuf[3]&0xfff0;
-	if (vol>=16) {
+static int fm_set_volume(struct FM_DATA *fm_data, unsigned char vol) {
+	unsigned short int reg5;
+
+	vol=vol/2;
+	if (vol>15) {
 		vol=15;
 	}
-	
-	wreg0=fm_data->wbuf[0]&0xbfff;
-	wreg3=wreg3|vol;
-	wreg0=wreg0|0x4000;
 
-	fm_data->wbuf[0]=wreg0;
-	fm_data->wbuf[3]=wreg3;
+	reg5=fm_data->regfile[5]&~(REG5_VOL_MASK);    //0xfff0;
+	reg5|=vol;
+	
+	fm_data->regfile[2]|= REG2_DMUTE;      // 0x4000 
+	fm_data->regfile[5]=reg5;
 
 	return rda580x_reg_write(fm_data,2,5);
 }
 
 static int fm_get_volume(struct FM_DATA *fm_data) {
-	return ((fm_data->wbuf[3]&0xf)<<1);
+	return ((fm_data->regfile[5]&REG5_VOL_MASK)<<1);
 }
 
-static int fm_get_frequency(struct FM_DATA *fm_data) {
-	unsigned short int wreg3=fm_data->wbuf[1];
-	unsigned short int rreg10=fm_data->rbuf[0];
-	unsigned short int a0, a1;
-static unsigned char bb[] = {0x0a, 0x10, 0x05};
+static unsigned char bb[] = {0x0a, 0x14, 0x05};
+static unsigned short int 
+fm_get_frequency(struct FM_DATA *fm_data) {
+	unsigned short int reg3=fm_data->regfile[3];
+	unsigned short int reg10=fm_data->regfile[0xa];
+	unsigned short int band_start_freq, channel_space,
+				channel_no, freq;
+	unsigned short int band;
 
-	if ((wreg3&0x3)==0x3) { // l1
+
+	if ((reg3&REG3_SPACE_MASK)==REG3_SPACE_25KHZ) { // l1
 		return 0;
 	}
 
-	a1=8700;
-	if (wreg3&0xc) { // l2
-		if ((wreg3&0xc)==0xc) {
-			a1=6500;
-		} else {
-			a1=7600;
+	band_start_freq=8700;
+	if ((band=reg3&REG3_BAND_MASK)) { // l2
+		band_start_freq=7600;
+		if (band==REG3_BAND_EEU) {
+			band_start_freq=6500;
 		}
 	}
 
-	a0=bb[wreg3&0x3];
-	rreg10=rreg10&0x3ff;
-	a0=rreg10*a0;
-	a0=a0+a1;
-	a0=a0&0xffff;
-
-	printk("get_freq: return %d\n", a0);
-	return a0;
+	channel_space=bb[reg3&REG3_SPACE_MASK];
+	channel_no=reg10&REGA_READ_CHAN_MASK;
+	freq=band_start_freq+(channel_no*channel_space);
+	return freq;
 }
 
 static int fm_tune(struct FM_DATA *fm_data, unsigned short freq) {
-static unsigned char bb[] = {0x0a, 0x14, 0x05};
-	unsigned short int 	wreg3;
-	unsigned short int	a0;
-	short int 		a1;
-	unsigned short int 	v0;
-	unsigned short int	t2;
+	unsigned short int 	reg3;
 	int			loop;
+	unsigned short int band_start_freq;
+	unsigned short int channel_no;
+	unsigned short int channel_space;
 
-	printk("fm_tune: tune to %d\n", freq);
-	if (freq>=7600) {//l1
-		wreg3=fm_data->wbuf[1];
-		if ((wreg3&0x3)==0x3) {//l6
-			a1=0;
-			goto l11;
-		} else if (!(wreg3&0xc)) {//l7
-			v0=8700;
-			t2=8700;
-l9:
+	reg3=fm_data->regfile[3];
 
-			a0=bb[wreg3&0x3];
-			if (v0<freq) {
-				v0=freq;
-			}
-			v0=v0-t2;
-			v0=v0/a0;
-			v0=v0<<0x6;
-			a1=v0<<0x10;
-			a1=a1>>0x10;
-			goto l11;
-		} else if ((wreg3&0xc)==0xc) { //l8
-			v0=6500;	
-			t2=6500;
-			goto l9;
-		} else {
-			v0=7600;
-			t2=7600;
-			goto l9;
-		}
+	if ((reg3&REG3_SPACE_MASK)==REG3_SPACE_25KHZ) {//l6
+		channel_no=0;
+		goto l11;
+	} else if ((reg3&REG3_SPACE_MASK)==REG3_SPACE_100KHZ) {//l7
+		band_start_freq=8700;
+	} else if ((reg3&REG3_BAND_MASK)==REG3_BAND_EEU) { //l8
+		band_start_freq=6500;	
 	} else {
-		v0=freq<<0x6;
-		a1=v0<<0x10;
-		a1=a1>>0x10;
-		wreg3=fm_data->wbuf[1];
+		band_start_freq=7600;
 	}
 
+	if (freq<band_start_freq) {
+		freq=band_start_freq;
+	}
+	channel_space=bb[reg3&REG3_SPACE_MASK];
+	channel_no=(freq-band_start_freq)/channel_space;
+
 l11:
-	v0=wreg3&0x2f;
-	v0=v0|0x10;
-	v0=a1|v0;
-	fm_data->wbuf[1]=v0;
+	fm_data->regfile[3]=(channel_no<<REG3_CHANNEL_SHIFT) | 
+				REG3_TUNE | 
+				(reg3 & ~REG3_CHANNEL_MASK);
 
 	rda580x_reg_write(fm_data,3,3);
 
@@ -299,7 +376,7 @@ l11:
 	while(loop--) {
 		msleep(1);
 		rda580x_reg_read(fm_data,10,10);
-		if (fm_data->rbuf[0]&0x4000) {
+		if (fm_data->regfile[0xa]&REGA_STC) {
 			break;
 		}
 	}
@@ -309,8 +386,8 @@ l11:
 	}
 
 //l10
-	fm_data->wbuf[1]&=0xffef;
-	rda580x_reg_write(fm_data,3,3);
+	fm_data->regfile[3]&=~(REG3_TUNE); //0xffef;
+//	rda580x_reg_write(fm_data,3,3);  // only update regfile, real reg is auto cleared
 	
 	msleep(10);
 
@@ -320,80 +397,73 @@ l11:
 static int fm_get_rssi(struct FM_DATA *fm_data) {
 
 	rda580x_reg_read(fm_data,10,11);
-	return (fm_data->rbuf[1]>>9);
+	return (fm_data->regfile[0xb]>>REGB_RSSI_SHIFT);
 }
 
 static int is_fm_rds_available(struct FM_DATA *fm_data) {
-	return ((fm_data->rbuf[0]>>0xc)&0x1);
+	return (fm_data->regfile[0xa]&REGA_RDSS)?1:0;
 }
 
 static int is_fm_stereo(struct FM_DATA *fm_data) {
-	return ((fm_data->rbuf[0]>>0xa)&0x1);
+	return (fm_data->regfile[0xa]&REGA_STEREO)?1:0;
 }
 
 static int is_fm_powerup(struct FM_DATA *fm_data) {
-	return (fm_data->wbuf[0]&0x1);
+	return (fm_data->regfile[2]&REG2_ENABLE);
 }
 
 static int is_fm_muted(struct FM_DATA *fm_data) {
-	return (((fm_data->wbuf[0]>>0xe)^0x1)&0x1);
+	return (fm_data->regfile[2]&REG2_DMUTE)?0:1;
 }
 
 
 
 static void fm_seek_wqueue_handler(struct work_struct *work) {
-	unsigned short wreg2=fm_data->wbuf[0];
-	unsigned short rreg10;
+	unsigned short reg2=fm_data->regfile[2];
+	unsigned short reg10;
 	unsigned short int freq;
 	unsigned int v0;
 
-	printk("%s\n", __FUNCTION__);
-
-	wreg2&=0xfd7f;
+	reg2&=~(REG2_SKMODE| REG2_SEEKUP); 	//0xfd7f;
 	fm_data->b199=0;
 	if (fm_data->b197) {
-		wreg2|=0x80;
+		reg2|=REG2_SKMODE;		//0x80;
 	}
 
 	if (fm_data->b196) {
-		wreg2|=0x200;
+		reg2|=REG2_SEEKUP;		//0x200;	
 	}
 
-	wreg2|=0x100;
-	fm_data->wbuf[0]=wreg2;
+	reg2|=REG2_SEEK;			//0x100;
+	fm_data->regfile[2]=reg2;
 
 	rda580x_reg_write(fm_data,2,2);
 
-l4:
-	msleep(0);
+	while(fm_data->b198) {	// seeking
+		msleep(0);
 
-	rda580x_reg_read(fm_data,10,11);
+		rda580x_reg_read(fm_data,10,11);
 
-	freq=fm_get_frequency(fm_data);
+		fm_data->freq=fm_get_frequency(fm_data);
+		reg10=fm_data->regfile[0xa];
 
-	fm_data->freq=freq;
-	rreg10=fm_data->rbuf[0];
-
-	if(rreg10&0x4000) { // l3
-		v0=rreg10&0x2000;
-		if (!fm_data->b198) {
+		if(reg10&REGA_STC) { // l3
+			v0=reg10&REGA_SF;
+			if (!fm_data->b198) {
+				goto l6;
+			}
+			if (reg10&REGA_SF) {
+				fm_data->b200=1; // scann failed
+			}
 			goto l6;
 		}
-		v0=v0>>0xd;
-		fm_data->b200=v0;
-		goto l6;
-	}
 
-	if(fm_data->b198) {
-		goto l4;	
 	}
 
 l6:
-	wreg2=fm_data->wbuf[0];
-	wreg2&=0xfeff;
-	fm_data->wbuf[0]=wreg2;
+	fm_data->regfile[2]&=~REG2_SEEK;
 
-	rda580x_reg_write(fm_data,2,2);
+//	rda580x_reg_write(fm_data,2,2);
 
 	msleep(10);
 
@@ -443,7 +513,7 @@ struct fm_status {
 
 static int fm_rda580x_ioctl(struct inode *i, struct file *f, 
 			unsigned int cmd, unsigned long arg) {
-	printk("%s: cmd %x, arg %lx\n", __FUNCTION__, cmd, arg);
+//	printk("%s: cmd %x, arg %lx\n", __FUNCTION__, cmd, arg);
 
 	switch(cmd) {
 		case FM_IOCTL_STATUS: {
@@ -457,10 +527,12 @@ static int fm_rda580x_ioctl(struct inode *i, struct file *f,
 					rda580x_reg_read(fm_data,10,11);
 					fm_stat->freq=fm_get_frequency(fm_data);
 				} else { //cmd0.1
+					printk("ioctl_status: scanning\n");
 					fm_stat->flags|=1;
 					fm_stat->freq=fm_data->freq;
 				}
 			} else { //cmd0.1
+				printk("ioctl_status: not idle\n");
 				fm_stat->flags|=1;
 				fm_stat->freq=fm_data->freq;
 			}
@@ -525,14 +597,12 @@ static int fm_rda580x_ioctl(struct inode *i, struct file *f,
 }
 
 static int fm_rda580x_open(struct inode *i, struct file *f) {
-	printk("%s\n",__FUNCTION__);
+
 	if (!fm_data->client) { // l1
 		printk("<3>FM_RDA580X %s: No i2c client\n", __FUNCTION__);
 		return -EIO;
 	}
 
-//	if (!(ul_4208&0x10000)) { // l2
-//	}
 	if (test_and_set_bit(0,&fm_opened)) {
 		return -EACCES;
 	}
@@ -543,7 +613,6 @@ static int fm_rda580x_open(struct inode *i, struct file *f) {
 }
 
 static int fm_rda580x_release(struct inode *i, struct file *f) {
-	printk("%s\n",__FUNCTION__);
 
 	if (!fm_data->client) { // l1
 		printk("<3>FM_RDA580X %s: No i2c client\n", __FUNCTION__);
@@ -588,12 +657,10 @@ static int fm_rda580x_probe(struct i2c_adapter *adapter, int address, int kind) 
 }
 
 static int fm_rda580x_attach(struct i2c_adapter *adapter) {
-	printk("%s\n",__FUNCTION__);
 	return i2c_probe(adapter,&addr_data,fm_rda580x_probe);
 }
 
 static int detach_client(struct i2c_client *cl) {
-	printk("%s\n",__FUNCTION__);
 	return -1;
 }
 
@@ -658,26 +725,24 @@ static int __init fm_rda580x_init(void) {
 
 	memset(&fm_data->pad3[0],0,34);
 	
-	rda580x_reg_write(fm_data,2,6);     // write 6 half words to reg 2
+	rda580x_reg_write(fm_data,2,6);     // write reg 2 to 6 half words
 
 	fm_powerup(fm_data);
 
-	v1=fm_data->wbuf[2]&0xffc0; //short 212
+	v1=fm_data->regfile[4]&0xffc0; //short 212
 	v1=v1|0x16;
-	v1=v1&0xffff;
 	v1=v1&0xf9ff;
 	v1=v1|0x600;
-	v0=fm_data->wbuf[0]&0xff8f; //short 208
-	a0=v0&0xffff;
-	a0=a0&0x6fff;
-	v0=0xffffd000;
-	a0=a0|v0;
+	v0=fm_data->regfile[2]& ~(REG2_CLK_MODE_MASK); //0xff8f; //short 208 bit 4-6 off
+	a0=v0;
+	a0=a0& ~(REG2_DHIZ| REG2_BASS);		//0x6fff; off with bit 12 and 15
+	a0|=(REG2_DHIZ| REG2_DMUTE | REG2_BASS);     // v0=0xd000;
 	v0=0x10aa;
-	fm_data->wbuf[0]=a0; // short 208
-	fm_data->wbuf[2]=v1; // short 212
-	fm_data->wbuf[3]=v0; // short 214
+	fm_data->regfile[2]=a0; // short 208
+	fm_data->regfile[4]=v1; // short 212
+	fm_data->regfile[5]=v0; // short 214
 
-	fm_regional_cfg(fm_data,3);
+	fm_regional_cfg(fm_data,1);
 
 	rda580x_reg_write(fm_data,2,6);
 
@@ -696,6 +761,9 @@ static int __init fm_rda580x_init(void) {
 	wqp=create_singlethread_workqueue("fm_rda580x_workqueue");
 	fm_data->wqp=wqp;
 	INIT_WORK(&fm_data->work, fm_seek_wqueue_handler);
+	fm_data->freq=fm_get_frequency(fm_data); // 202
+
+	fm_tune(fm_data,8810);
 	fm_data->freq=fm_get_frequency(fm_data); // 202
 
 //	fm_data->d[202]=freq; //short

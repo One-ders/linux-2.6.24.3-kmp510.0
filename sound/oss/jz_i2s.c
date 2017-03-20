@@ -83,6 +83,7 @@ void (*set_codec_bass)(int val) = NULL;
 void (*set_codec_volume)(int val) = NULL;
 void (*set_codec_mic)(int val) = NULL;
 void (*set_codec_line)(int val) = NULL;
+void (*set_codec_outsource)(int v1, int v2, int v3)=NULL;
 void (*i2s_resume_codec)(void) = NULL;
 void (*i2s_suspend_codec)(int wr,int rd) = NULL;
 void (*init_codec_pin)(void) = NULL;
@@ -126,6 +127,7 @@ static int              pop_dma_flag;
 static int              last_dma_buffer_id;
 static int              drain_flag;
 static int              use_mic_line_flag;
+static int		codec_outsource;
 
 static void (*old_mksound)(unsigned int hz, unsigned int ticks);
 extern void (*kd_mksound)(unsigned int hz, unsigned int ticks);
@@ -848,7 +850,7 @@ static void replay_fill_2x16_s(signed long src_start, int count, int id)
 	*(out_dma_buf_data_count + id) = cnt;
 }
 
-static void replay_fill_2x18_s(unsigned long src_start, int count, int id)
+static void replay_fill_2x18_s(signed long src_start, int count, int id)
 {
 	int cnt = 0;
 	signed long d1;
@@ -994,6 +996,7 @@ match:
 static int jz_i2s_ioctl_mixdev(struct inode *inode, struct file *file, unsigned int cmd, unsigned long arg)
 {
 	struct i2s_codec *codec = (struct i2s_codec *)file->private_data;
+	printk("jz_i2s_ioctl_mixdev(cmd %x, arg %lx\n", cmd, arg);
 	return codec->mixer_ioctl(codec, cmd, arg);
 }
 
@@ -1014,6 +1017,7 @@ static int i2s_mixer_ioctl(struct i2s_codec *codec, unsigned int cmd, unsigned l
 {
 	int ret;
 	long val = 0;
+	printk("i2s_mixer ioctl(cmd %x, arg %lx)\n", cmd, arg);
 	switch (cmd) {
 	case SOUND_MIXER_INFO:
 
@@ -1157,6 +1161,27 @@ static int i2s_mixer_ioctl(struct i2s_codec *codec, unsigned int cmd, unsigned l
 		val = val | ret;
 		
 		return put_user(val, (long *) arg);
+
+	case SOUND_MIXER_WRITE_OUTSRC:
+		ret=get_user(val, (long *) arg);
+		if (ret)
+			return ret;
+
+		codec_outsource=val&0xd0;
+		if(set_codec_outsource) {
+			set_codec_outsource((val>>4)&1,
+					  (val>>6)&1,
+					  (val>>7)&1);
+		}
+		return 0;
+
+	case SOUND_MIXER_READ_OUTSRC:
+		val=codec_outsource;
+		ret=val << 8;
+		val=val|ret;
+
+		return put_user(val, (long *) arg);
+
 	default:
 		return -ENOSYS;
 	}
@@ -1870,11 +1895,12 @@ static int jz_audio_release(struct inode *inode, struct file *file)
 		drain_dac(controller, file->f_flags & O_NONBLOCK);
 #if defined(CONFIG_I2S_DLV)
 	/* wait for fifo empty */
-		write_codec_file_bit(1, 1, 5);//DAC_MUTE->1
-		gain_down_start = jiffies;
-		sleep_on(&pop_wait_queue);
-		//gain_down_end = jiffies;
-		/*while (1) {
+		if (!(read_codec_file(1)&0x20)) {
+			write_codec_file_bit(1, 1, 5);//DAC_MUTE->1
+			gain_down_start = jiffies;
+			sleep_on(&pop_wait_queue);
+			//gain_down_end = jiffies;
+			/*while (1) {
 			tfl = REG_AIC_SR & 0x00003f00;
 			if (tfl == 0) {
 				udelay(500);
@@ -1882,7 +1908,8 @@ static int jz_audio_release(struct inode *inode, struct file *file)
 			}
 			mdelay(2);
 			}*/	
-		mdelay(100);
+			mdelay(100);
+		}
 #endif
 		disable_dma(controller->dma1);
 		set_dma_count(controller->dma1, 0);
@@ -1924,10 +1951,13 @@ static int jz_audio_release(struct inode *inode, struct file *file)
 		controller->nextIn = 0;
 		spin_unlock_irqrestore(&controller->ioctllock, flags);
 #if defined(CONFIG_I2S_DLV)
-		write_codec_file_bit(5, 1, 6);//SB_OUT->1
-		ramp_down_start = jiffies;
-		sleep_on(&pop_wait_queue);
-		//ramp_down_end = jiffies;
+		if (!(read_codec_file(5)&0x40)) {
+			write_codec_file_bit(5, 1, 6);//SB_OUT->1
+			ramp_down_start = jiffies;
+			sleep_on(&pop_wait_queue);
+			//ramp_down_end = jiffies;
+		}
+
 		if (use_mic_line_flag == USE_LINEIN) {
 			unset_record_line_input_audio_with_audio_data_replay();
 			//printk("3 use_mic_line_flag=%d\n",use_mic_line_flag);
@@ -1955,10 +1985,12 @@ static int jz_audio_release(struct inode *inode, struct file *file)
 		//write_mute_to_dma_buffer(save_last_samples[last_dma_buffer_id].left,save_last_samples[last_dma_buffer_id].right);
 #endif
 #if defined(CONFIG_I2S_DLV)
-		write_codec_file_bit(1, 1, 5);//DAC_MUTE->1
-		gain_down_start = jiffies;
-		sleep_on(&pop_wait_queue);
-		//gain_down_end = jiffies;
+		if (!(read_codec_file(1)&0x20)) {
+			write_codec_file_bit(1, 1, 5);//DAC_MUTE->1
+			gain_down_start = jiffies;
+			sleep_on(&pop_wait_queue);
+			//gain_down_end = jiffies;
+		}
 		while (1) {
 			tfl = REG_AIC_SR & 0x00003f00;
 			if (tfl == 0) {
@@ -1987,10 +2019,12 @@ static int jz_audio_release(struct inode *inode, struct file *file)
 		controller->nextOut = 0;
 		spin_unlock_irqrestore(&controller->ioctllock, flags);
 #if defined(CONFIG_I2S_DLV)
-		write_codec_file_bit(5, 1, 6);//SB_OUT->1
-		ramp_down_start = jiffies;
-		sleep_on(&pop_wait_queue);
-		//ramp_down_end = jiffies;
+		if (!(read_codec_file(5)&0x40)) {
+			write_codec_file_bit(5, 1, 6);//SB_OUT->1
+			ramp_down_start = jiffies;
+			sleep_on(&pop_wait_queue);
+			//ramp_down_end = jiffies;
+		}
 		unset_audio_data_replay();
 #endif
 		__i2s_disable();
@@ -2260,21 +2294,25 @@ static int jz_audio_open(struct inode *inode, struct file *file)
 #if defined(CONFIG_I2S_DLV)
 		//set SB_ADC or SB_DAC
 		__dmac_enable_module(0);
-		write_codec_file_bit(5, 0, 6);//PMR1.SB_OUT->0
-		ramp_up_start = jiffies;
-		sleep_on(&pop_wait_queue);
-		//ramp_up_end = jiffies;
+		if (read_codec_file(5)&0x40) {
+			write_codec_file_bit(5, 0, 6);//PMR1.SB_OUT->0
+			ramp_up_start = jiffies;
+			sleep_on(&pop_wait_queue);
+			//ramp_up_end = jiffies;
+		}
 #endif
 	} else if (file->f_mode & FMODE_WRITE) {
 #if defined(CONFIG_I2S_DLV)
-		write_codec_file_bit(5, 0, 6);//PMR1.SB_OUT->0
-		ramp_up_start = jiffies;
-		/*while (!(REG_RTC_RCR & RTC_RCR_WRDY));
-		REG_RTC_RCR = 0x1;
-		while (!(REG_RTC_RCR & RTC_RCR_WRDY));
-		REG_RTC_RGR = 1;*/
-		sleep_on(&pop_wait_queue);
-		//ramp_up_end = jiffies;
+		if (read_codec_file(5)&0x40) {
+			write_codec_file_bit(5, 0, 6);//PMR1.SB_OUT->0
+			ramp_up_start = jiffies;
+			/*while (!(REG_RTC_RCR & RTC_RCR_WRDY));
+			REG_RTC_RCR = 0x1;
+			while (!(REG_RTC_RCR & RTC_RCR_WRDY));
+			REG_RTC_RGR = 1;*/
+			sleep_on(&pop_wait_queue);
+			//ramp_up_end = jiffies;
+		}
 		write_codec_file_bit(5, 1, 4);//SB_ADC->1
 #endif
 	} else if (file->f_mode & FMODE_READ) {
@@ -2301,6 +2339,14 @@ unsigned int cmd, unsigned long arg)
 	audio_buf_info abinfo;
 	int id, i;
 
+	if (cmd&0x40045017)
+	switch(cmd) {
+	case 0x40045017:
+	case 0x4010500c:
+		break;
+	default:
+		printk("jz_audio_ioctl(cmd %x, arg %lx)\n", cmd, arg);
+	}
 	val = 0;
 	switch (cmd) {
 	case OSS_GETVERSION:
