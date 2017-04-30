@@ -70,6 +70,7 @@ typedef void (*WQ_HANDLER)(void);
 
 #define REG4			4
 #define REG4_RSVD_15		0x8000
+#define REG4_RBDS		0x2000
 #define REG4_RSVD_12_13		0x3000
 #define REG4_DE			0x0800	// 0=75s, 1=50s
 #define REG4_RSVD_10		0x0400
@@ -85,7 +86,7 @@ typedef void (*WQ_HANDLER)(void);
 
 #define REG6			6
 #define REG6_RSVD_15		0x8000
-#define REG6_OPEN_MODE_MASK	0x6000		_
+#define REG6_OPEN_MODE_MASK	0x6000
 
 #define REG7			7
 #define REG7_RSVD_15		0x8000
@@ -243,7 +244,7 @@ static void fm_regional_cfg(struct FM_DATA *fm_data, int region) {
 	fm_data->regfile[3]&=
 		~(REG3_BAND_MASK|REG3_SPACE_MASK); //0xfff0; zero out bit 3,2,1,0
 	fm_data->regfile[4]&=
-		~(REG4_DE); //0xf7ff;// zero out bit 11
+		~(REG4_DE|REG4_AFCD); //0xf7ff;// zero out bit 11
 
 	switch(region) {
 		case 0: {
@@ -253,7 +254,7 @@ static void fm_regional_cfg(struct FM_DATA *fm_data, int region) {
 		}
 		case 1: {
 			fm_data->regfile[2]|=REG2_ENA_RDS; //0x8;
-			fm_data->regfile[4]|=REG4_DE;	   //0x800;
+			fm_data->regfile[4]|=(REG4_DE|REG4_RBDS);   //0x800;
 			break;
 		}
 		case 2: {
@@ -401,6 +402,9 @@ static int fm_get_rssi(struct FM_DATA *fm_data) {
 }
 
 static int is_fm_rds_available(struct FM_DATA *fm_data) {
+	printk("REGA_RDSS=%x, REGA_RDSR=%x\n", 
+			fm_data->regfile[0xa]&REGA_RDSS,
+			fm_data->regfile[0xa]&REGA_RDSR);
 	return (fm_data->regfile[0xa]&REGA_RDSS)?1:0;
 }
 
@@ -490,7 +494,9 @@ static ssize_t fm_rda580x_write(struct file *f,
 #define FM_IOCTL_STATUS		0
 #define FM_IOCTL_SET_VOL	2
 #define FM_IOCTL_TUNE		3
-#define FM_IOCTL_SEEK_UP	4
+#define FM_IOCTL_SEEK		4
+#define FM_IOCTL_STOP_SEEK	5
+#define FM_IOCTL_SET_REGION	8
 
 
 struct fm_status {
@@ -567,7 +573,6 @@ static int fm_rda580x_ioctl(struct inode *i, struct file *f,
 			fm_stat->b5=88;
 			fm_stat->b6=0;
 			fm_stat->b7=0;
-
 			return 0;
 
 		}
@@ -582,14 +587,30 @@ static int fm_rda580x_ioctl(struct inode *i, struct file *f,
 			fm_tune(fm_data,arg);
 			return 0;
 		}
-		case FM_IOCTL_SEEK_UP: {
+		case FM_IOCTL_SEEK: {
 			if (fm_data->b198) {
 				return -EAGAIN;
 			}
-			fm_data->b196=(arg>>1)&0x1;
+			fm_data->b196=(arg>>1)&0x1; // down/up
 			fm_data->b197=arg&0x1;
 			fm_data->b198=1;
 			queue_work(fm_data->wqp, &fm_data->work);
+			return 0;
+		}
+		case FM_IOCTL_STOP_SEEK: {
+			int i=50;
+			fm_data->b198=0; // stop seek
+			while(i--) {
+				if (fm_data->b199) return 0;
+				msleep(10);
+			}
+			printk("<3>FM_RDA580X %s: Cannot stop fm seeking\n", 
+				__FUNCTION__);
+			return -EIO;
+		}
+		case FM_IOCTL_SET_REGION: {
+			fm_regional_cfg(fm_data, arg);
+			rda580x_reg_write(fm_data,2,5);
 			return 0;
 		}
 	}
@@ -713,7 +734,7 @@ static int __init fm_rda580x_init(void) {
 		printk("<3>FM_RDA580X %s: kzalloc fail\n", __FUNCTION__);
 		return -ENOMEM;
 	}
-	fm_data->b199=1; //byte
+	fm_data->b199=1; // idle
 
 	i2c_register_driver(0,&fm_rda580x_driver);
 
@@ -733,10 +754,11 @@ static int __init fm_rda580x_init(void) {
 	v1=v1|0x16;
 	v1=v1&0xf9ff;
 	v1=v1|0x600;
-	v0=fm_data->regfile[2]& ~(REG2_CLK_MODE_MASK); //0xff8f; //short 208 bit 4-6 off
-	a0=v0;
+	v1=v1|0x3000;
+	a0=fm_data->regfile[2]& ~(REG2_CLK_MODE_MASK); //0xff8f; //short 208 bit 4-6 off
 	a0=a0& ~(REG2_DHIZ| REG2_BASS);		//0x6fff; off with bit 12 and 15
 	a0|=(REG2_DHIZ| REG2_DMUTE | REG2_BASS);     // v0=0xd000;
+	a0|=0x8;
 	v0=0x10aa;
 	fm_data->regfile[2]=a0; // short 208
 	fm_data->regfile[4]=v1; // short 212

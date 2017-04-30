@@ -2368,6 +2368,7 @@ unsigned int cmd, unsigned long arg)
 		/* set smaple rate */
 		if (get_user(val, (int *)arg))
 			return -EFAULT;
+	printk("DSP_SPEED %d\n", val);
 		if (val >= 0)
 			jz_audio_set_speed(controller->dev_audio, val);
 		
@@ -2376,11 +2377,13 @@ unsigned int cmd, unsigned long arg)
 		/* set stereo or mono channel */
 		if (get_user(val, (int *)arg))
 		    return -EFAULT;
+	printk("DSP_STEREO %d\n", val);
 		jz_audio_set_channels(controller->dev_audio, val ? 2 : 1);
 	    
 		return 0;
 	case SNDCTL_DSP_GETBLKSIZE:
 		//return put_user(jz_audio_fragsize / jz_audio_b, (int *)arg);
+        printk("DSP_GETBLKSIZE: %d\n", jz_audio_fragsize);
 		return put_user(jz_audio_fragsize, (int *)arg);
 	case SNDCTL_DSP_GETFMTS:
 		/* Returns a mask of supported sample format*/
@@ -2389,6 +2392,7 @@ unsigned int cmd, unsigned long arg)
 		/* Select sample format */
 		if (get_user(val, (int *)arg))
 			return -EFAULT;
+	printk("DSP_SETFMT %d\n", val);
 		if (val != AFMT_QUERY)
 			jz_audio_set_format(controller->dev_audio,val);
 		else {
@@ -2402,6 +2406,7 @@ unsigned int cmd, unsigned long arg)
 	case SNDCTL_DSP_CHANNELS:
 		if (get_user(val, (int *)arg))
 			return -EFAULT;
+	printk("DSP_CHANNELS %d\n", val);
 		jz_audio_set_channels(controller->dev_audio, val);
 		
 		return put_user(val, (int *)arg);
@@ -2412,6 +2417,8 @@ unsigned int cmd, unsigned long arg)
 		return 0;
 	case SNDCTL_DSP_SETFRAGMENT:
 		get_user(val, (long *) arg);
+	printk("DSP_SETFRAGMENT %x\n", val);
+		
 		newfragsize = 1 << (val & 0xFFFF);
 		if (newfragsize < 4 * PAGE_SIZE)
 			newfragsize = 4 * PAGE_SIZE;
@@ -2440,7 +2447,12 @@ unsigned int cmd, unsigned long arg)
 		file->f_flags |= O_NONBLOCK;
 		return 0;
 	case SNDCTL_DSP_SETDUPLEX:
-		return -EINVAL;
+		if (get_user(val, (int *)arg))
+			return -EFAULT;
+		if (val) {
+			return -EINVAL;
+		}
+		return 0;
 	case SNDCTL_DSP_GETOSPACE:
 	{
 		int i;
@@ -2476,6 +2488,8 @@ unsigned int cmd, unsigned long arg)
 		/* write size count without blocking in bytes */
 		abinfo.bytes = (int)bytes;
 
+		printk("GETOSPACE: fragstotal=%d, fragments=%d, fragsize=%d, bytes=%d\n",
+				abinfo.fragstotal, abinfo.fragments, abinfo.fragsize, abinfo.bytes);
 		return copy_to_user((void *)arg, &abinfo, 
 				    sizeof(abinfo)) ? -EFAULT : 0;
 	}
@@ -2518,10 +2532,13 @@ unsigned int cmd, unsigned long arg)
 		if (file->f_mode & FMODE_WRITE && out_dma_buf)
 			val |= PCM_ENABLE_OUTPUT;
 
+	printk("DSP_GETTRIGGER\n");
+
 		return put_user(val, (int *)arg);	
 	case SNDCTL_DSP_SETTRIGGER:
 		if (get_user(val, (int *)arg))
 			return -EFAULT;
+		printk("DSP_SETTRIGGER: cleared val=%d\n", val);
 		return 0;
 	case SNDCTL_DSP_GETIPTR:
 		if (!(file->f_mode & FMODE_READ))
@@ -2742,8 +2759,8 @@ static ssize_t jz_audio_write(struct file *file, const char *buffer, size_t coun
 //		copy_count = jz_audio_fragsize / 4;
 	left_count = count;
 	if (copy_from_user(controller->tmp1, buffer, count)) {
-		printk("copy_from_user failed:%d",ret);
-		return ret ? ret : -EFAULT;
+		printk("copy_from_user failed");
+		return -EFAULT;
 	}
 
 	while (left_count > 0) {
@@ -2752,7 +2769,7 @@ static ssize_t jz_audio_write(struct file *file, const char *buffer, size_t coun
 			udelay(2);
 		if (elements_in_queue(&out_empty_queue) == 0) {
 			if (file->f_flags & O_NONBLOCK)
-				return ret;
+				return ret?ret:-EAGAIN;
 			else
 				sleep_on(&tx_wait_queue);
 		}

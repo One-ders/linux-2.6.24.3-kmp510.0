@@ -391,7 +391,7 @@ static int i2cio_ioctl(struct inode *inode, struct file *file,
 		unsigned int cmd, unsigned long arg) {
 	void __user *p=(void __user *)arg;
 
-	int bub=-0xb201;
+//	int bub=-0xb201;
 	int nr=_IOC_NR(cmd);
 	unsigned int rc;
 	unsigned long v0, v1, a0, a1;
