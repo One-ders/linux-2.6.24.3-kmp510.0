@@ -595,7 +595,8 @@ typedef struct imem_list {
 
 static struct imem_list *imem0_list_head = NULL; /* up sorted by phys_start */
 
-#define IMEM1_MAX_ORDER 11		/* max 2^11 * 4096 = 8MB */
+//#define IMEM1_MAX_ORDER 11		/* max 2^11 * 4096 = 8MB */
+#define IMEM1_MAX_ORDER 	0	/* max 2^0 * 4096 = 4096 */
 static unsigned int jz_imem1_base;	/* physical base address of ipu memory */
 static unsigned int allocated_phys_addr1 = 0;
 static struct imem_list *imem1_list_head = NULL; /* up sorted by phys_start */

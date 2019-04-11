@@ -2220,8 +2220,10 @@ static int jz4750fb_set_backlight_level(int n)
 				}
 #endif		
 				__lcd_set_backlight_level(n);
+#if 0
 			} else {
 				__lcd_set_backlight_max();
+#endif
 			}
 		}
 	}else{

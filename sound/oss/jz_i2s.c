@@ -291,7 +291,8 @@ static inline void audio_start_dma(int chan, void *dev_id, unsigned long phyaddr
 	struct jz_i2s_controller_info * controller = (struct jz_i2s_controller_info *) dev_id;
 	
 	spin_lock_irqsave(&controller->ioctllock, flags);
-	jz_audio_dma_tran_count = count / jz_audio_b;
+//	jz_audio_dma_tran_count = count / jz_audio_b;
+	jz_audio_dma_tran_count = count;
 	spin_unlock_irqrestore(&controller->ioctllock, flags);
 	flags = claim_dma_lock();
 	disable_dma(chan);
@@ -330,7 +331,11 @@ static irqreturn_t jz_i2s_record_dma_irq (int irq, void *dev_id)
 			wake_up(&drain_wait_queue);
 		/* for DSP_GETIPTR */
 		spin_lock_irqsave(&controller->ioctllock, flags);
-		controller->total_bytes += jz_audio_dma_tran_count;
+		if (jz_audio_channels==2) {
+			controller->total_bytes+=(jz_audio_dma_tran_count/jz_audio_b);
+		} else {
+			controller->total_bytes+=(jz_audio_dma_tran_count/(jz_audio_b*2));
+		}
 		controller->blocks ++;
 		spin_unlock_irqrestore(&controller->ioctllock, flags);
 		id1 = get_buffer_id(&in_busy_queue);
@@ -382,7 +387,11 @@ static irqreturn_t jz_i2s_replay_dma_irq (int irq, void *dev_id)
 
 			/* for DSP_GETOPTR */
 			spin_lock_irqsave(&controller->ioctllock, flags);
-			controller->total_bytes += jz_audio_dma_tran_count;
+			if (jz_audio_channels==2) {
+				controller->total_bytes += (jz_audio_dma_tran_count/jz_audio_b);
+			} else {
+				controller->total_bytes += (jz_audio_dma_tran_count/(jz_audio_b*2));
+			}
 			controller->blocks ++;
 			spin_unlock_irqrestore(&controller->ioctllock, flags);
 			if ((id = get_buffer_id(&out_busy_queue)) < 0)
@@ -1431,7 +1440,12 @@ static int jz_i2s_resume(struct jz_i2s_controller_info *controller)
 
                     /* for DSP_GETOPTR */
                     spin_lock_irqsave(&controller->ioctllock, flags);
-                    controller->total_bytes += jz_audio_dma_tran_count;
+		    if (jz_audio_channels=2) {
+			controller->total_bytes += (jz_audio_dma_tran_count/jz_audio_b);
+		    } else {
+			controller->total_bytes += (jz_audio_dma_tran_count/(jz_audio_b*2));
+		    }
+
                     controller->blocks ++;
                     spin_unlock_irqrestore(&controller->ioctllock, flags);
                     while((id = get_buffer_id(&out_busy_queue)) >= 0)
@@ -1465,7 +1479,12 @@ static int jz_i2s_resume(struct jz_i2s_controller_info *controller)
 		    }
 		    /* for DSP_GETIPTR */
 		    spin_lock_irqsave(&controller->ioctllock, flags);
-		    controller->total_bytes += jz_audio_dma_tran_count;
+		    if (jz_audio_channels==2) {
+			controller->total_bytes += (jz_audio_dma_tran_count/jz_audio_b);
+		    } else {
+			controller->total_bytes += (jz_audio_dma_tran_count/(jz_audio_b*2));
+		    }
+
 		    controller->blocks ++;
 		    spin_unlock_irqrestore(&controller->ioctllock, flags);
 		    id1 = get_buffer_id(&in_busy_queue);
@@ -1507,24 +1526,24 @@ static int jz_i2s_pm_callback(struct pm_dev *pm_dev, pm_request_t req, void *dat
 #if defined(CONFIG_I2S_DLV)
 static irqreturn_t aic_codec_irq(int irq, void *dev_id)
 {
-	u8 file_9 = read_codec_file(9);
-	u8 file_8 = read_codec_file(8);
+	u8 file_9 = read_codec_file(9);  // IFR Interrupt Flag Reg
+	u8 file_8 = read_codec_file(8);  // ICR Interrupt Control Reg
 	
 	//printk("--- 8:0x%x  9:0x%x ---\n",file_8,file_9);
-	if ((file_9 & 0x1f) == 0x10) {
+	if ((file_9 & 0x1f) == 0x10) { // Short circuit ??
 
-		write_codec_file(8, 0x3f);
-		write_codec_file_bit(5, 1, 6);//SB_OUT->1
+		write_codec_file(8, 0x3f); // Mask all irqs
+		write_codec_file_bit(5, 1, 6);//SB_OUT->1  = power down output
 		mdelay(300);
-		while ((read_codec_file(9) & 0x4) != 0x4);
-		while ((read_codec_file(9) & 0x10) == 0x10) {
-			write_codec_file(9, 0x10);
+		while ((read_codec_file(9) & 0x4) != 0x4); // SB out active
+		while ((read_codec_file(9) & 0x10) == 0x10) { // short circ
+			write_codec_file(9, 0x10); // update reg
 		}
-		write_codec_file_bit(5, 0, 6);//SB_OUT->0
+		write_codec_file_bit(5, 0, 6);//SB_OUT->0  = activate
 		mdelay(300);
-		while ((read_codec_file(9) & 0x8) != 0x8);
-		write_codec_file(9, file_9);
-		write_codec_file(8, file_8);
+		while ((read_codec_file(9) & 0x8) != 0x8); // ramp up
+		write_codec_file(9, file_9);   // reset all irq flags
+		write_codec_file(8, file_8);   // enable irqs again
 
 		return IRQ_HANDLED;
 	}
@@ -1538,7 +1557,7 @@ static irqreturn_t aic_codec_irq(int irq, void *dev_id)
 	else if (file_9 & 0x1)
 		gain_down_end = jiffies;
 
-	write_codec_file(9, file_9);
+	write_codec_file(9, file_9);  // reset all
 	if (file_9 & 0xf)
 		wake_up(&pop_wait_queue);
 	while (REG_ICDC_RGDATA & 0x100);
@@ -2339,6 +2358,7 @@ unsigned int cmd, unsigned long arg)
 	audio_buf_info abinfo;
 	int id, i;
 
+#if 0
 	if (cmd&0x40045017)
 	switch(cmd) {
 	case 0x40045017:
@@ -2347,6 +2367,7 @@ unsigned int cmd, unsigned long arg)
 	default:
 		printk("jz_audio_ioctl(cmd %x, arg %lx)\n", cmd, arg);
 	}
+#endif
 	val = 0;
 	switch (cmd) {
 	case OSS_GETVERSION:
@@ -2361,6 +2382,7 @@ unsigned int cmd, unsigned long arg)
 #endif
 		return 0;
 	case SNDCTL_DSP_SYNC:
+//	printk("DSP_SYNC %d\n", val);
 		if (file->f_mode & FMODE_WRITE)
 			return drain_dac(controller, file->f_flags & O_NONBLOCK);
 		return 0;
@@ -2368,7 +2390,7 @@ unsigned int cmd, unsigned long arg)
 		/* set smaple rate */
 		if (get_user(val, (int *)arg))
 			return -EFAULT;
-	printk("DSP_SPEED %d\n", val);
+//	printk("DSP_SPEED %d\n", val);
 		if (val >= 0)
 			jz_audio_set_speed(controller->dev_audio, val);
 		
@@ -2377,14 +2399,20 @@ unsigned int cmd, unsigned long arg)
 		/* set stereo or mono channel */
 		if (get_user(val, (int *)arg))
 		    return -EFAULT;
-	printk("DSP_STEREO %d\n", val);
+//	printk("DSP_STEREO %d\n", val);
 		jz_audio_set_channels(controller->dev_audio, val ? 2 : 1);
 	    
 		return 0;
-	case SNDCTL_DSP_GETBLKSIZE:
+	case SNDCTL_DSP_GETBLKSIZE: {
+		int blksize=0;
+		if (jz_audio_channels == 2)
+			blksize = jz_audio_fragsize / jz_audio_b;
+		else if  (jz_audio_channels == 1)
+			blksize = jz_audio_fragsize / jz_audio_b / 2;
 		//return put_user(jz_audio_fragsize / jz_audio_b, (int *)arg);
-        printk("DSP_GETBLKSIZE: %d\n", jz_audio_fragsize);
-		return put_user(jz_audio_fragsize, (int *)arg);
+//        printk("DSP_GETBLKSIZE: %d\n", blksize);
+		return put_user(blksize, (int *)arg);
+	}
 	case SNDCTL_DSP_GETFMTS:
 		/* Returns a mask of supported sample format*/
 		return put_user(AFMT_U8 | AFMT_S16_LE, (int *)arg);
@@ -2392,7 +2420,7 @@ unsigned int cmd, unsigned long arg)
 		/* Select sample format */
 		if (get_user(val, (int *)arg))
 			return -EFAULT;
-	printk("DSP_SETFMT %d\n", val);
+//	printk("DSP_SETFMT %d\n", val);
 		if (val != AFMT_QUERY)
 			jz_audio_set_format(controller->dev_audio,val);
 		else {
@@ -2406,7 +2434,7 @@ unsigned int cmd, unsigned long arg)
 	case SNDCTL_DSP_CHANNELS:
 		if (get_user(val, (int *)arg))
 			return -EFAULT;
-	printk("DSP_CHANNELS %d\n", val);
+//	printk("DSP_CHANNELS %d\n", val);
 		jz_audio_set_channels(controller->dev_audio, val);
 		
 		return put_user(val, (int *)arg);
@@ -2417,19 +2445,26 @@ unsigned int cmd, unsigned long arg)
 		return 0;
 	case SNDCTL_DSP_SETFRAGMENT:
 		get_user(val, (long *) arg);
-	printk("DSP_SETFRAGMENT %x\n", val);
+//	printk("DSP_SETFRAGMENT %x\n", val);
 		
 		newfragsize = 1 << (val & 0xFFFF);
-		if (newfragsize < 4 * PAGE_SIZE)
-			newfragsize = 4 * PAGE_SIZE;
-		if (newfragsize > (16 * PAGE_SIZE))
-			newfragsize = 16 * PAGE_SIZE;
-		
 		newfragstotal = (val >> 16) & 0x7FFF;
 		if (newfragstotal < 2)
 			newfragstotal = 2;
 		if (newfragstotal > 32)
 			newfragstotal = 32;
+
+		if (jz_audio_channels == 2)
+			newfragsize = newfragsize*jz_audio_b;
+		else if (jz_audio_channels == 1)
+			newfragsize = newfragsize*jz_audio_b*2;
+		else printk("SETFRAGMENT: bad channel no\n");
+
+		if (newfragsize < (4*PAGE_SIZE))
+			newfragsize = 4*PAGE_SIZE;
+		if (newfragsize > (16 * PAGE_SIZE))
+			newfragsize = 16 * PAGE_SIZE;
+
 		if((jz_audio_fragstotal == newfragstotal) && (jz_audio_fragsize == newfragsize))
 			return 0;
 		Free_In_Out_queue(jz_audio_fragstotal,jz_audio_fragsize);
@@ -2468,7 +2503,7 @@ unsigned int cmd, unsigned long arg)
 		if (jz_audio_channels == 2)
 			bytes /= jz_audio_b;
 		else if  (jz_audio_channels == 1)
-			bytes /= 4;
+			bytes /= (jz_audio_b*2);
 		else 
 			printk("SNDCTL_DSP_GETOSPACE : channels is wrong 1!\n");
 		
@@ -2481,15 +2516,15 @@ unsigned int cmd, unsigned long arg)
 		if (jz_audio_channels == 2)
 			abinfo.fragsize = jz_audio_fragsize / jz_audio_b;
 		else if  (jz_audio_channels == 1)
-			abinfo.fragsize = jz_audio_fragsize / 4;
+			abinfo.fragsize = jz_audio_fragsize / (jz_audio_b*2);
 		else 
 			printk("SNDCTL_DSP_GETOSPACE : channels is wrong 2!\n");
  
 		/* write size count without blocking in bytes */
 		abinfo.bytes = (int)bytes;
 
-		printk("GETOSPACE: fragstotal=%d, fragments=%d, fragsize=%d, bytes=%d\n",
-				abinfo.fragstotal, abinfo.fragments, abinfo.fragsize, abinfo.bytes);
+//		printk("GETOSPACE: fragstotal=%d, fragments=%d, fragsize=%d, bytes=%d\n",
+//				abinfo.fragstotal, abinfo.fragments, abinfo.fragsize, abinfo.bytes);
 		return copy_to_user((void *)arg, &abinfo, 
 				    sizeof(abinfo)) ? -EFAULT : 0;
 	}
@@ -2532,13 +2567,13 @@ unsigned int cmd, unsigned long arg)
 		if (file->f_mode & FMODE_WRITE && out_dma_buf)
 			val |= PCM_ENABLE_OUTPUT;
 
-	printk("DSP_GETTRIGGER\n");
+//	printk("DSP_GETTRIGGER\n");
 
 		return put_user(val, (int *)arg);	
 	case SNDCTL_DSP_SETTRIGGER:
 		if (get_user(val, (int *)arg))
 			return -EFAULT;
-		printk("DSP_SETTRIGGER: cleared val=%d\n", val);
+//		printk("DSP_SETTRIGGER: val=%d\n", val);
 		return 0;
 	case SNDCTL_DSP_GETIPTR:
 		if (!(file->f_mode & FMODE_READ))
@@ -2585,7 +2620,7 @@ unsigned int cmd, unsigned long arg)
 		if (jz_audio_channels == 2)
 			unfinish /= jz_audio_b;
 		else if  (jz_audio_channels == 1)
-			unfinish /= 4;
+			unfinish /= (jz_audio_b*2);
 		else 
 			printk("SNDCTL_DSP_GETODELAY : channels is wrong !\n");
 	    
@@ -2613,18 +2648,27 @@ static unsigned int jz_audio_poll(struct file *file,struct poll_table_struct *wa
 	unsigned long flags;
 	unsigned int mask = 0;
 
+//	printk("enter: poll\n");
 	if (file->f_mode & FMODE_WRITE) {
-		if (elements_in_queue(&out_empty_queue) > 0)
+		if (elements_in_queue(&out_empty_queue) > 0) {
+			//printk("leave: poll w\n");
 			return POLLOUT | POLLWRNORM;
+		}
 
+//		printk("enter: pollwait w\n");
 		poll_wait(file, &controller->dac_wait, wait);
+//		printk("return: pollwait w\n");
 	}
 
 	if (file->f_mode & FMODE_READ) {
-		if (elements_in_queue(&in_full_queue) > 0)
+		if (elements_in_queue(&in_full_queue) > 0) {
+//			printk("leave: poll r\n");
 			return POLLIN | POLLRDNORM;
+		}
 
+//		printk("enter: pollwait r\n");
 		poll_wait(file, &controller->adc_wait, wait);
+//		printk("return: pollwait r\n");
 	}
 
 	spin_lock_irqsave(&controller->lock, flags);
@@ -2637,6 +2681,7 @@ static unsigned int jz_audio_poll(struct file *file,struct poll_table_struct *wa
 	}
 	spin_unlock_irqrestore(&controller->lock, flags);
 
+//	printk("return: poll %x\n", mask);
 	return mask;
 }
 
@@ -2740,8 +2785,11 @@ static ssize_t jz_audio_write(struct file *file, const char *buffer, size_t coun
 	unsigned int flags;
 	struct jz_i2s_controller_info *controller = (struct jz_i2s_controller_info *) file->private_data;
 	
-	if (count <= 0)
+//	printk("jz write: %d bytes\n",count);
+	if (count <= 0) {
+//	printk("jz write: leave 1\n");
 		return -EINVAL;
+	}
 	
 	if(set_replay_hp_or_speaker)
 		set_replay_hp_or_speaker();
@@ -2755,11 +2803,12 @@ static ssize_t jz_audio_write(struct file *file, const char *buffer, size_t coun
 	if (jz_audio_channels == 2)
 		copy_count = jz_audio_fragsize / jz_audio_b;
 	else if(jz_audio_channels == 1)
-		copy_count = jz_audio_fragsize / jz_audio_b / 2;
-//		copy_count = jz_audio_fragsize / 4;
+		copy_count = jz_audio_fragsize / (jz_audio_b*2);
+
 	left_count = count;
 	if (copy_from_user(controller->tmp1, buffer, count)) {
 		printk("copy_from_user failed");
+//	printk("jz write: leave 2\n");
 		return -EFAULT;
 	}
 
@@ -2768,10 +2817,12 @@ static ssize_t jz_audio_write(struct file *file, const char *buffer, size_t coun
 		if (file->f_flags & O_NONBLOCK)
 			udelay(2);
 		if (elements_in_queue(&out_empty_queue) == 0) {
-			if (file->f_flags & O_NONBLOCK)
+			if (file->f_flags & O_NONBLOCK) {
+//	printk("jz write: leave 3, eagain %d\n", ret);
 				return ret?ret:-EAGAIN;
-			else
+			} else {
 				sleep_on(&tx_wait_queue);
+			}
 		}
 		/* the end fragment size in this write */
 		if (ret + copy_count > count)
@@ -2820,6 +2871,7 @@ static ssize_t jz_audio_write(struct file *file, const char *buffer, size_t coun
 		}
 	}
 
+//	printk("jz write: leave 4, return %d\n", ret);
 	return ret;
 }
 
