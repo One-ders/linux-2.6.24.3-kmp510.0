@@ -385,7 +385,7 @@ static INLINE void ResetHcdState(PSDHCD pHcd) {
     pHcd->IrqProcState = SDHCD_IDLE;
         /* mark this device as special */
     pHcd->pPseudoDev->pId[0].CardFlags = CARD_PSEUDO;
-    pHcd->SlotCurrentAllocated = 0;
+// FIXUP    pHcd->SlotCurrentAllocated = 0;
 }
 
 static INLINE SDIO_STATUS _IssueConfig(PSDHCD           pHcd,

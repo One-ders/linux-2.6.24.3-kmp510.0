@@ -2,7 +2,7 @@
 # kernel build system and can use its language.
 ifneq (${KERNELRELEASE},)
 obj-m := sdio_busdriver.o
-sdio_busdriver-objs := sdio_bus.o sdio_bus_linux.o
+sdio_busdriver-objs := sdio_bus.o sdio_function.o sdio_bus_linux.o
 MY_CFLAGS += -g
 ccflags-y += ${MY_CFLAGS}
 CC += ${MY_CFLAGS}

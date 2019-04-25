@@ -343,10 +343,13 @@ SDIO_STATUS _SDIO_RegisterHostController(PSDHCD pHcd) {
         if (!SDIO_SUCCESS((status = SemaphorePost(&pBusContext->HcdListSem)))) {
             break;   /* wait interrupted */
         }
+#if 0
+FIXUP
         if (pHcd->Attributes & SDHCD_ATTRIB_SLOT_POLLING) {
                 /* post message to card detect helper to do polling */
             PostCardDetectEvent(pBusContext, EVENT_HCD_CD_POLLING, NULL);      
         }
+#endif
     } while (FALSE);
     
     if (!SDIO_SUCCESS(status)) {

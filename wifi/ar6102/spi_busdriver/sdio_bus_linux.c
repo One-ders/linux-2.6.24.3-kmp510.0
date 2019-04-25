@@ -467,11 +467,13 @@ SDIO_STATUS OS_InitializeDevice(PSDDEVICE pDevice, PSDFUNCTION pFunction)
                              pFdname->id));
     pnp_add_id(pFdname, &pDevice->Device);
 
+#if 0
         /* deal with DMA settings */
     if (pDevice->pHcd->pDmaDescription != NULL) {
         pDevice->Device.dev.dma_mask = &pDevice->pHcd->pDmaDescription->Mask;
         pDevice->Device.dev.coherent_dma_mask = pDevice->pHcd->pDmaDescription->Mask;
     }
+#endif
 
     return SDIO_STATUS_SUCCESS;
 }
