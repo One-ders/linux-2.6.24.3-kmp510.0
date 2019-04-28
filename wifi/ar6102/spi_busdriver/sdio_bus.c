@@ -55,12 +55,11 @@ SDIO_STATUS _SDIO_BusDriverInitialize(void)
         SDLIST_INIT(&pBusContext->SignalList);
         
             /* setup defaults */
-// FIXUP        pBusContext->RequestRetries = SDMMC_DEFAULT_CMD_RETRIES;
+	pBusContext->RequestRetries = 0;
 // FIXUP        pBusContext->CardReadyPollingRetry = SDMMC_DEFAULT_CARD_READY_RETRIES;
 // FIXUP       pBusContext->PowerSettleDelay = SDMMC_POWER_SETTLE_DELAY;
 // FIXUP       pBusContext->DefaultOperClock = MMC_HS_MAX_BUS_CLOCK;
 // FIXUP        pBusContext->DefaultBusMode = SDCONFIG_BUS_WIDTH_4_BIT;
-        pBusContext->FixupData = 0;
         pBusContext->RequestListSize = SDBUS_DEFAULT_REQ_LIST_SIZE;
         pBusContext->SignalSemListSize = SDBUS_DEFAULT_REQ_SIG_SIZE;
 // FIXUP        pBusContext->CDPollingInterval = SDBUS_DEFAULT_CD_POLLING_INTERVAL;

@@ -31,7 +31,7 @@
 module_param(debuglevel, int, 0644);
 MODULE_PARM_DESC(debuglevel, "debuglevel 0-7, controls debug prints");
 /* configuration and default parameters */
-static int RequestRetries = SDMMC_DEFAULT_CMD_RETRIES;
+static int RequestRetries = 0;     //SDMMC_DEFAULT_CMD_RETRIES;
 module_param(RequestRetries, int, 0644);
 MODULE_PARM_DESC(RequestRetries, "number of command retries");
 static int CardReadyPollingRetry = SDMMC_DEFAULT_CARD_READY_RETRIES;
@@ -40,9 +40,12 @@ MODULE_PARM_DESC(CardReadyPollingRetry, "number of card ready retries");
 static int PowerSettleDelay = SDMMC_POWER_SETTLE_DELAY;
 module_param(PowerSettleDelay, int, 0644);
 MODULE_PARM_DESC(PowerSettleDelay, "delay in ms for power to settle after power changes");
+#if 0
+FIXUP
 static int DefaultOperClock = 52000000;
 
 MODULE_PARM_DESC(DefaultOperClock, "maximum operational clock limit");
+#endif
 static int DefaultBusMode = SDCONFIG_BUS_WIDTH_4_BIT;
 module_param(DefaultBusMode, int, 0644);
 MODULE_PARM_DESC(DefaultBusMode, "default bus mode: see SDCONFIG_BUS_WIDTH_xxx");
@@ -52,18 +55,23 @@ MODULE_PARM_DESC(RequestListSize, "");
 static int SignalSemListSize = SDBUS_DEFAULT_REQ_SIG_SIZE;
 module_param(SignalSemListSize, int, 0644);
 MODULE_PARM_DESC(SignalSemListSize, "");
+#if 0
+FIXUP
 static int CDPollingInterval = SDBUS_DEFAULT_CD_POLLING_INTERVAL;
 module_param(CDPollingInterval, int, 0644);
 MODULE_PARM_DESC(CDPollingInterval, "");
+#endif
 static int DefaultOperBlockLen = SDMMC_DEFAULT_BYTES_PER_BLOCK;
 module_param(DefaultOperBlockLen, int, 0644);
 MODULE_PARM_DESC(DefaultOperBlockLen, "operational block length");
 static int DefaultOperBlockCount = SDMMC_DEFAULT_BLOCKS_PER_TRANS;
 module_param(DefaultOperBlockCount, int, 0644);
 MODULE_PARM_DESC(DefaultOperBlockCount, "operational block count");
+#if 0
 static int ConfigFlags = BD_DEFAULT_CONFIG_FLAGS;
 module_param(ConfigFlags, int, 0644);
 MODULE_PARM_DESC(ConfigFlags, "config flags");
+#endif
 
 static int HcdRCount = MAX_HCD_REQ_RECURSION;
 module_param(HcdRCount, int, 0644);
@@ -71,13 +79,19 @@ MODULE_PARM_DESC(HcdRCount, "HCD request recursion count");
 
 extern void pnp_remove_device(struct pnp_dev *dev);
 
+#if 0
+FIXUP
 static void CardDetect_WorkItem(void *context);
 static void CardDetect_TimerFunc(unsigned long Context);
 static DECLARE_WORK(CardDetectPollWork, CardDetect_WorkItem);
+#endif
 static int RegisterDriver(PSDFUNCTION pFunction);
 static int UnregisterDriver(PSDFUNCTION pFunction);
 
+#if 0
+FIXUP
 static struct timer_list CardDetectTimer;
+#endif
 
 #define SDDEVICE_FROM_OSDEVICE(pOSDevice)  container_of(pOSDevice, SDDEVICE, Device)
 #define SDFUNCTION_FROM_OSDRIVER(pOSDriver)  container_of(pOSDriver, SDFUNCTION, Driver)
@@ -158,21 +172,23 @@ SDIO_STATUS SDIO_HandleHcdEvent(PSDHCD pHcd, HCD_EVENT Event) {
 SDIO_STATUS _SDIO_BusGetDefaultSettings(PBDCONTEXT pBdc)
 {
     /* these defaults are module params */
-// FIXUP    pBdc->RequestRetries = RequestRetries;
+	pBdc->RequestRetries = RequestRetries;
 // FIXUP    pBdc->CardReadyPollingRetry = CardReadyPollingRetry;
 // FIXUP    pBdc->PowerSettleDelay = PowerSettleDelay;
 // FIXUP    pBdc->DefaultOperClock = DefaultOperClock;
 // FIXUP    pBdc->DefaultBusMode = DefaultBusMode;
     pBdc->RequestListSize = RequestListSize;
     pBdc->SignalSemListSize = SignalSemListSize;
-    pBdc->CDPollingInterval = CDPollingInterval;
+// FIXUP    pBdc->CDPollingInterval = CDPollingInterval;
 // FIXUP    pBdc->DefaultOperBlockLen = DefaultOperBlockLen;
 // FIXUP    pBdc->DefaultOperBlockCount = DefaultOperBlockCount;
-    pBdc->ConfigFlags = ConfigFlags;
+// FIXUP    pBdc->ConfigFlags = ConfigFlags;
     pBdc->MaxHcdRecursion = HcdRCount;
     return SDIO_STATUS_SUCCESS;
 }
 
+#if 0
+FIXUP
 static void CardDetect_TimerFunc(unsigned long Context)
 {
     DBG_PRINT(SDIODBG_CD_TIMER, ("+ SDIO BusDriver Card Detect Timer\n"));
@@ -247,6 +263,7 @@ static void CardDetect_WorkItem(void *context)
         /* call bus driver function */  
     SDIO_NotifyTimerTriggered(SDIOBUS_CD_TIMER_ID);
 }
+#endif
 
 /*
  * OS_IncHcdReference - increment host controller driver reference count
@@ -457,23 +474,19 @@ SDIO_STATUS OS_InitializeDevice(PSDDEVICE pDevice, PSDFUNCTION pFunction)
         return SDIO_STATUS_NO_RESOURCES;
     }
 
-#ifdef FIXUP
     /* set the id as slot number/function number */
     snprintf(pFdname->id, sizeof(pFdname->id), "SD_%02X%02X",
              pDevice->pHcd->SlotNumber, (UINT)SDDEVICE_GET_SDIO_FUNCNO(pDevice));
-#endif
     pFdname->next = NULL;
     DBG_PRINT(SDDBG_TRACE, ("SDIO BusDriver - OS_InitializeDevice adding id: %s\n",
                              pFdname->id));
     pnp_add_id(pFdname, &pDevice->Device);
 
-#if 0
         /* deal with DMA settings */
     if (pDevice->pHcd->pDmaDescription != NULL) {
         pDevice->Device.dev.dma_mask = &pDevice->pHcd->pDmaDescription->Mask;
         pDevice->Device.dev.coherent_dma_mask = pDevice->pHcd->pDmaDescription->Mask;
     }
-#endif
 
     return SDIO_STATUS_SUCCESS;
 }
@@ -709,7 +722,7 @@ module_exit(sdio_busdriver_cleanup);
 EXPORT_SYMBOL(SDIO_RegisterHostController);
 EXPORT_SYMBOL(SDIO_UnregisterHostController);
 EXPORT_SYMBOL(SDIO_HandleHcdEvent);
-EXPORT_SYMBOL(SDIO_CheckResponse);
+// Fixup EXPORT_SYMBOL(SDIO_CheckResponse);
 EXPORT_SYMBOL(SDIO_RegisterFunction);
 EXPORT_SYMBOL(SDIO_UnregisterFunction);
 

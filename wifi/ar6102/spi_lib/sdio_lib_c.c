@@ -48,86 +48,6 @@ SDIO_STATUS _SDLIB_IssueConfig(PSDDEVICE        pDevice,
 }
 
 
-
-static INLINE void FreeMessageBlock(PSDMESSAGE_QUEUE pQueue, PSDMESSAGE_BLOCK pMsg) {
-    SDListInsertHead(&pQueue->FreeMessageList, &pMsg->SDList);
-}
-static INLINE void QueueMessageBlock(PSDMESSAGE_QUEUE pQueue, PSDMESSAGE_BLOCK pMsg) {
-    SDListInsertTail(&pQueue->MessageList, &pMsg->SDList);
-}
-static INLINE void QueueMessageToHead(PSDMESSAGE_QUEUE pQueue, PSDMESSAGE_BLOCK pMsg) {
-    SDListInsertHead(&pQueue->MessageList, &pMsg->SDList);
-}
-
-static INLINE PSDMESSAGE_BLOCK GetFreeMessageBlock(PSDMESSAGE_QUEUE pQueue) {
-    PSDLIST pItem = SDListRemoveItemFromHead(&pQueue->FreeMessageList);
-    if (pItem != NULL) {
-        return CONTAINING_STRUCT(pItem, SDMESSAGE_BLOCK , SDList);
-    }
-    return NULL;
-}
-static INLINE PSDMESSAGE_BLOCK GetQueuedMessage(PSDMESSAGE_QUEUE pQueue) {
-    PSDLIST pItem = SDListRemoveItemFromHead(&pQueue->MessageList);
-    if (pItem != NULL) {
-        return CONTAINING_STRUCT(pItem, SDMESSAGE_BLOCK , SDList);
-    }
-    return NULL;
-}
-
-
-/**++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  @function: Delete a message queue
-
-  @function name: SDLIB_DeleteMessageQueue
-  @prototype: void SDLIB_DeleteMessageQueue(PSDMESSAGE_QUEUE pQueue)
-  @category: Support_Reference
-  
-  @input: pQueue - message queue to delete
-  
-  @notes: This function flushes the message queue and frees all memory allocated for
-          messages.
-  
-  @see also: SDLIB_CreateMessageQueue
-  
-  @example: Deleting a message queue:
-       if (pMsgQueue != NULL) {
-            SDLIB_DeleteMessageQueue(pMsgQueue);
-       }
-  
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-void _DeleteMessageQueue(PSDMESSAGE_QUEUE pQueue)
-{
-    PSDMESSAGE_BLOCK pMsg;
-    SDIO_STATUS     status;
-    CT_DECLARE_IRQ_SYNC_CONTEXT();
-
-    status = CriticalSectionAcquireSyncIrq(&pQueue->MessageCritSection);
-
-        /* cleanup free list */
-    while (1) {
-        pMsg = GetFreeMessageBlock(pQueue);
-        if (pMsg != NULL) {
-            KernelFree(pMsg);
-        } else {
-            break;
-        }
-    }
-        /* cleanup any in the queue */
-    while (1) {
-        pMsg = GetQueuedMessage(pQueue);
-        if (pMsg != NULL) {
-            KernelFree(pMsg);
-        } else {
-            break;
-        }
-    }
-
-    status = CriticalSectionReleaseSyncIrq(&pQueue->MessageCritSection);
-    CriticalSectionDelete(&pQueue->MessageCritSection);
-    KernelFree(pQueue);
-
-}
-
 /**++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   @function: Print a buffer to the debug output
 
@@ -201,6 +121,237 @@ void _SDLIB_PrintBuffer(PUCHAR pBuffer, INT Length, PTEXT pDescription)
 
 }
 
+static INLINE void FreeMessageBlock(PSDMESSAGE_QUEUE pQueue, PSDMESSAGE_BLOCK pMsg) {
+    SDListInsertHead(&pQueue->FreeMessageList, &pMsg->SDList);
+}
+static INLINE void QueueMessageBlock(PSDMESSAGE_QUEUE pQueue, PSDMESSAGE_BLOCK pMsg) {
+    SDListInsertTail(&pQueue->MessageList, &pMsg->SDList);
+}
+static INLINE void QueueMessageToHead(PSDMESSAGE_QUEUE pQueue, PSDMESSAGE_BLOCK pMsg) {
+    SDListInsertHead(&pQueue->MessageList, &pMsg->SDList);
+}
+
+static INLINE PSDMESSAGE_BLOCK GetFreeMessageBlock(PSDMESSAGE_QUEUE pQueue) {
+    PSDLIST pItem = SDListRemoveItemFromHead(&pQueue->FreeMessageList);
+    if (pItem != NULL) {
+        return CONTAINING_STRUCT(pItem, SDMESSAGE_BLOCK , SDList);
+    }
+    return NULL;
+}
+static INLINE PSDMESSAGE_BLOCK GetQueuedMessage(PSDMESSAGE_QUEUE pQueue) {
+    PSDLIST pItem = SDListRemoveItemFromHead(&pQueue->MessageList);
+    if (pItem != NULL) {
+        return CONTAINING_STRUCT(pItem, SDMESSAGE_BLOCK , SDList);
+    }
+    return NULL;
+}
+
+
+/**++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  @function: Create a message queue
+
+  @function name: SDLIB_CreateMessageQueue
+  @prototype: PSDMESSAGE_QUEUE SDLIB_CreateMessageQueue(INT MaxMessages, INT MaxMessageLength)
+  @category: Support_Reference
+  
+  @input: MaxMessages - Maximum number of messages this queue supports
+  @input: MaxMessageLength - Maximum size of each message
+ 
+  @return: Message queue object, NULL on failure
+  
+  @notes:  This function creates a simple first-in-first-out message queue.  The caller must determine 
+           the maximum number of messages the queue supports and the size of each message.  This
+           function will pre-allocate memory for each message. A producer of data posts a message
+           using SDLIB_PostMessage with a user defined data structure. A consumer of this data 
+           can retrieve the message (in FIFO order) using SDLIB_GetMessage. A message queue does not
+           provide a signaling mechanism for notifying a consumer of data. Notifying a consumer is 
+           user defined.
+  
+  @see also: SDLIB_DeleteMessageQueue, SDLIB_GetMessage, SDLIB_PostMessage.
+  
+  @example: Creating a message queue:
+       typedef struct _MyMessage {
+           UINT8 Code;
+           PVOID pDataBuffer;
+       } MyMessage;
+            // create message queue, 16 messages max.
+       pMsgQueue = SDLIB_CreateMessageQueue(16,sizeof(MyMessage));
+       if (NULL == pMsgQueue) {
+           .. failed
+       }
+  
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+PSDMESSAGE_QUEUE _CreateMessageQueue(INT MaxMessages, INT MaxMessageLength)
+{
+    PSDMESSAGE_QUEUE pQueue = NULL;
+    SDIO_STATUS      status = SDIO_STATUS_SUCCESS;
+    INT              ii;
+    PSDMESSAGE_BLOCK pMsg;
+
+    do {
+        pQueue = (PSDMESSAGE_QUEUE)KernelAlloc(sizeof(SDMESSAGE_QUEUE));
+
+        if (NULL == pQueue) {
+            status = SDIO_STATUS_NO_RESOURCES;
+            break;
+        }
+        SDLIST_INIT(&pQueue->MessageList);
+        SDLIST_INIT(&pQueue->FreeMessageList);
+        pQueue->MaxMessageLength = MaxMessageLength;
+        status = CriticalSectionInit(&pQueue->MessageCritSection);
+        if (!SDIO_SUCCESS(status)) {
+            break;
+        }
+            /* allocate message blocks */
+        for (ii = 0; ii < MaxMessages; ii++) {
+            pMsg = (PSDMESSAGE_BLOCK)KernelAlloc(sizeof(SDMESSAGE_BLOCK) + MaxMessageLength -1);
+            if (NULL == pMsg) {
+                break;
+            }
+            FreeMessageBlock(pQueue, pMsg);
+        }
+
+        if (0 == ii) {
+            status = SDIO_STATUS_NO_RESOURCES;
+            break;
+        }
+
+    } while (FALSE);
+
+    if (!SDIO_SUCCESS(status)) {
+        if (pQueue != NULL) {
+            _DeleteMessageQueue(pQueue);
+            pQueue = NULL;
+        }
+    }
+    return pQueue;
+}
+
+/**++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  @function: Delete a message queue
+
+  @function name: SDLIB_DeleteMessageQueue
+  @prototype: void SDLIB_DeleteMessageQueue(PSDMESSAGE_QUEUE pQueue)
+  @category: Support_Reference
+  
+  @input: pQueue - message queue to delete
+  
+  @notes: This function flushes the message queue and frees all memory allocated for
+          messages.
+  
+  @see also: SDLIB_CreateMessageQueue
+  
+  @example: Deleting a message queue:
+       if (pMsgQueue != NULL) {
+            SDLIB_DeleteMessageQueue(pMsgQueue);
+       }
+  
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+void _DeleteMessageQueue(PSDMESSAGE_QUEUE pQueue)
+{
+    PSDMESSAGE_BLOCK pMsg;
+    SDIO_STATUS     status;
+    CT_DECLARE_IRQ_SYNC_CONTEXT();
+
+    status = CriticalSectionAcquireSyncIrq(&pQueue->MessageCritSection);
+
+        /* cleanup free list */
+    while (1) {
+        pMsg = GetFreeMessageBlock(pQueue);
+        if (pMsg != NULL) {
+            KernelFree(pMsg);
+        } else {
+            break;
+        }
+    }
+        /* cleanup any in the queue */
+    while (1) {
+        pMsg = GetQueuedMessage(pQueue);
+        if (pMsg != NULL) {
+            KernelFree(pMsg);
+        } else {
+            break;
+        }
+    }
+
+    status = CriticalSectionReleaseSyncIrq(&pQueue->MessageCritSection);
+    CriticalSectionDelete(&pQueue->MessageCritSection);
+    KernelFree(pQueue);
+
+}
+
+/**++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  @function: Post a message queue
+
+  @function name: SDLIB_PostMessage
+  @prototype: SDIO_STATUS SDLIB_PostMessage(PSDMESSAGE_QUEUE pQueue, PVOID pMessage, INT MessageLength)
+  @category: Support_Reference
+  
+  @input: pQueue - message queue to post to
+  @input: pMessage - message to post
+  @input: MessageLength - length of message (for validation)
+  
+  @return: SDIO_STATUS
+  
+  @notes: The message queue uses an internal list of user defined message structures.  When
+          posting a message the message is copied into an allocated structure and queued.  The memory 
+          pointed to by pMessage does not need to be allocated and can reside on the stack. 
+          The length of the message to post can be smaller that the maximum message size. This allows
+          for variable length messages up to the maximum message size. This 
+          function returns SDIO_STATUS_NO_RESOURCES, if the message queue is full.  This
+          function returns SDIO_STATUS_BUFFER_TOO_SMALL, if the message size exceeds the maximum
+          size of a message.  Posting and getting messsages from a message queue is safe in any
+          driver context.
+            
+  @see also: SDLIB_CreateMessageQueue , SDLIB_GetMessage
+  
+  @example: Posting a message
+       MyMessage message;
+           // set up message
+       message.code = MESSAGE_DATA_READY;
+       message.pData = pInstance->pDataBuffers[currentIndex];
+           // post message       
+       status = SDLIB_PostMessage(pInstance->pReadQueue,&message,sizeof(message));
+       if (!SDIO_SUCCESS(status)) {
+           // failed
+       }
+  
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+SDIO_STATUS _PostMessage(PSDMESSAGE_QUEUE pQueue, PVOID pMessage, INT MessageLength)
+{
+    SDIO_STATUS status2;
+    SDIO_STATUS status = SDIO_STATUS_SUCCESS;
+    PSDMESSAGE_BLOCK pMsg;
+    CT_DECLARE_IRQ_SYNC_CONTEXT();
+
+    if (MessageLength > pQueue->MaxMessageLength) {
+        return SDIO_STATUS_BUFFER_TOO_SMALL;
+    }
+
+    status = CriticalSectionAcquireSyncIrq(&pQueue->MessageCritSection);
+    if (!SDIO_SUCCESS(status)) {
+        return status;
+    }
+
+    do {
+            /* get a message block */
+        pMsg = GetFreeMessageBlock(pQueue);
+        if (NULL == pMsg) {
+            status = SDIO_STATUS_NO_RESOURCES;
+            break;
+        }
+            /* copy the message */
+        memcpy(pMsg->MessageStart,pMessage,MessageLength);
+            /* set the length of the message */
+        pMsg->MessageLength = MessageLength;
+            /* queue the message to the list  */
+        QueueMessageBlock(pQueue,pMsg);
+    } while (FALSE);
+
+
+    status2 = CriticalSectionReleaseSyncIrq(&pQueue->MessageCritSection);
+    return status;
+}
 
 /**++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   @function: Get a message from a message queue
@@ -288,157 +439,4 @@ SDIO_STATUS _GetMessage(PSDMESSAGE_QUEUE pQueue, PVOID pData, INT *pBufferLength
     status2 = CriticalSectionReleaseSyncIrq(&pQueue->MessageCritSection);
 
     return status;
-}
-
-/**++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  @function: Post a message queue
-
-  @function name: SDLIB_PostMessage
-  @prototype: SDIO_STATUS SDLIB_PostMessage(PSDMESSAGE_QUEUE pQueue, PVOID pMessage, INT MessageLength)
-  @category: Support_Reference
-  
-  @input: pQueue - message queue to post to
-  @input: pMessage - message to post
-  @input: MessageLength - length of message (for validation)
-  
-  @return: SDIO_STATUS
-  
-  @notes: The message queue uses an internal list of user defined message structures.  When
-          posting a message the message is copied into an allocated structure and queued.  The memory 
-          pointed to by pMessage does not need to be allocated and can reside on the stack. 
-          The length of the message to post can be smaller that the maximum message size. This allows
-          for variable length messages up to the maximum message size. This 
-          function returns SDIO_STATUS_NO_RESOURCES, if the message queue is full.  This
-          function returns SDIO_STATUS_BUFFER_TOO_SMALL, if the message size exceeds the maximum
-          size of a message.  Posting and getting messsages from a message queue is safe in any
-          driver context.
-            
-  @see also: SDLIB_CreateMessageQueue , SDLIB_GetMessage
-  
-  @example: Posting a message
-       MyMessage message;
-           // set up message
-       message.code = MESSAGE_DATA_READY;
-       message.pData = pInstance->pDataBuffers[currentIndex];
-           // post message       
-       status = SDLIB_PostMessage(pInstance->pReadQueue,&message,sizeof(message));
-       if (!SDIO_SUCCESS(status)) {
-           // failed
-       }
-  
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-SDIO_STATUS _PostMessage(PSDMESSAGE_QUEUE pQueue, PVOID pMessage, INT MessageLength)
-{
-    SDIO_STATUS status2;
-    SDIO_STATUS status = SDIO_STATUS_SUCCESS;
-    PSDMESSAGE_BLOCK pMsg;
-    CT_DECLARE_IRQ_SYNC_CONTEXT();
-
-    if (MessageLength > pQueue->MaxMessageLength) {
-        return SDIO_STATUS_BUFFER_TOO_SMALL;
-    }
-
-    status = CriticalSectionAcquireSyncIrq(&pQueue->MessageCritSection);
-    if (!SDIO_SUCCESS(status)) {
-        return status;
-    }
-
-    do {
-            /* get a message block */
-        pMsg = GetFreeMessageBlock(pQueue);
-        if (NULL == pMsg) {
-            status = SDIO_STATUS_NO_RESOURCES;
-            break;
-        }
-            /* copy the message */
-        memcpy(pMsg->MessageStart,pMessage,MessageLength);
-            /* set the length of the message */
-        pMsg->MessageLength = MessageLength;
-            /* queue the message to the list  */
-        QueueMessageBlock(pQueue,pMsg);
-    } while (FALSE);
-
-
-    status2 = CriticalSectionReleaseSyncIrq(&pQueue->MessageCritSection);
-    return status;
-}
-
-/**++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  @function: Create a message queue
-
-  @function name: SDLIB_CreateMessageQueue
-  @prototype: PSDMESSAGE_QUEUE SDLIB_CreateMessageQueue(INT MaxMessages, INT MaxMessageLength)
-  @category: Support_Reference
-  
-  @input: MaxMessages - Maximum number of messages this queue supports
-  @input: MaxMessageLength - Maximum size of each message
- 
-  @return: Message queue object, NULL on failure
-  
-  @notes:  This function creates a simple first-in-first-out message queue.  The caller must determine 
-           the maximum number of messages the queue supports and the size of each message.  This
-           function will pre-allocate memory for each message. A producer of data posts a message
-           using SDLIB_PostMessage with a user defined data structure. A consumer of this data 
-           can retrieve the message (in FIFO order) using SDLIB_GetMessage. A message queue does not
-           provide a signaling mechanism for notifying a consumer of data. Notifying a consumer is 
-           user defined.
-  
-  @see also: SDLIB_DeleteMessageQueue, SDLIB_GetMessage, SDLIB_PostMessage.
-  
-  @example: Creating a message queue:
-       typedef struct _MyMessage {
-           UINT8 Code;
-           PVOID pDataBuffer;
-       } MyMessage;
-            // create message queue, 16 messages max.
-       pMsgQueue = SDLIB_CreateMessageQueue(16,sizeof(MyMessage));
-       if (NULL == pMsgQueue) {
-           .. failed
-       }
-  
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-PSDMESSAGE_QUEUE _CreateMessageQueue(INT MaxMessages, INT MaxMessageLength)
-{
-    PSDMESSAGE_QUEUE pQueue = NULL;
-    SDIO_STATUS      status = SDIO_STATUS_SUCCESS;
-    INT              ii;
-    PSDMESSAGE_BLOCK pMsg;
-
-    do {
-        pQueue = (PSDMESSAGE_QUEUE)KernelAlloc(sizeof(SDMESSAGE_QUEUE));
-
-        if (NULL == pQueue) {
-            status = SDIO_STATUS_NO_RESOURCES;
-            break;
-        }
-        SDLIST_INIT(&pQueue->MessageList);
-        SDLIST_INIT(&pQueue->FreeMessageList);
-        pQueue->MaxMessageLength = MaxMessageLength;
-        status = CriticalSectionInit(&pQueue->MessageCritSection);
-        if (!SDIO_SUCCESS(status)) {
-            break;
-        }
-            /* allocate message blocks */
-        for (ii = 0; ii < MaxMessages; ii++) {
-            pMsg = (PSDMESSAGE_BLOCK)KernelAlloc(sizeof(SDMESSAGE_BLOCK) + MaxMessageLength -1);
-            if (NULL == pMsg) {
-                break;
-            }
-            FreeMessageBlock(pQueue, pMsg);
-        }
-
-        if (0 == ii) {
-            status = SDIO_STATUS_NO_RESOURCES;
-            break;
-        }
-
-    } while (FALSE);
-
-    if (!SDIO_SUCCESS(status)) {
-        if (pQueue != NULL) {
-            _DeleteMessageQueue(pQueue);
-            pQueue = NULL;
-        }
-    }
-    return pQueue;
 }

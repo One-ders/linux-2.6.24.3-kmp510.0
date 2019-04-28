@@ -89,7 +89,7 @@ typedef struct _BDCONTEXT {
     INT              CurrentSignalAllocations;   /* 88,88 current count of signal allocations */
     INT              MaxRequestAllocations;  /* max number of allocated requests to keep around*/
     INT              MaxSignalAllocations;   /* 96,96 max number of signal allocations to keep around*/
-// FIXUP   INT              RequestRetries;         /* cmd retries */
+    INT              RequestRetries;         /* cmd retries */
 // FIXUP   INT              CardReadyPollingRetry;  /* card ready polling retry count */
 // FIXUP    INT              PowerSettleDelay;       /* power settle delay */
 // FIXUP    INT              CMD13PollingMultiplier; /* CMD13 (GET STATUS) multiplier */
@@ -97,7 +97,6 @@ typedef struct _BDCONTEXT {
 // FIXUP    SD_BUSMODE_FLAGS DefaultBusMode;         /* default bus mode */ 
 //    UINT16           DefaultOperBlockLen;    /* default operational block length per block */
 //    UINT16           DefaultOperBlockCount;  /* default operational block count per transaction */
-    UINT32           FixupData;		/* position byte 100 */
     UINT32           CDPollingInterval;      /* 104 card insert/removal polling interval */ 
     UINT16           FixupDataSh108;
     UINT8            InitMask;               /* 132, 110 bus driver init mask */

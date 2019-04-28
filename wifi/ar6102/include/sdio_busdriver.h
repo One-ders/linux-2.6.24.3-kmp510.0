@@ -99,10 +99,11 @@ FIXUP
 typedef struct _CARD_PROPERTIES {
     UINT8              IOFnCount;      /* number of I/O functions */
     UINT8              SDIORevision;   /* SDIO revision */
+    CARD_INFO_FLAGS    Flags;          /* 2 bytes card flags */
 #define SDIO_REVISION_1_00 0x00
 #define SDIO_REVISION_1_10 0x01
 #define SDIO_REVISION_1_20 0x02
-    UINT8              SD_MMC_Revision; /* SD or MMC revision */
+//    UINT8              SD_MMC_Revision; /* SD or MMC revision */
 #define SD_REVISION_1_01  0x00
 #define SD_REVISION_1_10  0x01
 #define MMC_REVISION_1_0_2_2 0x00
@@ -110,15 +111,17 @@ typedef struct _CARD_PROPERTIES {
 #define MMC_REVISION_4_0  0x02
 //    UINT16 SDIO_ManufacturerCode;      /* JEDEC Code */
 //    UINT16 SDIO_ManufacturerID;        /* manf-specific ID */
-    UINT32             CommonCISPtr;   /* common CIS ptr */
-    UINT16             RCA;            /* relative card address */
-    UINT8              SDIOCaps;       /* SDIO card capabilities (refer to SDIO spec for decoding) */
-    UINT8              CardCSD[MAX_CARD_RESPONSE_BYTES];    /* for SD/MMC cards */
-    CARD_INFO_FLAGS    Flags;          /* card flags */
+//    UINT16             RCA;            /* relative card address */
+      SD_BUSCLOCK_RATE   OperBusClock;   /* operational bus clock (based on HCD limit)*/
+// FIXUP    SD_BUSMODE_FLAGS   BusMode;        /* current card bus mode */
+// FIXUP    UINT32             CommonCISPtr;   /* common CIS ptr */
+//    UINT8              SDIOCaps;       /* SDIO card capabilities (refer to SDIO spec for decoding) */
+//    UINT8              CardCSD[MAX_CARD_RESPONSE_BYTES];    /* for SD/MMC cards */
+// FIXUP MOVE    CARD_INFO_FLAGS    Flags;          /* card flags */
 //    SD_BUSCLOCK_RATE   OperBusClock;   /* operational bus clock (based on HCD limit)*/
-    SD_BUSMODE_FLAGS   BusMode;        /* current card bus mode */
     UINT16             OperBlockLenLimit; /* operational bytes per block length limit*/
     UINT16             OperBlockCountLimit; /* operational number of blocks per transfer limit */
+    UINT16		FixUpPos84;
     UINT8              CardState;      /* card state flags */
 //    SLOT_VOLTAGE_MASK  CardVoltage;    /* card operational voltage */
 #define CARD_STATE_REMOVED 0x01
@@ -222,9 +225,12 @@ typedef struct _SDREQUEST {
     SDIO_STATUS Status;         /* 60, 64 completion status */
     struct _SDFUNCTION* pFunction; /* 64, 68 function driver that generated request (internal use)*/
     INT     RetryCount;          /* number of times to retry on error, non-data cmds only */
+#if 0
+FIXUP
     PVOID   pBdRsv1;        /* reserved */
     PVOID   pBdRsv2;
     PVOID   pBdRsv3;
+#endif
 }SDREQUEST, *PSDREQUEST;
 
     /* a request queue */
@@ -1350,21 +1356,21 @@ typedef struct _SDHCD {
     PSDREQUEST      pCurrentRequest;    /* 68, 68, current request we are working on */
     CARD_PROPERTIES CardProperties;     /* 72, 72, 48, 16 properties for the currently inserted card*/
     OSKERNEL_HELPER SDIOIrqHelper;      /* 88, 88, 40 synch IRQ helper, internal use */
-    SDDEVICE        *pPseudoDev;        /* 164, 128, pseudo device used for initialization (internal use) */
-    UINT8           PendingHelperIrqs;  /* 168, 132, IRQ helper pending IRQs */
-    UINT8           PendingIrqAcks;     /* 169, 133,  pending IRQ acks from function drivers */
-    UINT8           IrqsEnabled;        /* 170, 134,current irq enabled mask */
-    SDHCD_IRQ_PROC_STATE IrqProcState;  /* 172, 136 irq processing state */
+    SDDEVICE        *pPseudoDev;        /* 128, 128, pseudo device used for initialization (internal use) */
+    UINT8           PendingHelperIrqs;  /* 132, 132, IRQ helper pending IRQs */
+    UINT8           PendingIrqAcks;     /* 133, 133,  pending IRQ acks from function drivers */
+    UINT8           IrqsEnabled;        /* 134, 134,current irq enabled mask */
+    SDHCD_IRQ_PROC_STATE IrqProcState;  /* 136, 136 irq processing state */
     POS_DEVICE      pDevice;            /* device registration with base system */
-    SD_SLOT_CURRENT SlotCurrentAllocated; /* 180, slot current allocated (internal use ) */
-    ATOMIC_FLAGS    HcdFlags;             /* HCD Flags */
+// FIXUP    SD_SLOT_CURRENT SlotCurrentAllocated; /* 180, slot current allocated (internal use ) */
+    ATOMIC_FLAGS    HcdFlags;             /* 144, 144 HCD Flags */
 #define HCD_REQUEST_CALL_BIT  0
 #define HCD_IRQ_NO_PEND_CHECK 1           /* HCD flag to bypass interrupt pending register
                                              check, typically done on single function cards */
-    SDREQUESTQUEUE  CompletedRequestQueue; /* 188, 148, 12completed request queue, internal use */
-// FIXUP    PSDDMA_DESCRIPTION pDmaDescription; /* description of HCD's DMA capabilities */  
+    SDREQUESTQUEUE  CompletedRequestQueue; /* 148, 148, 12completed request queue, internal use */
+    PSDDMA_DESCRIPTION pDmaDescription; /* description of HCD's DMA capabilities */  
     POS_MODULE         pModule;         /* OS-specific module information */
-    INT                Recursion;       /* 192, 168 recursion level */
+    INT                Recursion;       /* 168, 168 recursion level */
     PVOID              Reserved1;
     PVOID              Reserved2;
 }SDHCD, *PSDHCD;

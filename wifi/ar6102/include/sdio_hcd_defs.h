@@ -34,7 +34,7 @@ typedef UINT8 SDIO_IRQ_MODE_FLAGS;
 /* SDIO Interrupt control */
 typedef struct _SDCONFIG_SDIO_INT_CTRL_DATA  {
     BOOL                  SlotIRQEnable;      /* turn on/off Slot IRQ detection */
-    SDIO_IRQ_MODE_FLAGS   IRQDetectMode;      /* slot IRQ detect mode , only valid if Enabled = TRUE */
+//    SDIO_IRQ_MODE_FLAGS   IRQDetectMode;      /* slot IRQ detect mode , only valid if Enabled = TRUE */
 #define IRQ_DETECT_RAW       0x00
 #define IRQ_DETECT_MULTI_BLK 0x01
 #define IRQ_DETECT_4_BIT     0x02
