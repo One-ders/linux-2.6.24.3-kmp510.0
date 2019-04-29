@@ -34,21 +34,21 @@ MODULE_PARM_DESC(debuglevel, "debuglevel 0-7, controls debug prints");
 static int RequestRetries = 0;     //SDMMC_DEFAULT_CMD_RETRIES;
 module_param(RequestRetries, int, 0644);
 MODULE_PARM_DESC(RequestRetries, "number of command retries");
+#if 0
+FIXUP
 static int CardReadyPollingRetry = SDMMC_DEFAULT_CARD_READY_RETRIES;
 module_param(CardReadyPollingRetry, int, 0644);
 MODULE_PARM_DESC(CardReadyPollingRetry, "number of card ready retries");
 static int PowerSettleDelay = SDMMC_POWER_SETTLE_DELAY;
 module_param(PowerSettleDelay, int, 0644);
 MODULE_PARM_DESC(PowerSettleDelay, "delay in ms for power to settle after power changes");
-#if 0
-FIXUP
 static int DefaultOperClock = 52000000;
 
 MODULE_PARM_DESC(DefaultOperClock, "maximum operational clock limit");
-#endif
 static int DefaultBusMode = SDCONFIG_BUS_WIDTH_4_BIT;
 module_param(DefaultBusMode, int, 0644);
 MODULE_PARM_DESC(DefaultBusMode, "default bus mode: see SDCONFIG_BUS_WIDTH_xxx");
+#endif
 static int RequestListSize = SDBUS_DEFAULT_REQ_LIST_SIZE;
 module_param(RequestListSize, int, 0644);
 MODULE_PARM_DESC(RequestListSize, "");
@@ -60,14 +60,12 @@ FIXUP
 static int CDPollingInterval = SDBUS_DEFAULT_CD_POLLING_INTERVAL;
 module_param(CDPollingInterval, int, 0644);
 MODULE_PARM_DESC(CDPollingInterval, "");
-#endif
 static int DefaultOperBlockLen = SDMMC_DEFAULT_BYTES_PER_BLOCK;
 module_param(DefaultOperBlockLen, int, 0644);
 MODULE_PARM_DESC(DefaultOperBlockLen, "operational block length");
 static int DefaultOperBlockCount = SDMMC_DEFAULT_BLOCKS_PER_TRANS;
 module_param(DefaultOperBlockCount, int, 0644);
 MODULE_PARM_DESC(DefaultOperBlockCount, "operational block count");
-#if 0
 static int ConfigFlags = BD_DEFAULT_CONFIG_FLAGS;
 module_param(ConfigFlags, int, 0644);
 MODULE_PARM_DESC(ConfigFlags, "config flags");
