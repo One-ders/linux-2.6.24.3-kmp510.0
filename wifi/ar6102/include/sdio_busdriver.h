@@ -261,6 +261,7 @@ typedef UINT16 SDCONFIG_COMMAND;
 #define SDCONFIG_GET_HOST_CUSTOM   (SDCONFIG_FLAGS_HC_CONFIG | SDCONFIG_FLAGS_DATA_GET  | 300)
 #define SDCONFIG_PUT_HOST_CUSTOM   (SDCONFIG_FLAGS_HC_CONFIG | SDCONFIG_FLAGS_DATA_PUT  | 301)
 
+#define SDCONFIG_PUT_HOST_307   (SDCONFIG_FLAGS_HC_CONFIG | SDCONFIG_FLAGS_DATA_PUT  | 307)
 /* function commands */
 #define SDCONFIG_FUNC_ENABLE_DISABLE         (SDCONFIG_FLAGS_DATA_PUT  | 18)
 #define SDCONFIG_FUNC_UNMASK_IRQ             (SDCONFIG_FLAGS_DATA_NONE | 21)
@@ -1332,27 +1333,27 @@ typedef enum _SDHCD_IRQ_PROC_STATE {
     SDHCD_IRQ_HELPER  = 2 
 }SDHCD_IRQ_PROC_STATE, *PSDHCD_IRQ_PROC_STATE;
 
-/* host controller bus driver registration structure */
+/* size 178 bytes host controller bus driver registration structure */
 typedef struct _SDHCD {
-    CT_VERSION_CODE Version;    /* version code of the SDIO stack */
-    SDLIST  SDList;             /* internal use list*/
-    PTEXT   pName;              /* name of registering host/slot driver */
-    UINT32  Attributes;         /* attributes of host controller */
-    UINT16  MaxBytesPerBlock;   /* max bytes per block */
-    UINT16  MaxBlocksPerTrans;  /* max blocks per transaction */
+    CT_VERSION_CODE Version;    /* 0 version code of the SDIO stack */
+    SDLIST  SDList;             /* 4 internal use list*/
+    PTEXT   pName;              /* 12 name of registering host/slot driver */
+    UINT32  Attributes;         /* 16 attributes of host controller */
+    UINT16  MaxBytesPerBlock;   /* 20 max bytes per block */
+    UINT16  MaxBlocksPerTrans;  /* 22 max blocks per transaction */
 // FIXUP    SD_SLOT_CURRENT  MaxSlotCurrent;  /* max current per slot in milli-amps */
     UINT8   SlotNumber;         /* 24,24 sequential slot number for this HCD, set by bus driver */
-    SD_BUSCLOCK_RATE    MaxClockRate;         /* max clock rate in hz */
+    SD_BUSCLOCK_RATE    MaxClockRate; /* 28 max clock rate in hz */
 // FIXUP   SLOT_VOLTAGE_MASK   SlotVoltageCaps;      /* slot voltage capabilities */
 // FIXUP   SLOT_VOLTAGE_MASK   SlotVoltagePreferred; /* preferred slot voltage */
-    PVOID   pContext;                         /* host controller driver use data   */
-    SDIO_STATUS (*pRequest)(struct _SDHCD *pHcd); 
+    PVOID   pContext;   /* 32 host controller driver use data   */
+    SDIO_STATUS (*pRequest)(struct _SDHCD *pHcd); // 36
                                 /* get/set configuration */
-    SDIO_STATUS (*pConfigure)(struct _SDHCD *pHcd, PSDCONFIG pConfig); // 44, 40
+    SDIO_STATUS (*pConfigure)(struct _SDHCD *pHcd, PSDCONFIG pConfig); // 40
         /* everything below this line is for bus driver use */
-    OS_SEMAPHORE    ConfigureOpsSem;    /* 48, 44, 12 semaphore to make specific configure ops atomic, internal use */
-    OS_CRITICALSECTION HcdCritSection;  /* 52, 48 critical section to protect hcd data structures (internal use) */
-    SDREQUESTQUEUE  RequestQueue;       /* 60, 56,request queue, internal use */
+    OS_SEMAPHORE    ConfigureOpsSem;    /* 44, 12 semaphore to make specific configure ops atomic, internal use */
+    OS_CRITICALSECTION HcdCritSection;  /* 56 critical section to protect hcd data structures (internal use) */
+    SDREQUESTQUEUE  RequestQueue;       /* 56,request queue, internal use */
     PSDREQUEST      pCurrentRequest;    /* 68, 68, current request we are working on */
     CARD_PROPERTIES CardProperties;     /* 72, 72, 48, 16 properties for the currently inserted card*/
     OSKERNEL_HELPER SDIOIrqHelper;      /* 88, 88, 40 synch IRQ helper, internal use */
@@ -1361,18 +1362,18 @@ typedef struct _SDHCD {
     UINT8           PendingIrqAcks;     /* 133, 133,  pending IRQ acks from function drivers */
     UINT8           IrqsEnabled;        /* 134, 134,current irq enabled mask */
     SDHCD_IRQ_PROC_STATE IrqProcState;  /* 136, 136 irq processing state */
-    POS_DEVICE      pDevice;            /* device registration with base system */
+    POS_DEVICE      pDevice;            /* 140 device registration with base system */
 // FIXUP    SD_SLOT_CURRENT SlotCurrentAllocated; /* 180, slot current allocated (internal use ) */
     ATOMIC_FLAGS    HcdFlags;             /* 144, 144 HCD Flags */
 #define HCD_REQUEST_CALL_BIT  0
 #define HCD_IRQ_NO_PEND_CHECK 1           /* HCD flag to bypass interrupt pending register
                                              check, typically done on single function cards */
     SDREQUESTQUEUE  CompletedRequestQueue; /* 148, 148, 12completed request queue, internal use */
-    PSDDMA_DESCRIPTION pDmaDescription; /* description of HCD's DMA capabilities */  
-    POS_MODULE         pModule;         /* OS-specific module information */
+    PSDDMA_DESCRIPTION pDmaDescription; /* 160 description of HCD's DMA capabilities */  
+    POS_MODULE         pModule;         /* 164 OS-specific module information */
     INT                Recursion;       /* 168, 168 recursion level */
-    PVOID              Reserved1;
-    PVOID              Reserved2;
+    PVOID              Reserved1;       // 172
+    PVOID              Reserved2;       // 176
 }SDHCD, *PSDHCD;
 
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
