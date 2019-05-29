@@ -1,0 +1,110 @@
+
+jz4755_spi.o:     file format elf32-tradlittlemips
+
+Disassembly of section .text:
+
+00000000 <set_spi_clock>:
+set_spi_clock():
+   0:	3c05b000 	lui	a1,0xb000
+   4:	3c02016e 	lui	v0,0x16e
+   8:	8ca60000 	lw	a2,0(a1)
+   c:	344d3600 	ori	t5,v0,0x3600
+  10:	34ac0010 	ori	t4,a1,0x10
+  14:	3c020000 	lui	v0,0x0
+			14: R_MIPS_HI16	.rodata
+  18:	24430000 	addiu	v1,v0,0
+			18: R_MIPS_LO16	.rodata
+  1c:	8d870000 	lw	a3,0(t4)
+  20:	8c450000 	lw	a1,0(v0)
+			20: R_MIPS_LO16	.rodata
+  24:	3c020020 	lui	v0,0x20
+  28:	8c690008 	lw	t1,8(v1)
+  2c:	8c6a000c 	lw	t2,12(v1)
+  30:	8c680004 	lw	t0,4(v1)
+  34:	00c23024 	and	a2,a2,v0
+  38:	240b0001 	li	t3,1
+  3c:	24020002 	li	v0,2
+  40:	27bdfff0 	addiu	sp,sp,-16
+  44:	0046580a 	movz	t3,v0,a2
+  48:	30e70300 	andi	a3,a3,0x300
+  4c:	24020100 	li	v0,256
+  50:	afa90008 	sw	t1,8(sp)
+  54:	01a01821 	move	v1,t5
+  58:	afa50000 	sw	a1,0(sp)
+  5c:	afa80004 	sw	t0,4(sp)
+  60:	afaa000c 	sw	t2,12(sp)
+  64:	10e2002d 	beq	a3,v0,11c <set_spi_clock+0x11c>
+  68:	00804821 	move	t1,a0
+  6c:	006b001b 	divu	zero,v1,t3
+  70:	016001f4 	teq	t3,zero,0x7
+  74:	3c07b000 	lui	a3,0xb000
+  78:	34e80020 	ori	t0,a3,0x20
+  7c:	8d020000 	lw	v0,0(t0)
+  80:	24060010 	li	a2,16
+  84:	34420010 	ori	v0,v0,0x10
+  88:	ad020000 	sw	v0,0(t0)
+  8c:	8d240000 	lw	a0,0(t1)
+  90:	34e70074 	ori	a3,a3,0x74
+  94:	27bd0010 	addiu	sp,sp,16
+  98:	00002812 	mflo	a1
+  9c:	00a4001b 	divu	zero,a1,a0
+  a0:	008001f4 	teq	a0,zero,0x7
+  a4:	00001812 	mflo	v1
+  a8:	00031842 	srl	v1,v1,0x1
+  ac:	00031040 	sll	v0,v1,0x1
+  b0:	00a2001b 	divu	zero,a1,v0
+  b4:	004001f4 	teq	v0,zero,0x7
+  b8:	00001012 	mflo	v0
+  bc:	0082102b 	sltu	v0,a0,v0
+  c0:	00431821 	addu	v1,v0,v1
+  c4:	2c640011 	sltiu	a0,v1,17
+  c8:	0064300b 	movn	a2,v1,a0
+  cc:	00061040 	sll	v0,a2,0x1
+  d0:	00a2001b 	divu	zero,a1,v0
+  d4:	004001f4 	teq	v0,zero,0x7
+  d8:	3c02b004 	lui	v0,0xb004
+  dc:	34423018 	ori	v0,v0,0x3018
+  e0:	24c6ffff 	addiu	a2,a2,-1
+  e4:	00002812 	mflo	a1
+  e8:	ad250000 	sw	a1,0(t1)
+  ec:	a4400000 	sh	zero,0(v0)
+  f0:	8ce30000 	lw	v1,0(a3)
+  f4:	2402fff0 	li	v0,-16
+  f8:	00621824 	and	v1,v1,v0
+  fc:	00661825 	or	v1,v1,a2
+ 100:	ace30000 	sw	v1,0(a3)
+ 104:	8d020000 	lw	v0,0(t0)
+ 108:	2403ffef 	li	v1,-17
+ 10c:	00431024 	and	v0,v0,v1
+ 110:	ad020000 	sw	v0,0(t0)
+ 114:	03e00008 	jr	ra
+ 118:	00000000 	nop
+ 11c:	8d840000 	lw	a0,0(t4)
+ 120:	8d830000 	lw	v1,0(t4)
+ 124:	8d820000 	lw	v0,0(t4)
+ 128:	00031c82 	srl	v1,v1,0x12
+ 12c:	00021382 	srl	v0,v0,0xe
+ 130:	3042000c 	andi	v0,v0,0xc
+ 134:	005d1021 	addu	v0,v0,sp
+ 138:	8c450000 	lw	a1,0(v0)
+ 13c:	3063001f 	andi	v1,v1,0x1f
+ 140:	24630002 	addiu	v1,v1,2
+ 144:	70651802 	mul	v1,v1,a1
+ 148:	000425c2 	srl	a0,a0,0x17
+ 14c:	01a3001b 	divu	zero,t5,v1
+ 150:	006001f4 	teq	v1,zero,0x7
+ 154:	24840002 	addiu	a0,a0,2
+ 158:	00001812 	mflo	v1
+ 15c:	0800001b 	j	6c <set_spi_clock+0x6c>
+			15c: R_MIPS_26	.text
+ 160:	70831802 	mul	v1,a0,v1
+
+00000164 <get_dma_count>:
+get_dma_count():
+ 164:	2c820021 	sltiu	v0,a0,33
+ 168:	14400003 	bnez	v0,178 <get_dma_count+0x14>
+ 16c:	00001821 	move	v1,zero
+ 170:	2402fff0 	li	v0,-16
+ 174:	00821824 	and	v1,a0,v0
+ 178:	03e00008 	jr	ra
+ 17c:	00601021 	move	v0,v1
