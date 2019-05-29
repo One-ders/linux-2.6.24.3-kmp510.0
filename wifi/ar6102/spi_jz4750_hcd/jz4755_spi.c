@@ -632,7 +632,7 @@ static void hcd_ssicomplete_wqueue_handler(struct work_struct *p) {
 static void hcd_dmacomplete_wqueue_handler(struct work_struct *p) {
 	struct spi_dev *spi_dev=
 		container_of(p, struct spi_dev, dmacomplete_work);
-	HcdDmaCompletion(spi_dev->pHcd, spi_dev->w100);
+	HcdDmaCompletion(spi_dev->pHcd_ctx, spi_dev->w100);
 }
 
 static void hcd_procirq_wqueue_handler(struct work_struct *p) {
@@ -655,7 +655,7 @@ void deinit_hardware(struct spi_dev *spi_dev) {
 	}
 
 	if (spi_dev->pDmaCommonBuffer) {
-		__free_pages(virt_to_page(spi_dev->pDmaCommonBuffer,0);
+		__free_pages(virt_to_page(spi_dev->pDmaCommonBuffer),0);
 	}
 
 	if (spi_dev->b104&0x08) {
@@ -663,23 +663,107 @@ void deinit_hardware(struct spi_dev *spi_dev) {
 	}
 }
 
-void remove_driver() {
+void remove_driver(void) {
+	struct spi_dev *spi_dev=&dev_spi;
+	
+	if (spi_dev->b104&0x20) {
+		SDIO_HandleHcdEvent(&ar6k_spi.pHcd, EVENT_HCD_DETACH);
+		flush_scheduled_work();
+		SDIO_UnregisterHostController(&ar6k_spi.pHcd);
+	}
+
+	if (spi_dev->b104&0x40) {
+		HcdDeinitialize(&ar6k_spi);
+	}
+
+	deinit_hardware(ar6k_spi.pDev);
+	module_power_off();
 }
 
 void HW_StartTimer(struct hcd_context *hcd_ctx, int ms, int w28) {
+	struct spi_dev *spi_dev=hcd_ctx->pDev;
+	unsigned int jiffies_to_tout;
+
+	if (spi_dev->b24) {
+		return;
+	}
+
+	spi_dev->b24=1;
+	spi_dev->w28=w28;
+	spi_dev->b25=0;
+	jiffies_to_tout=msecs_to_jiffies(ms);
+	spi_dev->spi_timer.expires=jiffies+jiffies_to_tout;	
+	add_timer(&spi_dev->spi_timer);
 }
 
 static void HW_StopDMATransfer(struct hcd_context *hcd_ctx) {
+	struct spi_dev *spi_dev=hcd_ctx->pDev;
+
+	printk("Enter %s,  to be done\n", __FUNCTION__);
+
+	disable_dma(spi_dev->TxDmaChannel);
+	disable_dma(spi_dev->RxDmaChannel);
 }
 
-void HW_EnableDisableSPIIRQ(struct hcd_context *hcd_ctx, unsigned char a1, unsigned char a2) {
+void HW_EnableDisableSPIIRQ(struct hcd_context *hcd_ctx, unsigned char spiirq_enable, unsigned char irqs_enabled) {
+	unsigned long int flags=0;
+	struct spi_dev *spi_dev=hcd_ctx->pDev;
+	
+	if (!irqs_enabled) {
+		local_irq_save(flags);
+		inc_preempt_count();
+	}
+
+	if (!spiirq_enable) {
+		if (spi_dev->b105) {
+			spi_dev->b105=0;
+			disable_irq(194);
+		}
+	} else { 
+		if (!spi_dev->b105) {
+			spi_dev->b105=1;
+			enable_irq(194);
+		}
+	}
+
+	if (!irqs_enabled) {
+		local_irq_restore(flags);
+		dec_preempt_count();
+		preempt_check_resched();
+	}
 }
 
-static int hcd_spi_irq(int irq, struct spi_dev *spi_dev) {
+static irqreturn_t hcd_spi_irq(int irq, void *vdev) {
+	struct spi_dev *spi_dev=(struct spi_dev *)vdev;
+
+	HW_EnableDisableSPIIRQ(spi_dev->pHcd_ctx,0,1);
+	QueueWork(spi_dev, &spi_dev->procirq_work);
 	return 1;
 }
 
-void HW_StopTimer(struct hcd_context *hcd) {
+void HW_StopTimer(struct hcd_context *hcd_ctx) {
+	struct spi_dev *spi_dev=hcd_ctx->pDev;
+	unsigned long flags;
+
+	local_irq_save(flags);
+	inc_preempt_count();
+
+	if (spi_dev->b24) {
+		spi_dev->b25=1;
+		spi_dev->b24=0;
+
+		local_irq_restore(flags);
+		dec_preempt_count();
+		preempt_check_resched();
+
+		del_timer(&spi_dev->spi_timer);
+
+		return;
+	}
+	local_irq_restore(flags);
+	dec_preempt_count();
+	preempt_check_resched();
+
 }
 
 void HW_StartDMA(struct hcd_context *hcd) {

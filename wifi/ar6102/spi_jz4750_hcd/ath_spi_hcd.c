@@ -118,7 +118,7 @@ void HcdDmaCompletion(struct hcd_context *hcd_ctx, SDIO_STATUS status) {
 		local_irq_enable();
 	}
 // 2d08
-	if (!SD_SUCCESS(status)) {
+	if (!SDIO_SUCCESS(status)) {
 	if (req->DataRemaining != 0) {
 		status=HcdTransferData(hcd_ctx,req);
 	}
