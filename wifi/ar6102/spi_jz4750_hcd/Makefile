@@ -3,7 +3,7 @@
 ifneq (${KERNELRELEASE},)
 obj-m := athspi_jz4755_hcd.o
 athspi_jz4755_hcd-objs := jz4755_spi.o ath_spi_hcd.o
-MY_CFLAGS += 
+MY_CFLAGS +=
 ccflags-y += ${MY_CFLAGS}
 CC += ${MY_CFLAGS}
 # Otherwise we were called directly from the command line.

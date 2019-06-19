@@ -113,9 +113,9 @@ struct spi_dev { // size 152 bytes
 //	void (*ttimeout)(struct spi_dev *);  // 12-15	
 //	struct spi_dev *dev;		     // 16-19
 //	unsigned int w20;		     // 20-23
-	unsigned char b24;		     // 24
-	unsigned char b25;		     // 25
-	unsigned short int h26;		     // 26-27
+	unsigned char ub24;		     // 24
+	unsigned char ub25;		     // 25
+	unsigned short int uh26;	     // 26-27
 	unsigned int w28;		     // 28-31
 	struct hcd_context *pHcd_ctx;        // 32-35
 	struct work_struct ssicomplete_work; // 36-51
@@ -123,12 +123,12 @@ struct spi_dev { // size 152 bytes
 	struct work_struct procirq_work;     // 68-83
 	struct work_struct dmacomplete_work; // 84-99
 	unsigned int w100;                   // 100-103
-	unsigned char b104;                  // 104
-        unsigned char b105;                  // 105
+	unsigned char ub104;                  // 104
+        unsigned char ub105;                  // 105
 	unsigned short int pad5;             // 106-107
 	unsigned int op_clock_current;       // 108-111
-	unsigned int TxDmaChannel;	     // 112-115
-	unsigned int RxDmaChannel;	     // 116-119
+	int TxDmaChannel;		     // 112-115
+	int RxDmaChannel;		     // 116-119
 	unsigned int w120;		     // 120-123
 	         int w124;		     // 124-127
 	unsigned int w128;		     // 128-131
@@ -150,10 +150,10 @@ struct hcd_context  { // size 252 bytes
 	char		b26;	  // 26
 	char		pad27;	  // 27
 	unsigned int pad28[3];	  // 28-39
-	unsigned int w40;         // 40-43
-	unsigned int w44;         // 44-47
-	unsigned char b48;	  // 48
-	unsigned char pad2;	  // 49
+	unsigned short int *w40;  // 40-43
+	int w44;  	          // 44-47
+	unsigned char ub48;	  // 48
+	unsigned char ub49;	  // 49
 	unsigned short pad3;	  // 50-51
         unsigned int pad4[2];    // 52-59
 	unsigned int op_clock;    // 60-63
