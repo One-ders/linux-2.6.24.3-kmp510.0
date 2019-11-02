@@ -91,7 +91,7 @@
 // (16*11)+4 (180) = ??         = c00294c0  @ c00294c0
 // (16*11)+8 (184) = ??         = c00294c0  @ c00294c4
 // (16*11)+c (188) = ??         = c0029450  @ c00294c8
-// (16*12)+0 (192) = SDIOIrqHelperFunction = c001cfb0 @ c00294cc 
+// (16*12)+0 (192) = SDIOIrqHelperFunction = c001cfb0 @ c00294cc
 // (16*12)+4 (196) = ??         = 81847000  @ c00294d0
 // (16*12)+8 (200) = ??         = 20200     @ c00294d4
 // (16*12)+c (204) = ??         = 2         @ c00294d8
@@ -110,7 +110,7 @@
 struct spi_dev { // size 152 bytes
 	struct timer_list	spi_timer;   // 0-11
 //	unsigned int pad1[3];     // 0-11
-//	void (*ttimeout)(struct spi_dev *);  // 12-15	
+//	void (*ttimeout)(struct spi_dev *);  // 12-15
 //	struct spi_dev *dev;		     // 16-19
 //	unsigned int w20;		     // 20-23
 	unsigned char ub24;		     // 24
@@ -133,22 +133,20 @@ struct spi_dev { // size 152 bytes
 	         int w124;		     // 124-127
 	unsigned int w128;		     // 128-131
 	unsigned int w132;		     // 132-135
-	unsigned int pDmaDescriptorBuffer;   // 136-139
+	unsigned char *pDmaDescriptorBuffer; // 136-139
 	unsigned int DmaDescriptorPhys;      // 140-143
-	unsigned int pDmaCommonBuffer;       // 144-147
+	unsigned char *pDmaCommonBuffer;     // 144-147
 	unsigned int DmaCommonBufferPhys;    // 148-151
 };
 
 struct hcd_context  { // size 252 bytes
         unsigned int pad0[4];     // 0-15
-	unsigned char	ub16;     // 16
-	unsigned char	ub17;     // 17
+	unsigned short int uh16;  // 16-17
 	unsigned char	ub18;     // 18
 	unsigned char	ub19;     // 19
-	unsigned int    pad20;	  // 20-23
-	unsigned short int pad24; // 24-25
-	char		b26;	  // 26
-	char		pad27;	  // 27
+	unsigned int    uw20;	  // 20-23
+	unsigned short int uh24;  // 24-25
+	unsigned short int uh26;  // 26-27
 	unsigned int pad28[3];	  // 28-39
 	unsigned short int *w40;  // 40-43
 	int w44;  	          // 44-47
@@ -166,4 +164,6 @@ struct hcd_context  { // size 252 bytes
 };
 
 void HcdDmaCompletion(struct hcd_context *hcd_ctx, SDIO_STATUS status);
+
+extern int debuglevel;
 

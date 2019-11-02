@@ -1,0 +1,4 @@
+2c2
+< sdio_busdriver.ko:     file format elf32-tradlittlemips
+---
+> spi_busdriver.ko:     file format elf32-tradlittlemips

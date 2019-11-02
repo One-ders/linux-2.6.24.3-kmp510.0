@@ -1,0 +1,1516 @@
+ELF Header:
+  Magic:   7f 45 4c 46 01 01 01 00 00 00 00 00 00 00 00 00 
+  Class:                             ELF32
+  Data:                              2's complement, little endian
+  Version:                           1 (current)
+  OS/ABI:                            UNIX - System V
+  ABI Version:                       0
+  Type:                              REL (Relocatable file)
+  Machine:                           MIPS R3000
+  Version:                           0x1
+  Entry point address:               0x0
+  Start of program headers:          0 (bytes into file)
+  Start of section headers:          32976 (bytes into file)
+  Flags:                             0x50001001, noreorder, o32, mips32
+  Size of this header:               52 (bytes)
+  Size of program headers:           0 (bytes)
+  Number of program headers:         0
+  Size of section headers:           40 (bytes)
+  Number of section headers:         32
+  Section header string table index: 29
+
+Section Headers:
+  [Nr] Name              Type            Addr     Off    Size   ES Flg Lk Inf Al
+  [ 0]                   NULL            00000000 000000 000000 00      0   0  0
+  [ 1] .reginfo          MIPS_REGINFO    00000000 000034 000018 18   A  0   0  4
+  [ 2] .text             PROGBITS        00000000 000050 006500 00  AX  0   0 16
+  [ 3] .rel.text         REL             00000000 0085d0 001e28 08     30   2  4
+  [ 4] .exit.text        PROGBITS        00000000 006550 00005c 00  AX  0   0  4
+  [ 5] .rel.exit.text    REL             00000000 00a3f8 000060 08     30   4  4
+  [ 6] .init.text        PROGBITS        00000000 0065ac 000140 00  AX  0   0  4
+  [ 7] .rel.init.text    REL             00000000 00a458 000100 08     30   6  4
+  [ 8] .rodata           PROGBITS        00000000 0066f0 0001d0 00   A  0   0 16
+  [ 9] .rel.rodata       REL             00000000 00a558 0002b8 08     30   8  4
+  [10] .rodata.str1.4    PROGBITS        00000000 0068c0 0000bc 01 AMS  0   0  4
+  [11] __ksymtab         PROGBITS        00000000 00697c 000038 00   A  0   0  4
+  [12] .rel__ksymtab     REL             00000000 00a810 000070 08     30  11  4
+  [13] __kcrctab         PROGBITS        00000000 0069b4 00001c 00   A  0   0  4
+  [14] .rel__kcrctab     REL             00000000 00a880 000038 08     30  13  4
+  [15] .modinfo          PROGBITS        00000000 0069d0 00021c 00   A  0   0  4
+  [16] __param           PROGBITS        00000000 006bec 000064 00   A  0   0  4
+  [17] .rel__param       REL             00000000 00a8b8 0000a0 08     30  16  4
+  [18] __ksymtab_strings PROGBITS        00000000 006c50 0000ac 00   A  0   0  4
+  [19] __versions        PROGBITS        00000000 006cfc 0007c0 00   A  0   0  4
+  [20] .data             PROGBITS        00000000 0074c0 000160 00  WA  0   0 16
+  [21] .rel.data         REL             00000000 00a958 000028 08     30  20  4
+  [22] .gnu.linkonce.thi PROGBITS        00000000 007620 000160 00  WA  0   0 32
+  [23] .rel.gnu.linkonce REL             00000000 00a980 000010 08     30  22  4
+  [24] .bss              NOBITS          00000000 007780 000020 00  WA  0   0 16
+  [25] .comment          PROGBITS        00000000 007780 00006c 00      0   0  1
+  [26] .mdebug.abi32     PROGBITS        0000006c 0077ec 000000 00      0   0  1
+  [27] .pdr              PROGBITS        00000000 0077ec 0007e0 00      0   0  4
+  [28] .rel.pdr          REL             00000000 00a990 0001f8 08     30  27  4
+  [29] .shstrtab         STRTAB          00000000 007fcc 000102 00      0   0  1
+  [30] .symtab           SYMTAB          00000000 00ab88 000ce0 10     31 114  4
+  [31] .strtab           STRTAB          00000000 00b868 000dca 00      0   0  1
+Key to Flags:
+  W (write), A (alloc), X (execute), M (merge), S (strings), I (info),
+  L (link order), O (extra OS processing required), G (group), T (TLS),
+  C (compressed), x (unknown), o (OS specific), E (exclude),
+  p (processor specific)
+
+There are no section groups in this file.
+
+There are no program headers in this file.
+
+There is no dynamic section in this file.
+
+Relocation section '.rel.text' at offset 0x85d0 contains 965 entries:
+ Offset     Info    Type            Sym.Value  Sym. Name
+00000008  0000a005 R_MIPS_HI16       00000000   cpu_data
+0000000c  0000a006 R_MIPS_LO16       00000000   cpu_data
+0000009c  00000204 R_MIPS_26         00000000   .text
+000000a4  0000b505 R_MIPS_HI16       00000000   __up
+000000a8  0000b506 R_MIPS_LO16       00000000   __up
+000000f4  0000cd05 R_MIPS_HI16       00000000   pBusContext
+000000f8  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00000130  00000204 R_MIPS_26         00000000   .text
+00000184  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00000190  0000aa05 R_MIPS_HI16       00000000   memset
+0000019c  0000aa06 R_MIPS_LO16       00000000   memset
+000001d4  0000be05 R_MIPS_HI16       00000000   malloc_sizes
+000001d8  0000be06 R_MIPS_LO16       00000000   malloc_sizes
+000001dc  00009105 R_MIPS_HI16       00000000   kmem_cache_alloc
+000001e0  00009106 R_MIPS_LO16       00000000   kmem_cache_alloc
+0000022c  0000cd06 R_MIPS_LO16       00000000   pBusContext
+0000027c  00009d05 R_MIPS_HI16       00000000   preempt_schedule
+0000017c  00009d05 R_MIPS_HI16       00000000   preempt_schedule
+00000280  00009d06 R_MIPS_LO16       00000000   preempt_schedule
+0000028c  00000204 R_MIPS_26         00000000   .text
+00000294  0000be06 R_MIPS_LO16       00000000   malloc_sizes
+00000298  00009105 R_MIPS_HI16       00000000   kmem_cache_alloc
+0000029c  00009106 R_MIPS_LO16       00000000   kmem_cache_alloc
+000002b4  0000aa05 R_MIPS_HI16       00000000   memset
+000002bc  0000aa06 R_MIPS_LO16       00000000   memset
+000002cc  00000204 R_MIPS_26         00000000   .text
+000004a0  00009d05 R_MIPS_HI16       00000000   preempt_schedule
+000002d4  00009d06 R_MIPS_LO16       00000000   preempt_schedule
+000002e0  00000204 R_MIPS_26         00000000   .text
+000002e8  00008d05 R_MIPS_HI16       000000b4   AllocateRequest
+000002ec  00008d06 R_MIPS_LO16       000000b4   AllocateRequest
+0000030c  0000be05 R_MIPS_HI16       00000000   malloc_sizes
+00000314  0000be06 R_MIPS_LO16       00000000   malloc_sizes
+00000318  00009105 R_MIPS_HI16       00000000   kmem_cache_alloc
+0000031c  00009106 R_MIPS_LO16       00000000   kmem_cache_alloc
+00000328  0000aa05 R_MIPS_HI16       00000000   memset
+00000330  0000aa06 R_MIPS_LO16       00000000   memset
+0000035c  00009305 R_MIPS_HI16       00000e98   IssueBusRequest
+00000364  00009306 R_MIPS_LO16       00000e98   IssueBusRequest
+00000360  00009a05 R_MIPS_HI16       00001160   IssueBusConfig
+00000368  00009a06 R_MIPS_LO16       00001160   IssueBusConfig
+00000374  00008405 R_MIPS_HI16       000002e8   IssueAllocRequest
+00000380  00008406 R_MIPS_LO16       000002e8   IssueAllocRequest
+00000378  0000b005 R_MIPS_HI16       00001208   IssueFreeRequest
+00000384  0000b006 R_MIPS_LO16       00001208   IssueFreeRequest
+000003d4  00000204 R_MIPS_26         00000000   .text
+0000041c  0000cd05 R_MIPS_HI16       00000000   pBusContext
+00000420  0000cd06 R_MIPS_LO16       00000000   pBusContext
+0000050c  00009d05 R_MIPS_HI16       00000000   preempt_schedule
+00000510  00009d06 R_MIPS_LO16       00000000   preempt_schedule
+00000524  0000be05 R_MIPS_HI16       00000000   malloc_sizes
+000004a8  0000be05 R_MIPS_HI16       00000000   malloc_sizes
+00000528  0000be06 R_MIPS_LO16       00000000   malloc_sizes
+0000052c  00009105 R_MIPS_HI16       00000000   kmem_cache_alloc
+00000530  00009106 R_MIPS_LO16       00000000   kmem_cache_alloc
+00000548  0000aa05 R_MIPS_HI16       00000000   memset
+00000550  0000aa06 R_MIPS_LO16       00000000   memset
+0000055c  00008705 R_MIPS_HI16       00000000   init_waitqueue_head
+00000568  00008706 R_MIPS_LO16       00000000   init_waitqueue_head
+000005a4  0000cd06 R_MIPS_LO16       00000000   pBusContext
+000005f4  00009d05 R_MIPS_HI16       00000000   preempt_schedule
+000005f8  00009d06 R_MIPS_LO16       00000000   preempt_schedule
+00000604  00000204 R_MIPS_26         00000000   .text
+0000060c  00000204 R_MIPS_26         00000000   .text
+00000614  00008105 R_MIPS_HI16       00000000   kfree
+00000618  00008106 R_MIPS_LO16       00000000   kfree
+00000660  0000cd05 R_MIPS_HI16       00000000   pBusContext
+00000664  0000cd06 R_MIPS_LO16       00000000   pBusContext
+000006e4  00000205 R_MIPS_HI16       00000000   .text
+000006f4  00000206 R_MIPS_LO16       00000000   .text
+00000700  00000204 R_MIPS_26         00000000   .text
+000006dc  00009d05 R_MIPS_HI16       00000000   preempt_schedule
+00000718  00009d06 R_MIPS_LO16       00000000   preempt_schedule
+00000724  00000204 R_MIPS_26         00000000   .text
+00000760  0000a005 R_MIPS_HI16       00000000   cpu_data
+00000764  0000a006 R_MIPS_LO16       00000000   cpu_data
+000007c8  0000a006 R_MIPS_LO16       00000000   cpu_data
+00000818  0000a006 R_MIPS_LO16       00000000   cpu_data
+0000085c  0000c205 R_MIPS_HI16       00000624   FreeSignal
+00000e94  0000c205 R_MIPS_HI16       00000624   FreeSignal
+00000860  0000c206 R_MIPS_LO16       00000624   FreeSignal
+0000092c  0000cd05 R_MIPS_HI16       00000000   pBusContext
+00000938  0000cd06 R_MIPS_LO16       00000000   pBusContext
+000009c4  0000bf05 R_MIPS_HI16       00004888   _SDIO_HandleHcdEvent
+000009cc  0000bf06 R_MIPS_LO16       00004888   _SDIO_HandleHcdEvent
+000009d8  00000204 R_MIPS_26         00000000   .text
+00000a48  00000205 R_MIPS_HI16       00000000   .text
+0000079c  00000205 R_MIPS_HI16       00000000   .text
+00000a4c  00000206 R_MIPS_LO16       00000000   .text
+00000a54  0000b305 R_MIPS_HI16       000003dc   AllocateSignal
+00000a58  0000b306 R_MIPS_LO16       000003dc   AllocateSignal
+00000a6c  00000204 R_MIPS_26         00000000   .text
+00000af0  0000a006 R_MIPS_LO16       00000000   cpu_data
+00000b28  0000c205 R_MIPS_HI16       00000624   FreeSignal
+00000b2c  0000c206 R_MIPS_LO16       00000624   FreeSignal
+00000bc0  00000204 R_MIPS_26         00000000   .text
+00000bc8  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00000bf0  0000a006 R_MIPS_LO16       00000000   cpu_data
+00000c30  00000204 R_MIPS_26         00000000   .text
+00000c3c  00000204 R_MIPS_26         00000000   .text
+00000c4c  00000204 R_MIPS_26         00000000   .text
+00000c74  00000204 R_MIPS_26         00000000   .text
+00000cdc  00000204 R_MIPS_26         00000000   .text
+00000ce4  00000204 R_MIPS_26         00000000   .text
+00000d40  00000204 R_MIPS_26         00000000   .text
+00000d50  00000204 R_MIPS_26         00000000   .text
+00000db4  00000204 R_MIPS_26         00000000   .text
+00000dbc  0000a006 R_MIPS_LO16       00000000   cpu_data
+00000dec  00000204 R_MIPS_26         00000000   .text
+00000e54  00000204 R_MIPS_26         00000000   .text
+0000098c  00009d05 R_MIPS_HI16       00000000   preempt_schedule
+00000e5c  00009d06 R_MIPS_LO16       00000000   preempt_schedule
+00000e68  00000204 R_MIPS_26         00000000   .text
+00000ad4  00009d05 R_MIPS_HI16       00000000   preempt_schedule
+00000e70  00009d06 R_MIPS_LO16       00000000   preempt_schedule
+00000e7c  00000204 R_MIPS_26         00000000   .text
+00000b24  00008605 R_MIPS_HI16       00000000   __down
+00000e84  00008606 R_MIPS_LO16       00000000   __down
+00000e90  00000204 R_MIPS_26         00000000   .text
+00000e9c  0000b905 R_MIPS_HI16       0000072c   IssueRequestToHCD
+00000ea4  0000b906 R_MIPS_LO16       0000072c   IssueRequestToHCD
+00000eec  0000cd05 R_MIPS_HI16       00000000   pBusContext
+00000ef0  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00000f8c  00008105 R_MIPS_HI16       00000000   kfree
+00000fa8  00008106 R_MIPS_LO16       00000000   kfree
+00000fb4  00000204 R_MIPS_26         00000000   .text
+00000f74  00009d05 R_MIPS_HI16       00000000   preempt_schedule
+00000fbc  00009d06 R_MIPS_LO16       00000000   preempt_schedule
+00000fc8  00000204 R_MIPS_26         00000000   .text
+00000fd4  0000b305 R_MIPS_HI16       000003dc   AllocateSignal
+00000fec  0000b306 R_MIPS_LO16       000003dc   AllocateSignal
+00001004  00008d05 R_MIPS_HI16       000000b4   AllocateRequest
+00001008  00008d06 R_MIPS_LO16       000000b4   AllocateRequest
+0000101c  00000205 R_MIPS_HI16       00000000   .text
+00001020  00000206 R_MIPS_LO16       00000000   .text
+0000104c  0000b905 R_MIPS_HI16       0000072c   IssueRequestToHCD
+00001050  0000b906 R_MIPS_LO16       0000072c   IssueRequestToHCD
+00001068  0000a005 R_MIPS_HI16       00000000   cpu_data
+0000106c  0000a006 R_MIPS_LO16       00000000   cpu_data
+000010a4  0000cb05 R_MIPS_HI16       00000eb0   FreeRequest
+000010a8  0000cb06 R_MIPS_LO16       00000eb0   FreeRequest
+000010b8  0000c205 R_MIPS_HI16       00000624   FreeSignal
+000010bc  0000c206 R_MIPS_LO16       00000624   FreeSignal
+000010e8  00000204 R_MIPS_26         00000000   .text
+00001144  00000204 R_MIPS_26         00000000   .text
+0000109c  00008605 R_MIPS_HI16       00000000   __down
+0000114c  00008606 R_MIPS_LO16       00000000   __down
+00001158  00000204 R_MIPS_26         00000000   .text
+000011a4  00007205 R_MIPS_HI16       00000fd0   SendSyncedHcdBusConfig
+000011a8  00007206 R_MIPS_LO16       00000fd0   SendSyncedHcdBusConfig
+000011c8  0000a305 R_MIPS_HI16       00003c6c   SDMaskUnmaskFunctionIR
+000011cc  0000a306 R_MIPS_LO16       00003c6c   SDMaskUnmaskFunctionIR
+000011d8  0000a305 R_MIPS_HI16       00003c6c   SDMaskUnmaskFunctionIR
+000011dc  0000a306 R_MIPS_LO16       00003c6c   SDMaskUnmaskFunctionIR
+000011f0  00000204 R_MIPS_26         00000000   .text
+000011f8  0000c905 R_MIPS_HI16       00003dfc   SDFunctionAckInterrupt
+000011fc  0000c906 R_MIPS_LO16       00003dfc   SDFunctionAckInterrupt
+00001208  0000cb05 R_MIPS_HI16       00000eb0   FreeRequest
+0000120c  0000cb06 R_MIPS_LO16       00000eb0   FreeRequest
+00001218  00008105 R_MIPS_HI16       00000000   kfree
+0000121c  00008106 R_MIPS_LO16       00000000   kfree
+00001230  0000cd05 R_MIPS_HI16       00000000   pBusContext
+00001234  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00001254  0000a005 R_MIPS_HI16       00000000   cpu_data
+00001258  0000a006 R_MIPS_LO16       00000000   cpu_data
+00001290  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00001294  0000ae05 R_MIPS_HI16       00001218   FreeDevice
+0000129c  0000ae06 R_MIPS_LO16       00001218   FreeDevice
+000012a0  0000cd06 R_MIPS_LO16       00000000   pBusContext
+000012c4  0000cd06 R_MIPS_LO16       00000000   pBusContext
+000012e8  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00001300  0000a006 R_MIPS_LO16       00000000   cpu_data
+000013b0  00000204 R_MIPS_26         00000000   .text
+0000140c  00000204 R_MIPS_26         00000000   .text
+00001334  0000b505 R_MIPS_HI16       00000000   __up
+00001414  0000b506 R_MIPS_LO16       00000000   __up
+00001420  00000204 R_MIPS_26         00000000   .text
+0000128c  0000c305 R_MIPS_HI16       00000000   __down_interruptible
+00001428  0000c306 R_MIPS_LO16       00000000   __down_interruptible
+0000143c  00000204 R_MIPS_26         00000000   .text
+0000144c  0000cd05 R_MIPS_HI16       00000000   pBusContext
+00001450  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00001468  0000a005 R_MIPS_HI16       00000000   cpu_data
+0000146c  0000a006 R_MIPS_LO16       00000000   cpu_data
+000014a4  0000cd06 R_MIPS_LO16       00000000   pBusContext
+000014c4  0000cd06 R_MIPS_LO16       00000000   pBusContext
+000014cc  0000a006 R_MIPS_LO16       00000000   cpu_data
+00001574  00000204 R_MIPS_26         00000000   .text
+000015d0  00000204 R_MIPS_26         00000000   .text
+00001500  0000b505 R_MIPS_HI16       00000000   __up
+000015d8  0000b506 R_MIPS_LO16       00000000   __up
+000015e4  00000204 R_MIPS_26         00000000   .text
+000014a0  0000c305 R_MIPS_HI16       00000000   __down_interruptible
+000015ec  0000c306 R_MIPS_LO16       00000000   __down_interruptible
+00001600  00000204 R_MIPS_26         00000000   .text
+0000160c  00009c05 R_MIPS_HI16       00000000   SDLIB_OSDeleteHelper
+0000161c  00009c06 R_MIPS_LO16       00000000   SDLIB_OSDeleteHelper
+00001638  0000ae05 R_MIPS_HI16       00001218   FreeDevice
+0000163c  0000ae06 R_MIPS_LO16       00001218   FreeDevice
+00001664  0000cd05 R_MIPS_HI16       00000000   pBusContext
+00001668  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00001690  0000a105 R_MIPS_HI16       00000000   SDLIB_DeleteMessageQue
+00001694  0000a106 R_MIPS_LO16       00000000   SDLIB_DeleteMessageQue
+000016a0  0000cd06 R_MIPS_LO16       00000000   pBusContext
+000016a8  00008005 R_MIPS_HI16       00002ba0   RemoveAllFunctions
+000016ac  00008006 R_MIPS_LO16       00002ba0   RemoveAllFunctions
+000016b8  0000cc05 R_MIPS_HI16       00001228   DeleteDevices
+000016bc  0000cc06 R_MIPS_LO16       00001228   DeleteDevices
+000016c8  0000cd06 R_MIPS_LO16       00000000   pBusContext
+000016d8  00000204 R_MIPS_26         00000000   .text
+000016e8  0000cd06 R_MIPS_LO16       00000000   pBusContext
+000016f8  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00001704  0000cd06 R_MIPS_LO16       00000000   pBusContext
+0000171c  00008106 R_MIPS_LO16       00000000   kfree
+000016dc  00008105 R_MIPS_HI16       00000000   kfree
+00001738  00008106 R_MIPS_LO16       00000000   kfree
+00001744  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00001754  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00001764  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00001774  00000205 R_MIPS_HI16       00000000   .text
+00001778  00000206 R_MIPS_LO16       00000000   .text
+000017a0  0000cd06 R_MIPS_LO16       00000000   pBusContext
+000017b0  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00001804  00008105 R_MIPS_HI16       00000000   kfree
+000017c4  00008106 R_MIPS_LO16       00000000   kfree
+000017cc  0000cd06 R_MIPS_LO16       00000000   pBusContext
+000017d0  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00001684  00009c05 R_MIPS_HI16       00000000   SDLIB_OSDeleteHelper
+000017ec  00009c06 R_MIPS_LO16       00000000   SDLIB_OSDeleteHelper
+000017f8  00000204 R_MIPS_26         00000000   .text
+000017fc  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00001800  00000204 R_MIPS_26         00000000   .text
+00001834  0000a005 R_MIPS_HI16       00000000   cpu_data
+00001838  0000a006 R_MIPS_LO16       00000000   cpu_data
+000018d0  00000204 R_MIPS_26         00000000   .text
+000018d8  0000b505 R_MIPS_HI16       00000000   __up
+000018e4  0000b506 R_MIPS_LO16       00000000   __up
+00001908  0000be05 R_MIPS_HI16       00000000   malloc_sizes
+0000190c  0000be06 R_MIPS_LO16       00000000   malloc_sizes
+00001910  00009105 R_MIPS_HI16       00000000   kmem_cache_alloc
+00001914  00009106 R_MIPS_LO16       00000000   kmem_cache_alloc
+00001928  0000aa05 R_MIPS_HI16       00000000   memset
+00001930  0000aa06 R_MIPS_LO16       00000000   memset
+00001954  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00001958  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00001960  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00001968  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00001974  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00001980  0000cd06 R_MIPS_LO16       00000000   pBusContext
+0000198c  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00001998  0000cd06 R_MIPS_LO16       00000000   pBusContext
+000019a4  0000cd06 R_MIPS_LO16       00000000   pBusContext
+000019b0  0000cd06 R_MIPS_LO16       00000000   pBusContext
+000019bc  0000cd06 R_MIPS_LO16       00000000   pBusContext
+000019c8  0000cd06 R_MIPS_LO16       00000000   pBusContext
+000019d4  0000cd06 R_MIPS_LO16       00000000   pBusContext
+000019dc  0000cd06 R_MIPS_LO16       00000000   pBusContext
+000019e8  0000cd06 R_MIPS_LO16       00000000   pBusContext
+000019f4  0000cd06 R_MIPS_LO16       00000000   pBusContext
+000019fc  00008905 R_MIPS_HI16       00005a20   _SDIO_BusGetDefaultSet
+00001a00  00008906 R_MIPS_LO16       00005a20   _SDIO_BusGetDefaultSet
+00001a08  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00001a14  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00001a2c  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00001a20  00008705 R_MIPS_HI16       00000000   init_waitqueue_head
+00001a30  00008706 R_MIPS_LO16       00000000   init_waitqueue_head
+00001a40  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00001a54  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00001a68  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00001a78  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00001a84  00008d05 R_MIPS_HI16       000000b4   AllocateRequest
+00001a8c  00008d06 R_MIPS_LO16       000000b4   AllocateRequest
+00001a88  0000cb05 R_MIPS_HI16       00000eb0   FreeRequest
+00001a90  0000cb06 R_MIPS_LO16       00000eb0   FreeRequest
+00001a94  00000204 R_MIPS_26         00000000   .text
+00001aa4  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00001ab4  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00001ac8  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00001ad4  0000b305 R_MIPS_HI16       000003dc   AllocateSignal
+00001adc  0000b306 R_MIPS_LO16       000003dc   AllocateSignal
+00001ad8  0000c205 R_MIPS_HI16       00000624   FreeSignal
+00001ae0  0000c206 R_MIPS_LO16       00000624   FreeSignal
+00001ae4  00000204 R_MIPS_26         00000000   .text
+00001af4  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00001b18  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00001b30  00008a05 R_MIPS_HI16       00000000   SDLIB_CreateMessageQue
+00001b34  00008a06 R_MIPS_LO16       00000000   SDLIB_CreateMessageQue
+00001b3c  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00001b44  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00001b50  0000c505 R_MIPS_HI16       0000573c   CardDetectHelperFuncti
+00001b5c  0000c506 R_MIPS_LO16       0000573c   CardDetectHelperFuncti
+00001b54  00009205 R_MIPS_HI16       00000000   SDLIB_OSCreateHelper
+00001b60  00009206 R_MIPS_LO16       00000000   SDLIB_OSCreateHelper
+00001b74  0000cd05 R_MIPS_HI16       00000000   pBusContext
+00001b78  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00001bac  0000ac05 R_MIPS_HI16       0000165c   _SDIO_BusDriverCleanup
+00001bb0  0000ac06 R_MIPS_LO16       0000165c   _SDIO_BusDriverCleanup
+00001be4  00000204 R_MIPS_26         00000000   .text
+00001be8  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00001c44  0000aa05 R_MIPS_HI16       00000000   memset
+00001c4c  0000aa06 R_MIPS_LO16       00000000   memset
+00001ca8  00009505 R_MIPS_HI16       000002f8   AllocateDevice
+00001cb4  00009506 R_MIPS_LO16       000002f8   AllocateDevice
+00001cfc  00008705 R_MIPS_HI16       00000000   init_waitqueue_head
+00001d04  00008706 R_MIPS_LO16       00000000   init_waitqueue_head
+00001d10  0000c805 R_MIPS_HI16       00003fb0   SDIOIrqHelperFunction
+00001d34  0000c806 R_MIPS_LO16       00003fb0   SDIOIrqHelperFunction
+00001d14  00009205 R_MIPS_HI16       00000000   SDLIB_OSCreateHelper
+00001d38  00009206 R_MIPS_LO16       00000000   SDLIB_OSCreateHelper
+00001d4c  0000cd05 R_MIPS_HI16       00000000   pBusContext
+00001d50  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00001d58  0000a005 R_MIPS_HI16       00000000   cpu_data
+00001d5c  0000a006 R_MIPS_LO16       00000000   cpu_data
+00001d94  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00001da4  00000204 R_MIPS_26         00000000   .text
+00001dec  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00001e0c  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00001e14  0000a006 R_MIPS_LO16       00000000   cpu_data
+00001e78  00000205 R_MIPS_HI16       00000000   .text
+00002200  00000205 R_MIPS_HI16       00000000   .text
+00001e7c  00000206 R_MIPS_LO16       00000000   .text
+00001eb0  00000204 R_MIPS_26         00000000   .text
+00001f0c  00000204 R_MIPS_26         00000000   .text
+00001f68  00000204 R_MIPS_26         00000000   .text
+00001e48  0000b505 R_MIPS_HI16       00000000   __up
+00001f70  0000b506 R_MIPS_LO16       00000000   __up
+00001f7c  00000204 R_MIPS_26         00000000   .text
+00001d90  0000c305 R_MIPS_HI16       00000000   __down_interruptible
+00001f84  0000c306 R_MIPS_LO16       00000000   __down_interruptible
+00001f94  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00001f98  00000205 R_MIPS_HI16       00000000   .text
+00001f9c  00000206 R_MIPS_LO16       00000000   .text
+00001fa8  00000204 R_MIPS_26         00000000   .text
+00001fb4  0000bb05 R_MIPS_HI16       0000297c   RemoveHcdFunctions
+00001fd4  0000bb06 R_MIPS_LO16       0000297c   RemoveHcdFunctions
+00001fe0  0000cc05 R_MIPS_HI16       00001228   DeleteDevices
+00001fe4  0000cc06 R_MIPS_LO16       00001228   DeleteDevices
+00001ff0  0000a005 R_MIPS_HI16       00000000   cpu_data
+00001ff4  0000a006 R_MIPS_LO16       00000000   cpu_data
+00002004  00000204 R_MIPS_26         00000000   .text
+00002014  00009005 R_MIPS_HI16       00000000   schedule_timeout
+00002018  00009006 R_MIPS_LO16       00000000   schedule_timeout
+000009a4  0000cd05 R_MIPS_HI16       00000000   pBusContext
+00002024  0000cd06 R_MIPS_LO16       00000000   pBusContext
+0000192c  0000cd05 R_MIPS_HI16       00000000   pBusContext
+00002074  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00001bdc  0000cd05 R_MIPS_HI16       00000000   pBusContext
+000020ac  0000cd06 R_MIPS_LO16       00000000   pBusContext
+000020e4  00000205 R_MIPS_HI16       00000000   .text
+000020e8  00000206 R_MIPS_LO16       00000000   .text
+00002170  00000204 R_MIPS_26         00000000   .text
+000021cc  00000204 R_MIPS_26         00000000   .text
+00002070  0000c305 R_MIPS_HI16       00000000   __down_interruptible
+000021d4  0000c306 R_MIPS_LO16       00000000   __down_interruptible
+00001ff8  0000cd05 R_MIPS_HI16       00000000   pBusContext
+000021e4  0000cd06 R_MIPS_LO16       00000000   pBusContext
+000021e8  00000204 R_MIPS_26         00000000   .text
+000020e0  0000b505 R_MIPS_HI16       00000000   __up
+000021f0  0000b506 R_MIPS_LO16       00000000   __up
+000021fc  00000204 R_MIPS_26         00000000   .text
+00002444  0000a006 R_MIPS_LO16       00000000   cpu_data
+0000251c  0000cd05 R_MIPS_HI16       00000000   pBusContext
+00002520  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00002528  0000a006 R_MIPS_LO16       00000000   cpu_data
+00002584  0000cd06 R_MIPS_LO16       00000000   pBusContext
+0000258c  0000a006 R_MIPS_LO16       00000000   cpu_data
+000025c4  0000ba05 R_MIPS_HI16       00005e90   OS_RemoveDevice
+00002950  0000ba05 R_MIPS_HI16       00005e90   OS_RemoveDevice
+000025c8  0000ba06 R_MIPS_LO16       00005e90   OS_RemoveDevice
+00002688  00000204 R_MIPS_26         00000000   .text
+00002690  0000a006 R_MIPS_LO16       00000000   cpu_data
+000026c0  00000204 R_MIPS_26         00000000   .text
+00002728  00000204 R_MIPS_26         00000000   .text
+00002784  00000204 R_MIPS_26         00000000   .text
+000027e0  00000204 R_MIPS_26         00000000   .text
+00002868  0000a006 R_MIPS_LO16       00000000   cpu_data
+0000289c  00008605 R_MIPS_HI16       00000000   __down
+000028a0  00008606 R_MIPS_LO16       00000000   __down
+000028ac  00000204 R_MIPS_26         00000000   .text
+00002908  00000204 R_MIPS_26         00000000   .text
+0000255c  0000c305 R_MIPS_HI16       00000000   __down_interruptible
+00002910  0000c306 R_MIPS_LO16       00000000   __down_interruptible
+00002924  00000204 R_MIPS_26         00000000   .text
+000023fc  00009d05 R_MIPS_HI16       00000000   preempt_schedule
+0000292c  00009d06 R_MIPS_LO16       00000000   preempt_schedule
+00002938  00000204 R_MIPS_26         00000000   .text
+000025c0  0000b505 R_MIPS_HI16       00000000   __up
+00002940  0000b506 R_MIPS_LO16       00000000   __up
+0000294c  00000204 R_MIPS_26         00000000   .text
+00002518  00009d05 R_MIPS_HI16       00000000   preempt_schedule
+00002954  00009d06 R_MIPS_LO16       00000000   preempt_schedule
+00002960  00000204 R_MIPS_26         00000000   .text
+00002964  0000cd06 R_MIPS_LO16       00000000   pBusContext
+0000285c  00009d05 R_MIPS_HI16       00000000   preempt_schedule
+00002968  00009d06 R_MIPS_LO16       00000000   preempt_schedule
+00002974  00000204 R_MIPS_26         00000000   .text
+00002984  0000cd05 R_MIPS_HI16       00000000   pBusContext
+00002988  0000cd06 R_MIPS_LO16       00000000   pBusContext
+000029b0  0000a005 R_MIPS_HI16       00000000   cpu_data
+000029b4  0000a006 R_MIPS_LO16       00000000   cpu_data
+000029f8  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00002a08  0000c605 R_MIPS_HI16       000022d8   NotifyDeviceRemove
+00002a0c  0000c606 R_MIPS_LO16       000022d8   NotifyDeviceRemove
+00002a14  00000204 R_MIPS_26         00000000   .text
+00002a34  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00002a4c  0000a006 R_MIPS_LO16       00000000   cpu_data
+00002ab8  00000204 R_MIPS_26         00000000   .text
+00002b14  00000204 R_MIPS_26         00000000   .text
+00002b70  00000204 R_MIPS_26         00000000   .text
+000029e8  00008605 R_MIPS_HI16       00000000   __down
+00002b78  00008606 R_MIPS_LO16       00000000   __down
+00002b84  00000204 R_MIPS_26         00000000   .text
+00002a80  0000b505 R_MIPS_HI16       00000000   __up
+00002b8c  0000b506 R_MIPS_LO16       00000000   __up
+00002b98  00000204 R_MIPS_26         00000000   .text
+00002ba8  0000cd05 R_MIPS_HI16       00000000   pBusContext
+00002bac  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00002bc4  0000a005 R_MIPS_HI16       00000000   cpu_data
+00002bc8  0000a006 R_MIPS_LO16       00000000   cpu_data
+00002c00  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00002c10  0000bb05 R_MIPS_HI16       0000297c   RemoveHcdFunctions
+00002c14  0000bb06 R_MIPS_LO16       0000297c   RemoveHcdFunctions
+00002c20  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00002c38  0000a006 R_MIPS_LO16       00000000   cpu_data
+00002ce4  00000204 R_MIPS_26         00000000   .text
+00002d40  00000204 R_MIPS_26         00000000   .text
+00002bfc  00008605 R_MIPS_HI16       00000000   __down
+00002d48  00008606 R_MIPS_LO16       00000000   __down
+00002d54  00000204 R_MIPS_26         00000000   .text
+00002d58  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00002c6c  0000b505 R_MIPS_HI16       00000000   __up
+00002d5c  0000b506 R_MIPS_LO16       00000000   __up
+00002d68  00000204 R_MIPS_26         00000000   .text
+00002d9c  00007e05 R_MIPS_HI16       00000000   g_Version
+00002da4  00007e06 R_MIPS_LO16       00000000   g_Version
+00002e04  0000cd05 R_MIPS_HI16       00000000   pBusContext
+00002e08  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00002e10  0000a005 R_MIPS_HI16       00000000   cpu_data
+00002e14  0000a006 R_MIPS_LO16       00000000   cpu_data
+00002e4c  00008705 R_MIPS_HI16       00000000   init_waitqueue_head
+00002e5c  00008706 R_MIPS_LO16       00000000   init_waitqueue_head
+00002e70  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00002e94  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00002e9c  0000a005 R_MIPS_HI16       00000000   cpu_data
+00002ea0  0000a006 R_MIPS_LO16       00000000   cpu_data
+00002ee8  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00002ef0  0000a005 R_MIPS_HI16       00000000   cpu_data
+00002ef4  0000a006 R_MIPS_LO16       00000000   cpu_data
+00002f2c  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00002f3c  00007305 R_MIPS_HI16       00002298   IsPotentialIdMatch
+00002f44  00007306 R_MIPS_LO16       00002298   IsPotentialIdMatch
+00002f40  00007c05 R_MIPS_HI16       00002290   FilterPnpInfo
+00002f4c  00007c06 R_MIPS_LO16       00002290   FilterPnpInfo
+00002f48  0000ca05 R_MIPS_HI16       00006024   OS_InitializeDevice
+00002f50  0000ca06 R_MIPS_LO16       00006024   OS_InitializeDevice
+00002f54  0000b605 R_MIPS_HI16       00005dec   OS_AddDevice
+00002f5c  0000b606 R_MIPS_LO16       00005dec   OS_AddDevice
+00002f60  00000204 R_MIPS_26         00000000   .text
+00002f58  0000ba05 R_MIPS_HI16       00005e90   OS_RemoveDevice
+00002f64  0000ba06 R_MIPS_LO16       00005e90   OS_RemoveDevice
+00002f68  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00002f78  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00002fe8  00000204 R_MIPS_26         00000000   .text
+00002fec  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00002e48  0000c305 R_MIPS_HI16       00000000   __down_interruptible
+00002ff0  0000c306 R_MIPS_LO16       00000000   __down_interruptible
+00003004  00000204 R_MIPS_26         00000000   .text
+00003038  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00003040  0000a005 R_MIPS_HI16       00000000   cpu_data
+00003044  0000a006 R_MIPS_LO16       00000000   cpu_data
+0000307c  0000b505 R_MIPS_HI16       00000000   __up
+00003080  0000b506 R_MIPS_LO16       00000000   __up
+0000308c  00000204 R_MIPS_26         00000000   .text
+000030e8  00000204 R_MIPS_26         00000000   .text
+00003144  00000204 R_MIPS_26         00000000   .text
+000031a0  00000204 R_MIPS_26         00000000   .text
+000031fc  00000204 R_MIPS_26         00000000   .text
+00002ed4  0000b505 R_MIPS_HI16       00000000   __up
+00003204  0000b506 R_MIPS_LO16       00000000   __up
+00003210  00000204 R_MIPS_26         00000000   .text
+00002f28  0000c305 R_MIPS_HI16       00000000   __down_interruptible
+00003218  0000c306 R_MIPS_LO16       00000000   __down_interruptible
+0000322c  00000204 R_MIPS_26         00000000   .text
+0000323c  0000cd05 R_MIPS_HI16       00000000   pBusContext
+00003240  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00003260  0000a005 R_MIPS_HI16       00000000   cpu_data
+00003264  0000a006 R_MIPS_LO16       00000000   cpu_data
+000032c0  00000204 R_MIPS_26         00000000   .text
+000032e0  0000cd06 R_MIPS_LO16       00000000   pBusContext
+000032e8  0000a006 R_MIPS_LO16       00000000   cpu_data
+00003344  0000c605 R_MIPS_HI16       000022d8   NotifyDeviceRemove
+00003348  0000c606 R_MIPS_LO16       000022d8   NotifyDeviceRemove
+00003354  00000204 R_MIPS_26         00000000   .text
+000033b0  00000204 R_MIPS_26         00000000   .text
+0000340c  00000204 R_MIPS_26         00000000   .text
+0000331c  0000b505 R_MIPS_HI16       00000000   __up
+00003414  0000b506 R_MIPS_LO16       00000000   __up
+00003420  00000204 R_MIPS_26         00000000   .text
+00003298  0000c305 R_MIPS_HI16       00000000   __down_interruptible
+00003428  0000c306 R_MIPS_LO16       00000000   __down_interruptible
+0000343c  00000204 R_MIPS_26         00000000   .text
+00003448  00007c05 R_MIPS_HI16       00002290   FilterPnpInfo
+00003474  00007c06 R_MIPS_LO16       00002290   FilterPnpInfo
+00003484  0000cd05 R_MIPS_HI16       00000000   pBusContext
+00003488  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00003490  0000a005 R_MIPS_HI16       00000000   cpu_data
+00003494  0000a006 R_MIPS_LO16       00000000   cpu_data
+000034cc  0000cd06 R_MIPS_LO16       00000000   pBusContext
+000034d4  0000a006 R_MIPS_LO16       00000000   cpu_data
+00003514  0000cd06 R_MIPS_LO16       00000000   pBusContext
+0000351c  0000a006 R_MIPS_LO16       00000000   cpu_data
+00003554  0000cd06 R_MIPS_LO16       00000000   pBusContext
+0000355c  0000a006 R_MIPS_LO16       00000000   cpu_data
+0000361c  00000204 R_MIPS_26         00000000   .text
+00003678  00000204 R_MIPS_26         00000000   .text
+000036d4  00000204 R_MIPS_26         00000000   .text
+00003730  00000204 R_MIPS_26         00000000   .text
+00002400  0000a005 R_MIPS_HI16       00000000   cpu_data
+0000373c  0000a006 R_MIPS_LO16       00000000   cpu_data
+00003774  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00003784  00007305 R_MIPS_HI16       00002298   IsPotentialIdMatch
+0000378c  00007306 R_MIPS_LO16       00002298   IsPotentialIdMatch
+00003788  0000ca05 R_MIPS_HI16       00006024   OS_InitializeDevice
+00003790  0000ca06 R_MIPS_LO16       00006024   OS_InitializeDevice
+00003794  0000b605 R_MIPS_HI16       00005dec   OS_AddDevice
+0000379c  0000b606 R_MIPS_LO16       00005dec   OS_AddDevice
+000037a0  00000204 R_MIPS_26         00000000   .text
+00003798  0000ba05 R_MIPS_HI16       00005e90   OS_RemoveDevice
+000037a4  0000ba06 R_MIPS_LO16       00005e90   OS_RemoveDevice
+000037a8  0000cd06 R_MIPS_LO16       00000000   pBusContext
+000037b8  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00003824  00000204 R_MIPS_26         00000000   .text
+00003828  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00003880  00000204 R_MIPS_26         00000000   .text
+00003550  0000b505 R_MIPS_HI16       00000000   __up
+00003888  0000b506 R_MIPS_LO16       00000000   __up
+00003894  00000204 R_MIPS_26         00000000   .text
+000038c8  00000204 R_MIPS_26         00000000   .text
+000034c8  0000c305 R_MIPS_HI16       00000000   __down_interruptible
+000038d0  0000c306 R_MIPS_LO16       00000000   __down_interruptible
+000038e0  0000cd06 R_MIPS_LO16       00000000   pBusContext
+000038e4  00000204 R_MIPS_26         00000000   .text
+00003508  0000c305 R_MIPS_HI16       00000000   __down_interruptible
+000038ec  0000c306 R_MIPS_LO16       00000000   __down_interruptible
+000038fc  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00002934  0000a005 R_MIPS_HI16       00000000   cpu_data
+00003904  0000a006 R_MIPS_LO16       00000000   cpu_data
+0000393c  0000b505 R_MIPS_HI16       00000000   __up
+00003940  0000b506 R_MIPS_LO16       00000000   __up
+0000394c  00000204 R_MIPS_26         00000000   .text
+00003590  0000b505 R_MIPS_HI16       00000000   __up
+00003954  0000b506 R_MIPS_LO16       00000000   __up
+00003960  00000204 R_MIPS_26         00000000   .text
+000028b0  0000cd05 R_MIPS_HI16       00000000   pBusContext
+00003964  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00003770  0000b505 R_MIPS_HI16       00000000   __up
+00003968  0000b506 R_MIPS_LO16       00000000   __up
+00003974  00000204 R_MIPS_26         00000000   .text
+0000295c  0000cd05 R_MIPS_HI16       00000000   pBusContext
+00003978  0000cd06 R_MIPS_LO16       00000000   pBusContext
+000039d0  00000204 R_MIPS_26         00000000   .text
+00003ab0  0000cb05 R_MIPS_HI16       00000eb0   FreeRequest
+00003d98  0000cb05 R_MIPS_HI16       00000eb0   FreeRequest
+00003cdc  0000cb05 R_MIPS_HI16       00000eb0   FreeRequest
+00003ab4  0000cb06 R_MIPS_LO16       00000eb0   FreeRequest
+00003ad8  0000aa05 R_MIPS_HI16       00000000   memset
+00003b00  0000aa06 R_MIPS_LO16       00000000   memset
+00003bc8  00000204 R_MIPS_26         00000000   .text
+00003ba8  00009d05 R_MIPS_HI16       00000000   preempt_schedule
+00003bd0  00009d06 R_MIPS_LO16       00000000   preempt_schedule
+00003bdc  00000204 R_MIPS_26         00000000   .text
+00003bf0  00000205 R_MIPS_HI16       00000000   .text
+00003bfc  00000206 R_MIPS_LO16       00000000   .text
+00003c08  0000cb05 R_MIPS_HI16       00000eb0   FreeRequest
+00003c18  0000cb06 R_MIPS_LO16       00000eb0   FreeRequest
+00003c40  00000205 R_MIPS_HI16       00000000   .text
+00003c44  00000206 R_MIPS_LO16       00000000   .text
+00003c50  0000cb05 R_MIPS_HI16       00000eb0   FreeRequest
+00003c60  0000cb06 R_MIPS_LO16       00000eb0   FreeRequest
+00003c70  00008d05 R_MIPS_HI16       000000b4   AllocateRequest
+00003c88  00008d06 R_MIPS_LO16       000000b4   AllocateRequest
+00003ce0  00000205 R_MIPS_HI16       00000000   .text
+00003ce4  00000206 R_MIPS_LO16       00000000   .text
+00003d58  0000b905 R_MIPS_HI16       0000072c   IssueRequestToHCD
+00003d60  0000b906 R_MIPS_LO16       0000072c   IssueRequestToHCD
+00003d9c  00000205 R_MIPS_HI16       00000000   .text
+00003da0  00000206 R_MIPS_LO16       00000000   .text
+00003dac  00000204 R_MIPS_26         00000000   .text
+00003ec0  0000cb05 R_MIPS_HI16       00000eb0   FreeRequest
+00003db4  0000cb06 R_MIPS_LO16       00000eb0   FreeRequest
+00003dc0  00000204 R_MIPS_26         00000000   .text
+00003d50  00009d05 R_MIPS_HI16       00000000   preempt_schedule
+00003de8  00009d06 R_MIPS_LO16       00000000   preempt_schedule
+00003df4  00000204 R_MIPS_26         00000000   .text
+00003e00  00008d05 R_MIPS_HI16       000000b4   AllocateRequest
+00003e14  00008d06 R_MIPS_LO16       000000b4   AllocateRequest
+00003ec8  0000b905 R_MIPS_HI16       0000072c   IssueRequestToHCD
+00003ecc  0000b906 R_MIPS_LO16       0000072c   IssueRequestToHCD
+00003fa4  0000cb05 R_MIPS_HI16       00000eb0   FreeRequest
+00003ef4  0000cb06 R_MIPS_LO16       00000eb0   FreeRequest
+00003f4c  00000205 R_MIPS_HI16       00000000   .text
+00003f50  00000206 R_MIPS_LO16       00000000   .text
+00003f70  00000204 R_MIPS_26         00000000   .text
+00003eb8  00009d05 R_MIPS_HI16       00000000   preempt_schedule
+00003f94  00009d06 R_MIPS_LO16       00000000   preempt_schedule
+00003fa8  00000204 R_MIPS_26         00000000   .text
+00003fdc  0000a005 R_MIPS_HI16       00000000   cpu_data
+00003fec  0000a006 R_MIPS_LO16       00000000   cpu_data
+000057b0  00008605 R_MIPS_HI16       00000000   __down
+00003fe0  00008605 R_MIPS_HI16       00000000   __down
+00003ff0  00008606 R_MIPS_LO16       00000000   __down
+00004038  0000cd05 R_MIPS_HI16       00000000   pBusContext
+0000403c  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00004074  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00004090  00000204 R_MIPS_26         00000000   .text
+00004098  0000cd06 R_MIPS_LO16       00000000   pBusContext
+000040b4  0000cd06 R_MIPS_LO16       00000000   pBusContext
+000040e4  0000cd06 R_MIPS_LO16       00000000   pBusContext
+000040ec  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00004108  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00004278  0000b505 R_MIPS_HI16       00000000   __up
+0000413c  0000b505 R_MIPS_HI16       00000000   __up
+0000427c  0000b506 R_MIPS_LO16       00000000   __up
+00004290  00000204 R_MIPS_26         00000000   .text
+000042f0  0000cd06 R_MIPS_LO16       00000000   pBusContext
+000042f4  0000c305 R_MIPS_HI16       00000000   __down_interruptible
+00004070  0000c305 R_MIPS_HI16       00000000   __down_interruptible
+000042f8  0000c306 R_MIPS_LO16       00000000   __down_interruptible
+00004308  0000cd06 R_MIPS_LO16       00000000   pBusContext
+0000431c  00000204 R_MIPS_26         00000000   .text
+000044e0  0000cd05 R_MIPS_HI16       00000000   pBusContext
+000044e4  0000cd06 R_MIPS_LO16       00000000   pBusContext
+000044ec  0000a005 R_MIPS_HI16       00000000   cpu_data
+000044f0  0000a006 R_MIPS_LO16       00000000   cpu_data
+00004524  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00004534  0000a805 R_MIPS_HI16       00000000   printk
+00004538  0000a806 R_MIPS_LO16       00000000   printk
+0000453c  00000204 R_MIPS_26         00000000   .text
+00004544  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00004560  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00004578  00002c05 R_MIPS_HI16       00000000   $LC0
+00004584  00002c06 R_MIPS_LO16       00000000   $LC0
+0000459c  0000cd06 R_MIPS_LO16       00000000   pBusContext
+000045b4  0000a006 R_MIPS_LO16       00000000   cpu_data
+00004600  0000a006 R_MIPS_LO16       00000000   cpu_data
+00004634  0000b505 R_MIPS_HI16       00000000   __up
+00004638  0000b506 R_MIPS_LO16       00000000   __up
+00004644  00000204 R_MIPS_26         00000000   .text
+00004690  00009d05 R_MIPS_HI16       00000000   preempt_schedule
+00004694  00009d06 R_MIPS_LO16       00000000   preempt_schedule
+00004720  00000204 R_MIPS_26         00000000   .text
+0000477c  00000204 R_MIPS_26         00000000   .text
+000047d8  00000204 R_MIPS_26         00000000   .text
+00004800  00000204 R_MIPS_26         00000000   .text
+00004810  00000204 R_MIPS_26         00000000   .text
+000043d4  00009d05 R_MIPS_HI16       00000000   preempt_schedule
+00004818  00009d06 R_MIPS_LO16       00000000   preempt_schedule
+00004824  00000204 R_MIPS_26         00000000   .text
+00004464  00009d05 R_MIPS_HI16       00000000   preempt_schedule
+0000482c  00009d06 R_MIPS_LO16       00000000   preempt_schedule
+00004838  00000204 R_MIPS_26         00000000   .text
+000044dc  00009d05 R_MIPS_HI16       00000000   preempt_schedule
+00004840  00009d06 R_MIPS_LO16       00000000   preempt_schedule
+0000484c  00000204 R_MIPS_26         00000000   .text
+00004850  0000cd06 R_MIPS_LO16       00000000   pBusContext
+000045e8  0000b505 R_MIPS_HI16       00000000   __up
+00004854  0000b506 R_MIPS_LO16       00000000   __up
+00004860  00000204 R_MIPS_26         00000000   .text
+00004868  0000c305 R_MIPS_HI16       00000000   __down_interruptible
+0000486c  0000c306 R_MIPS_LO16       00000000   __down_interruptible
+00004880  00000204 R_MIPS_26         00000000   .text
+00004884  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00004904  0000cd05 R_MIPS_HI16       00000000   pBusContext
+0000490c  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00004930  0000bc05 R_MIPS_HI16       00000000   SDLIB_PostMessage
+00004938  0000bc06 R_MIPS_LO16       00000000   SDLIB_PostMessage
+00004950  0000a005 R_MIPS_HI16       00000000   cpu_data
+00004954  0000a006 R_MIPS_LO16       00000000   cpu_data
+00004a84  0000a005 R_MIPS_HI16       00000000   cpu_data
+00004a88  0000a006 R_MIPS_LO16       00000000   cpu_data
+00004ad0  0000a006 R_MIPS_LO16       00000000   cpu_data
+00004b08  0000cd05 R_MIPS_HI16       00000000   pBusContext
+00004b0c  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00004bb4  00000204 R_MIPS_26         00000000   .text
+00004bc0  00008c05 R_MIPS_HI16       00004324   DeviceInterrupt
+00004bc4  00008c06 R_MIPS_LO16       00004324   DeviceInterrupt
+00004bd0  00000204 R_MIPS_26         00000000   .text
+00004c40  0000cd05 R_MIPS_HI16       00000000   pBusContext
+00004c50  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00004cd0  0000cd05 R_MIPS_HI16       00000000   pBusContext
+00004cd4  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00004d00  0000bf05 R_MIPS_HI16       00004888   _SDIO_HandleHcdEvent
+00004ccc  0000bf05 R_MIPS_HI16       00004888   _SDIO_HandleHcdEvent
+00004d08  0000bf06 R_MIPS_LO16       00004888   _SDIO_HandleHcdEvent
+00004d40  0000a005 R_MIPS_HI16       00000000   cpu_data
+00004d48  0000a006 R_MIPS_LO16       00000000   cpu_data
+00004e78  0000cd05 R_MIPS_HI16       00000000   pBusContext
+00004e7c  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00004ef4  0000cd05 R_MIPS_HI16       00000000   pBusContext
+00004ef8  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00004f24  00000204 R_MIPS_26         00000000   .text
+00004f58  00000204 R_MIPS_26         00000000   .text
+00004fa8  00000204 R_MIPS_26         00000000   .text
+00005008  00000204 R_MIPS_26         00000000   .text
+00005064  00000204 R_MIPS_26         00000000   .text
+000050c8  00000204 R_MIPS_26         00000000   .text
+00005128  00000204 R_MIPS_26         00000000   .text
+00005184  00000204 R_MIPS_26         00000000   .text
+00005194  00000204 R_MIPS_26         00000000   .text
+000051b0  0000a005 R_MIPS_HI16       00000000   cpu_data
+000051b4  0000a006 R_MIPS_LO16       00000000   cpu_data
+000051f0  00000204 R_MIPS_26         00000000   .text
+00005258  00000204 R_MIPS_26         00000000   .text
+00004a38  00009d05 R_MIPS_HI16       00000000   preempt_schedule
+00005260  00009d06 R_MIPS_LO16       00000000   preempt_schedule
+0000526c  00000204 R_MIPS_26         00000000   .text
+00004bac  00009d05 R_MIPS_HI16       00000000   preempt_schedule
+00005274  00009d06 R_MIPS_LO16       00000000   preempt_schedule
+00005280  00000204 R_MIPS_26         00000000   .text
+00004984  0000b505 R_MIPS_HI16       00000000   __up
+00005288  0000b506 R_MIPS_LO16       00000000   __up
+00005294  00000204 R_MIPS_26         00000000   .text
+00004cb0  00009d05 R_MIPS_HI16       00000000   preempt_schedule
+0000529c  00009d06 R_MIPS_LO16       00000000   preempt_schedule
+000052a8  00000204 R_MIPS_26         00000000   .text
+000052e4  00000204 R_MIPS_26         00000000   .text
+00004928  0000c005 R_MIPS_HI16       00005ad8   Do_OS_IncHcdReference
+000052ec  0000c006 R_MIPS_LO16       00005ad8   Do_OS_IncHcdReference
+00005300  00000204 R_MIPS_26         00000000   .text
+00005320  0000a605 R_MIPS_HI16       00005c18   Do_OS_DecHcdReference
+000057bc  0000a605 R_MIPS_HI16       00005c18   Do_OS_DecHcdReference
+00005324  0000a606 R_MIPS_LO16       00005c18   Do_OS_DecHcdReference
+00005330  00000204 R_MIPS_26         00000000   .text
+00005338  0000a006 R_MIPS_LO16       00000000   cpu_data
+0000536c  00000204 R_MIPS_26         00000000   .text
+000053c8  00000204 R_MIPS_26         00000000   .text
+000053d0  00000204 R_MIPS_26         00000000   .text
+000053d8  0000a005 R_MIPS_HI16       00000000   cpu_data
+000053dc  0000a006 R_MIPS_LO16       00000000   cpu_data
+0000540c  00000204 R_MIPS_26         00000000   .text
+00005470  00000204 R_MIPS_26         00000000   .text
+000054d4  00000204 R_MIPS_26         00000000   .text
+00004b04  0000b505 R_MIPS_HI16       00000000   __up
+000054dc  0000b506 R_MIPS_LO16       00000000   __up
+000054e8  00000204 R_MIPS_26         00000000   .text
+00005550  00000204 R_MIPS_26         00000000   .text
+00004dc0  00009d05 R_MIPS_HI16       00000000   preempt_schedule
+00005558  00009d06 R_MIPS_LO16       00000000   preempt_schedule
+00005564  00000204 R_MIPS_26         00000000   .text
+0000556c  00000204 R_MIPS_26         00000000   .text
+00004e64  0000b505 R_MIPS_HI16       00000000   __up
+00005574  0000b506 R_MIPS_LO16       00000000   __up
+00005580  00000204 R_MIPS_26         00000000   .text
+000055d0  0000aa05 R_MIPS_HI16       00000000   memset
+000055d4  0000aa06 R_MIPS_LO16       00000000   memset
+000055f4  00009505 R_MIPS_HI16       000002f8   AllocateDevice
+00005608  00009506 R_MIPS_LO16       000002f8   AllocateDevice
+0000562c  00007b05 R_MIPS_HI16       00001444   AddDeviceToList
+00005630  00007b06 R_MIPS_LO16       00001444   AddDeviceToList
+0000563c  0000c405 R_MIPS_HI16       00003444   ProbeForFunction
+00005644  0000c406 R_MIPS_LO16       00003444   ProbeForFunction
+00005674  0000aa05 R_MIPS_HI16       00000000   memset
+0000568c  0000aa06 R_MIPS_LO16       00000000   memset
+000056a0  0000bb05 R_MIPS_HI16       0000297c   RemoveHcdFunctions
+000056a4  0000bb06 R_MIPS_LO16       0000297c   RemoveHcdFunctions
+000056b0  0000cc05 R_MIPS_HI16       00001228   DeleteDevices
+000056b4  0000cc06 R_MIPS_LO16       00001228   DeleteDevices
+00005744  0000a405 R_MIPS_HI16       00005588   DeviceAttach
+0000576c  0000a406 R_MIPS_LO16       00005588   DeviceAttach
+00005788  0000bd06 R_MIPS_LO16       00000000   SDLIB_GetMessage
+0000578c  00000204 R_MIPS_26         00000000   .text
+000057c0  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00005748  0000bd05 R_MIPS_HI16       00000000   SDLIB_GetMessage
+000057d4  0000bd06 R_MIPS_LO16       00000000   SDLIB_GetMessage
+00005778  0000a005 R_MIPS_HI16       00000000   cpu_data
+000057e8  0000a006 R_MIPS_LO16       00000000   cpu_data
+00005858  00008605 R_MIPS_HI16       00000000   __down
+0000585c  00008606 R_MIPS_LO16       00000000   __down
+00005870  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00005874  0000a605 R_MIPS_HI16       00005c18   Do_OS_DecHcdReference
+0000587c  0000a606 R_MIPS_LO16       00005c18   Do_OS_DecHcdReference
+00005884  0000cd06 R_MIPS_LO16       00000000   pBusContext
+000041e8  0000cd05 R_MIPS_HI16       00000000   pBusContext
+000058ac  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00004848  0000cd05 R_MIPS_HI16       00000000   pBusContext
+000058c0  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00004ac8  0000cd05 R_MIPS_HI16       00000000   pBusContext
+000058cc  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00005584  0000cd05 R_MIPS_HI16       00000000   pBusContext
+0000593c  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00005950  0000a605 R_MIPS_HI16       00005c18   Do_OS_DecHcdReference
+00005954  0000a606 R_MIPS_LO16       00005c18   Do_OS_DecHcdReference
+00005960  00000204 R_MIPS_26         00000000   .text
+0000577c  0000cd05 R_MIPS_HI16       00000000   pBusContext
+00005964  0000cd06 R_MIPS_LO16       00000000   pBusContext
+00005970  00000204 R_MIPS_26         00000000   .text
+00005930  00007d05 R_MIPS_HI16       0000566c   DeviceDetach
+00005978  00007d06 R_MIPS_LO16       0000566c   DeviceDetach
+00005984  00000204 R_MIPS_26         00000000   .text
+00005a20  00001805 R_MIPS_HI16       00000000   .bss
+00005a24  00001806 R_MIPS_LO16       00000000   .bss
+00005a28  00001405 R_MIPS_HI16       00000000   .data
+00005a30  00001406 R_MIPS_LO16       00000000   .data
+00005a34  00001405 R_MIPS_HI16       00000000   .data
+00005a3c  00001406 R_MIPS_LO16       00000000   .data
+00005a40  00001405 R_MIPS_HI16       00000000   .data
+00005a48  00001406 R_MIPS_LO16       00000000   .data
+00005b08  0000a005 R_MIPS_HI16       00000000   cpu_data
+00005b0c  0000a006 R_MIPS_LO16       00000000   cpu_data
+00005bc4  00000204 R_MIPS_26         00000000   .text
+00005b50  00009d05 R_MIPS_HI16       00000000   preempt_schedule
+00005bcc  00009d06 R_MIPS_LO16       00000000   preempt_schedule
+00005be0  00000204 R_MIPS_26         00000000   .text
+00005be8  00000204 R_MIPS_26         00000000   .text
+00005bf4  0000af05 R_MIPS_HI16       00000000   pnp_unregister_driver
+00006020  0000af05 R_MIPS_HI16       00000000   pnp_unregister_driver
+00005bfc  0000af06 R_MIPS_LO16       00000000   pnp_unregister_driver
+00005c2c  00009405 R_MIPS_HI16       00000000   module_put
+00005c30  00009406 R_MIPS_LO16       00000000   module_put
+00005c4c  0000bf05 R_MIPS_HI16       00004888   _SDIO_HandleHcdEvent
+00005c50  0000bf06 R_MIPS_LO16       00004888   _SDIO_HandleHcdEvent
+00005c60  00008205 R_MIPS_HI16       00003234   _SDIO_UnregisterFuncti
+00005c70  00008206 R_MIPS_LO16       00003234   _SDIO_UnregisterFuncti
+00005c80  00000205 R_MIPS_HI16       00000000   .text
+00005c84  00000206 R_MIPS_LO16       00000000   .text
+00005ca8  0000a505 R_MIPS_HI16       00001fb0   _SDIO_UnregisterHostCo
+00005cac  0000a506 R_MIPS_LO16       00001fb0   _SDIO_UnregisterHostCo
+00005cb8  0000b705 R_MIPS_HI16       00001bec   _SDIO_RegisterHostCont
+00005cbc  0000b706 R_MIPS_LO16       00001bec   _SDIO_RegisterHostCont
+00005cd8  00007e05 R_MIPS_HI16       00000000   g_Version
+00005ce0  00007e06 R_MIPS_LO16       00000000   g_Version
+00005d14  0000aa05 R_MIPS_HI16       00000000   memset
+00005d20  0000aa06 R_MIPS_LO16       00000000   memset
+00005d30  00000205 R_MIPS_HI16       00000000   .text
+00005d34  00000206 R_MIPS_LO16       00000000   .text
+00005d40  00000805 R_MIPS_HI16       00000000   .rodata
+00005d48  00000806 R_MIPS_LO16       00000000   .rodata
+00005d50  00009b05 R_MIPS_HI16       00000000   pnp_register_driver
+00005d58  00009b06 R_MIPS_LO16       00000000   pnp_register_driver
+00005d6c  00008e05 R_MIPS_HI16       00002d70   _SDIO_RegisterFunction
+00005d70  00008e06 R_MIPS_LO16       00002d70   _SDIO_RegisterFunction
+00005d84  00000205 R_MIPS_HI16       00000000   .text
+00005d88  00000206 R_MIPS_LO16       00000000   .text
+00005d94  00000204 R_MIPS_26         00000000   .text
+00005dac  00000805 R_MIPS_HI16       00000000   .rodata
+00005db0  00000806 R_MIPS_LO16       00000000   .rodata
+00005dc4  00000204 R_MIPS_26         00000000   .text
+00005dcc  00000204 R_MIPS_26         00000000   .text
+00005dd4  00000204 R_MIPS_26         00000000   .text
+00005ddc  00000204 R_MIPS_26         00000000   .text
+00005de4  00000204 R_MIPS_26         00000000   .text
+00005df0  00009905 R_MIPS_HI16       00000000   pnp_add_device
+00005e00  00009906 R_MIPS_LO16       00000000   pnp_add_device
+00005e10  00009f05 R_MIPS_HI16       00005a7c   release
+00005e14  00009f06 R_MIPS_LO16       00005a7c   release
+00005e48  00000805 R_MIPS_HI16       00000000   .rodata
+00005e4c  00000806 R_MIPS_LO16       00000000   .rodata
+00005e60  00000204 R_MIPS_26         00000000   .text
+00005e68  00000204 R_MIPS_26         00000000   .text
+00005e70  00000204 R_MIPS_26         00000000   .text
+00005e78  00000204 R_MIPS_26         00000000   .text
+00005e80  00000204 R_MIPS_26         00000000   .text
+00005e88  00000204 R_MIPS_26         00000000   .text
+00005e94  0000a205 R_MIPS_HI16       00000000   pnp_remove_device
+00005ea4  0000a206 R_MIPS_LO16       00000000   pnp_remove_device
+00005ec0  00001805 R_MIPS_HI16       00000000   .bss
+00005ec8  00001806 R_MIPS_LO16       00000000   .bss
+00005ed8  00001806 R_MIPS_LO16       00000000   .bss
+00005f04  00008105 R_MIPS_HI16       00000000   kfree
+00005f08  00008106 R_MIPS_LO16       00000000   kfree
+00005ef4  00009d05 R_MIPS_HI16       00000000   preempt_schedule
+00005f28  00009d06 R_MIPS_LO16       00000000   preempt_schedule
+00005f34  00000204 R_MIPS_26         00000000   .text
+00005f40  0000a205 R_MIPS_HI16       00000000   pnp_remove_device
+00005f58  0000a206 R_MIPS_LO16       00000000   pnp_remove_device
+00005f70  00008105 R_MIPS_HI16       00000000   kfree
+00005f74  00008106 R_MIPS_LO16       00000000   kfree
+00005f94  00001805 R_MIPS_HI16       00000000   .bss
+00005f9c  00001806 R_MIPS_LO16       00000000   .bss
+00005fac  00001806 R_MIPS_LO16       00000000   .bss
+00005fcc  0000af05 R_MIPS_HI16       00000000   pnp_unregister_driver
+00005fd0  0000af06 R_MIPS_LO16       00000000   pnp_unregister_driver
+00005fe8  00008105 R_MIPS_HI16       00000000   kfree
+00005fec  00008106 R_MIPS_LO16       00000000   kfree
+00005fc8  00009d05 R_MIPS_HI16       00000000   preempt_schedule
+00006010  00009d06 R_MIPS_LO16       00000000   preempt_schedule
+0000601c  00000204 R_MIPS_26         00000000   .text
+00006030  0000aa05 R_MIPS_HI16       00000000   memset
+00006054  0000aa06 R_MIPS_LO16       00000000   memset
+00006070  00001805 R_MIPS_HI16       00000000   .bss
+00006074  00001806 R_MIPS_LO16       00000000   .bss
+00006080  00000204 R_MIPS_26         00000000   .text
+000060ac  00001806 R_MIPS_LO16       00000000   .bss
+000060c0  00001806 R_MIPS_LO16       00000000   .bss
+000060e0  00007705 R_MIPS_HI16       00000008   sdio_protocol
+00006208  00007705 R_MIPS_HI16       00000008   sdio_protocol
+000060e4  00007706 R_MIPS_LO16       00000008   sdio_protocol
+000060f0  00008505 R_MIPS_HI16       00000000   pnp_init_resource_tabl
+000064b0  00008505 R_MIPS_HI16       00000000   pnp_init_resource_tabl
+000060fc  00008506 R_MIPS_LO16       00000000   pnp_init_resource_tabl
+00006108  0000be05 R_MIPS_HI16       00000000   malloc_sizes
+0000610c  0000be06 R_MIPS_LO16       00000000   malloc_sizes
+00006110  00009105 R_MIPS_HI16       00000000   kmem_cache_alloc
+00006114  00009106 R_MIPS_LO16       00000000   kmem_cache_alloc
+00006130  0000aa06 R_MIPS_LO16       00000000   memset
+00006148  00006805 R_MIPS_HI16       0000009c   $LC3
+00006154  00006806 R_MIPS_LO16       0000009c   $LC3
+00006150  00007905 R_MIPS_HI16       00000000   snprintf
+0000615c  00007906 R_MIPS_LO16       00000000   snprintf
+00006168  0000b105 R_MIPS_HI16       00000000   pnp_add_id
+00006174  0000b106 R_MIPS_LO16       00000000   pnp_add_id
+000061f0  00000204 R_MIPS_26         00000000   .text
+000060dc  00009d05 R_MIPS_HI16       00000000   preempt_schedule
+000061f8  00009d06 R_MIPS_LO16       00000000   preempt_schedule
+00006204  00000204 R_MIPS_26         00000000   .text
+0000625c  0000be05 R_MIPS_HI16       00000000   malloc_sizes
+00006260  0000be06 R_MIPS_LO16       00000000   malloc_sizes
+00006268  00009105 R_MIPS_HI16       00000000   kmem_cache_alloc
+0000626c  00009106 R_MIPS_LO16       00000000   kmem_cache_alloc
+00006284  0000aa05 R_MIPS_HI16       00000000   memset
+0000628c  0000aa06 R_MIPS_LO16       00000000   memset
+00006298  00001805 R_MIPS_HI16       00000000   .bss
+0000629c  00001806 R_MIPS_LO16       00000000   .bss
+000062a0  00007905 R_MIPS_HI16       00000000   snprintf
+000062b4  00007906 R_MIPS_LO16       00000000   snprintf
+000062bc  00006906 R_MIPS_LO16       000000a8   $LC4
+000062c0  00001806 R_MIPS_LO16       00000000   .bss
+000062cc  00009b05 R_MIPS_HI16       00000000   pnp_register_driver
+000062e4  00009b06 R_MIPS_LO16       00000000   pnp_register_driver
+000062f8  00007705 R_MIPS_HI16       00000008   sdio_protocol
+000062fc  00007706 R_MIPS_LO16       00000008   sdio_protocol
+00006324  0000aa05 R_MIPS_HI16       00000000   memset
+0000632c  0000aa06 R_MIPS_LO16       00000000   memset
+000062a4  00006905 R_MIPS_HI16       000000a8   $LC4
+00006338  00006906 R_MIPS_LO16       000000a8   $LC4
+0000634c  0000b105 R_MIPS_HI16       00000000   pnp_add_id
+00006358  0000b106 R_MIPS_LO16       00000000   pnp_add_id
+00006370  00001805 R_MIPS_HI16       00000000   .bss
+00006374  00001806 R_MIPS_LO16       00000000   .bss
+00006380  00000204 R_MIPS_26         00000000   .text
+000063b0  00001806 R_MIPS_LO16       00000000   .bss
+000063c0  00001806 R_MIPS_LO16       00000000   .bss
+000063e0  00008505 R_MIPS_HI16       00000000   pnp_init_resource_tabl
+000063e4  00008506 R_MIPS_LO16       00000000   pnp_init_resource_tabl
+000063f0  00009905 R_MIPS_HI16       00000000   pnp_add_device
+000063f4  00009906 R_MIPS_LO16       00000000   pnp_add_device
+00006408  00009f05 R_MIPS_HI16       00005a7c   release
+0000640c  00009f06 R_MIPS_LO16       00005a7c   release
+00006458  00000805 R_MIPS_HI16       00000000   .rodata
+0000645c  00000806 R_MIPS_LO16       00000000   .rodata
+00006470  00000204 R_MIPS_26         00000000   .text
+00006478  00000204 R_MIPS_26         00000000   .text
+00006480  00000204 R_MIPS_26         00000000   .text
+00006488  00000204 R_MIPS_26         00000000   .text
+00006490  00000204 R_MIPS_26         00000000   .text
+00006498  00000204 R_MIPS_26         00000000   .text
+000063dc  00009d05 R_MIPS_HI16       00000000   preempt_schedule
+000064a0  00009d06 R_MIPS_LO16       00000000   preempt_schedule
+000064ac  00000204 R_MIPS_26         00000000   .text
+000064b4  0000af05 R_MIPS_HI16       00000000   pnp_unregister_driver
+000064b8  0000af06 R_MIPS_LO16       00000000   pnp_unregister_driver
+000064c8  00009f05 R_MIPS_HI16       00005a7c   release
+000064cc  00009f06 R_MIPS_LO16       00005a7c   release
+000064dc  00000805 R_MIPS_HI16       00000000   .rodata
+000064e4  00000806 R_MIPS_LO16       00000000   .rodata
+
+Relocation section '.rel.exit.text' at offset 0xa3f8 contains 12 entries:
+ Offset     Info    Type            Sym.Value  Sym. Name
+00000008  0000a905 R_MIPS_HI16       00000000   debuglevel
+0000000c  0000a906 R_MIPS_LO16       00000000   debuglevel
+00000010  00006a05 R_MIPS_HI16       00000034   $LC0
+0000001c  00006a06 R_MIPS_LO16       00000034   $LC0
+00000020  0000a805 R_MIPS_HI16       00000000   printk
+00000024  0000a806 R_MIPS_LO16       00000000   printk
+00000030  0000ac05 R_MIPS_HI16       0000165c   _SDIO_BusDriverCleanup
+00000034  0000ac06 R_MIPS_LO16       0000165c   _SDIO_BusDriverCleanup
+00000040  00007705 R_MIPS_HI16       00000008   sdio_protocol
+0000004c  00007706 R_MIPS_LO16       00000008   sdio_protocol
+00000044  00007605 R_MIPS_HI16       00000000   pnp_unregister_protoco
+00000050  00007606 R_MIPS_LO16       00000000   pnp_unregister_protoco
+
+Relocation section '.rel.init.text' at offset 0xa458 contains 32 entries:
+ Offset     Info    Type            Sym.Value  Sym. Name
+00000010  0000a905 R_MIPS_HI16       00000000   debuglevel
+00000014  0000a906 R_MIPS_LO16       00000000   debuglevel
+00000024  00009805 R_MIPS_HI16       000018f0   _SDIO_BusDriverInitial
+000000bc  00009805 R_MIPS_HI16       000018f0   _SDIO_BusDriverInitial
+00000028  00009806 R_MIPS_LO16       000018f0   _SDIO_BusDriverInitial
+0000003c  00007405 R_MIPS_HI16       00000000   pnp_register_protocol
+00000040  00007406 R_MIPS_LO16       00000000   pnp_register_protocol
+00000038  00007705 R_MIPS_HI16       00000008   sdio_protocol
+00000048  00007706 R_MIPS_LO16       00000008   sdio_protocol
+00000070  0000a906 R_MIPS_LO16       00000000   debuglevel
+00000080  0000ac05 R_MIPS_HI16       0000165c   _SDIO_BusDriverCleanup
+000000d8  0000ac05 R_MIPS_HI16       0000165c   _SDIO_BusDriverCleanup
+00000084  0000ac06 R_MIPS_LO16       0000165c   _SDIO_BusDriverCleanup
+000000a8  0000a805 R_MIPS_HI16       00000000   printk
+000000ac  0000a806 R_MIPS_LO16       00000000   printk
+00000020  00006b05 R_MIPS_HI16       00000048   $LC1
+000000b4  00006b06 R_MIPS_LO16       00000048   $LC1
+000000b8  00000604 R_MIPS_26         00000000   .init.text
+0000007c  00006c05 R_MIPS_HI16       00000064   $LC2
+000000c4  00006c06 R_MIPS_LO16       00000064   $LC2
+000000c0  0000a805 R_MIPS_HI16       00000000   printk
+000000c8  0000a806 R_MIPS_LO16       00000000   printk
+000000d4  00000604 R_MIPS_26         00000000   .init.text
+000000f0  00000805 R_MIPS_HI16       00000000   .rodata
+000000f4  00000806 R_MIPS_LO16       00000000   .rodata
+00000108  00000604 R_MIPS_26         00000000   .init.text
+00000110  00000604 R_MIPS_26         00000000   .init.text
+00000118  00000604 R_MIPS_26         00000000   .init.text
+00000120  00000604 R_MIPS_26         00000000   .init.text
+00000128  00000604 R_MIPS_26         00000000   .init.text
+00000130  00000604 R_MIPS_26         00000000   .init.text
+00000138  00000604 R_MIPS_26         00000000   .init.text
+
+Relocation section '.rel.rodata' at offset 0xa558 contains 87 entries:
+ Offset     Info    Type            Sym.Value  Sym. Name
+00000010  00000602 R_MIPS_32         00000000   .init.text
+00000014  00000602 R_MIPS_32         00000000   .init.text
+00000018  00000602 R_MIPS_32         00000000   .init.text
+0000001c  00000602 R_MIPS_32         00000000   .init.text
+00000020  00000602 R_MIPS_32         00000000   .init.text
+00000024  00000602 R_MIPS_32         00000000   .init.text
+00000028  00000602 R_MIPS_32         00000000   .init.text
+0000002c  00000602 R_MIPS_32         00000000   .init.text
+00000030  00000602 R_MIPS_32         00000000   .init.text
+00000034  00000602 R_MIPS_32         00000000   .init.text
+00000038  00000602 R_MIPS_32         00000000   .init.text
+0000003c  00000202 R_MIPS_32         00000000   .text
+00000040  00000202 R_MIPS_32         00000000   .text
+00000044  00000202 R_MIPS_32         00000000   .text
+00000048  00000202 R_MIPS_32         00000000   .text
+0000004c  00000202 R_MIPS_32         00000000   .text
+00000050  00000202 R_MIPS_32         00000000   .text
+00000054  00000202 R_MIPS_32         00000000   .text
+00000058  00000202 R_MIPS_32         00000000   .text
+0000005c  00000202 R_MIPS_32         00000000   .text
+00000060  00000202 R_MIPS_32         00000000   .text
+00000064  00000202 R_MIPS_32         00000000   .text
+00000068  00000202 R_MIPS_32         00000000   .text
+0000006c  00000202 R_MIPS_32         00000000   .text
+00000070  00000202 R_MIPS_32         00000000   .text
+00000074  00000202 R_MIPS_32         00000000   .text
+00000078  00000202 R_MIPS_32         00000000   .text
+0000007c  00000202 R_MIPS_32         00000000   .text
+00000080  00000202 R_MIPS_32         00000000   .text
+00000084  00000202 R_MIPS_32         00000000   .text
+00000088  00000202 R_MIPS_32         00000000   .text
+0000008c  00000202 R_MIPS_32         00000000   .text
+00000090  00000202 R_MIPS_32         00000000   .text
+00000094  00000202 R_MIPS_32         00000000   .text
+00000098  00000202 R_MIPS_32         00000000   .text
+0000009c  00000202 R_MIPS_32         00000000   .text
+000000a0  00000202 R_MIPS_32         00000000   .text
+000000a4  00000202 R_MIPS_32         00000000   .text
+000000a8  00000202 R_MIPS_32         00000000   .text
+000000ac  00000202 R_MIPS_32         00000000   .text
+000000b0  00000202 R_MIPS_32         00000000   .text
+000000b4  00000202 R_MIPS_32         00000000   .text
+000000b8  00000202 R_MIPS_32         00000000   .text
+000000bc  00000202 R_MIPS_32         00000000   .text
+000000c0  00000202 R_MIPS_32         00000000   .text
+000000c4  00000202 R_MIPS_32         00000000   .text
+000000c8  00000202 R_MIPS_32         00000000   .text
+000000cc  00000202 R_MIPS_32         00000000   .text
+000000d0  00000202 R_MIPS_32         00000000   .text
+000000d4  00000202 R_MIPS_32         00000000   .text
+000000d8  00000202 R_MIPS_32         00000000   .text
+000000dc  00000202 R_MIPS_32         00000000   .text
+000000e0  00000202 R_MIPS_32         00000000   .text
+000000e4  00000202 R_MIPS_32         00000000   .text
+000000e8  00000202 R_MIPS_32         00000000   .text
+000000ec  00000202 R_MIPS_32         00000000   .text
+000000f0  00000202 R_MIPS_32         00000000   .text
+000000f4  00000202 R_MIPS_32         00000000   .text
+000000f8  00000202 R_MIPS_32         00000000   .text
+000000fc  00000202 R_MIPS_32         00000000   .text
+00000100  00000202 R_MIPS_32         00000000   .text
+00000104  00000202 R_MIPS_32         00000000   .text
+00000108  00000202 R_MIPS_32         00000000   .text
+0000010c  00000202 R_MIPS_32         00000000   .text
+00000110  00000202 R_MIPS_32         00000000   .text
+00000114  00000202 R_MIPS_32         00000000   .text
+00000118  00000202 R_MIPS_32         00000000   .text
+0000011c  00000202 R_MIPS_32         00000000   .text
+00000120  00000202 R_MIPS_32         00000000   .text
+00000124  00000202 R_MIPS_32         00000000   .text
+00000128  00000202 R_MIPS_32         00000000   .text
+0000012c  00000202 R_MIPS_32         00000000   .text
+00000130  00000202 R_MIPS_32         00000000   .text
+00000134  00000202 R_MIPS_32         00000000   .text
+00000138  00000202 R_MIPS_32         00000000   .text
+0000013c  00000202 R_MIPS_32         00000000   .text
+00000140  00000202 R_MIPS_32         00000000   .text
+00000144  00000202 R_MIPS_32         00000000   .text
+00000148  00000202 R_MIPS_32         00000000   .text
+0000014c  00000202 R_MIPS_32         00000000   .text
+00000150  00000202 R_MIPS_32         00000000   .text
+00000154  00000202 R_MIPS_32         00000000   .text
+00000158  00000202 R_MIPS_32         00000000   .text
+0000015c  00000202 R_MIPS_32         00000000   .text
+00000160  00000202 R_MIPS_32         00000000   .text
+00000164  00000202 R_MIPS_32         00000000   .text
+00000168  00000202 R_MIPS_32         00000000   .text
+
+Relocation section '.rel__ksymtab' at offset 0xa810 contains 14 entries:
+ Offset     Info    Type            Sym.Value  Sym. Name
+00000000  0000ab02 R_MIPS_32         00005c5c   SDIO_UnregisterFunctio
+00000004  00001202 R_MIPS_32         00000000   __ksymtab_strings
+00000008  00009702 R_MIPS_32         00005cc8   SDIO_RegisterFunction
+0000000c  00001202 R_MIPS_32         00000000   __ksymtab_strings
+00000010  0000ad02 R_MIPS_32         00005c4c   SDIO_HandleHcdEvent
+00000014  00001202 R_MIPS_32         00000000   __ksymtab_strings
+00000018  00008302 R_MIPS_32         00005ca8   SDIO_UnregisterHostCon
+0000001c  00001202 R_MIPS_32         00000000   __ksymtab_strings
+00000020  0000b802 R_MIPS_32         00005cb8   SDIO_RegisterHostContr
+00000024  00001202 R_MIPS_32         00000000   __ksymtab_strings
+00000028  00008802 R_MIPS_32         00005f3c   SDIO_BusRemoveOSDevice
+0000002c  00001202 R_MIPS_32         00000000   __ksymtab_strings
+00000030  00007502 R_MIPS_32         0000620c   SDIO_BusAddOSDevice
+00000034  00001202 R_MIPS_32         00000000   __ksymtab_strings
+
+Relocation section '.rel__kcrctab' at offset 0xa880 contains 7 entries:
+ Offset     Info    Type            Sym.Value  Sym. Name
+00000000  0000c102 R_MIPS_32         835c68b8   __crc_SDIO_UnregisterF
+00000004  00009e02 R_MIPS_32         4a39156b   __crc_SDIO_RegisterFun
+00000008  00008f02 R_MIPS_32         30c7c894   __crc_SDIO_HandleHcdEv
+0000000c  0000b202 R_MIPS_32         376908f8   __crc_SDIO_UnregisterH
+00000010  00009602 R_MIPS_32         6613f19c   __crc_SDIO_RegisterHos
+00000014  00007a02 R_MIPS_32         7b17b051   __crc_SDIO_BusRemoveOS
+00000018  0000a702 R_MIPS_32         10c983c5   __crc_SDIO_BusAddOSDev
+
+Relocation section '.rel__param' at offset 0xa8b8 contains 20 entries:
+ Offset     Info    Type            Sym.Value  Sym. Name
+00000000  00000802 R_MIPS_32         00000000   .rodata
+00000008  0000b402 R_MIPS_32         00000000   param_set_int
+0000000c  0000c702 R_MIPS_32         00000000   param_get_int
+00000010  00001402 R_MIPS_32         00000000   .data
+00000014  00000802 R_MIPS_32         00000000   .rodata
+0000001c  0000b402 R_MIPS_32         00000000   param_set_int
+00000020  0000c702 R_MIPS_32         00000000   param_get_int
+00000024  00001402 R_MIPS_32         00000000   .data
+00000028  00000802 R_MIPS_32         00000000   .rodata
+00000030  0000b402 R_MIPS_32         00000000   param_set_int
+00000034  0000c702 R_MIPS_32         00000000   param_get_int
+00000038  00001402 R_MIPS_32         00000000   .data
+0000003c  00000802 R_MIPS_32         00000000   .rodata
+00000044  0000b402 R_MIPS_32         00000000   param_set_int
+00000048  0000c702 R_MIPS_32         00000000   param_get_int
+0000004c  00001802 R_MIPS_32         00000000   .bss
+00000050  00000802 R_MIPS_32         00000000   .rodata
+00000058  0000b402 R_MIPS_32         00000000   param_set_int
+0000005c  0000c702 R_MIPS_32         00000000   param_get_int
+00000060  0000a902 R_MIPS_32         00000000   debuglevel
+
+Relocation section '.rel.data' at offset 0xa958 contains 5 entries:
+ Offset     Info    Type            Sym.Value  Sym. Name
+00000010  00000a02 R_MIPS_32         00000000   .rodata.str1.4
+00000014  00000202 R_MIPS_32         00000000   .text
+00000018  00000202 R_MIPS_32         00000000   .text
+0000001c  00000202 R_MIPS_32         00000000   .text
+00000130  00009f02 R_MIPS_32         00005a7c   release
+
+Relocation section '.rel.gnu.linkonce.this_module' at offset 0xa980 contains 2 entries:
+ Offset     Info    Type            Sym.Value  Sym. Name
+000000c8  00008b02 R_MIPS_32         00000000   init_module
+0000012c  00007f02 R_MIPS_32         00000000   cleanup_module
+
+Relocation section '.rel.pdr' at offset 0xa990 contains 63 entries:
+ Offset     Info    Type            Sym.Value  Sym. Name
+00000000  00000202 R_MIPS_32         00000000   .text
+00000020  00008d02 R_MIPS_32         000000b4   AllocateRequest
+00000040  00008402 R_MIPS_32         000002e8   IssueAllocRequest
+00000060  00009502 R_MIPS_32         000002f8   AllocateDevice
+00000080  0000b302 R_MIPS_32         000003dc   AllocateSignal
+000000a0  00000202 R_MIPS_32         00000000   .text
+000000c0  0000c202 R_MIPS_32         00000624   FreeSignal
+000000e0  0000b902 R_MIPS_32         0000072c   IssueRequestToHCD
+00000100  00009302 R_MIPS_32         00000e98   IssueBusRequest
+00000120  0000cb02 R_MIPS_32         00000eb0   FreeRequest
+00000140  00007202 R_MIPS_32         00000fd0   SendSyncedHcdBusConfig
+00000160  00009a02 R_MIPS_32         00001160   IssueBusConfig
+00000180  0000b002 R_MIPS_32         00001208   IssueFreeRequest
+000001a0  0000ae02 R_MIPS_32         00001218   FreeDevice
+000001c0  0000cc02 R_MIPS_32         00001228   DeleteDevices
+000001e0  00007b02 R_MIPS_32         00001444   AddDeviceToList
+00000200  00000202 R_MIPS_32         00000000   .text
+00000220  0000ac02 R_MIPS_32         0000165c   _SDIO_BusDriverCleanup
+00000240  00000202 R_MIPS_32         00000000   .text
+00000260  00009802 R_MIPS_32         000018f0   _SDIO_BusDriverInitial
+00000280  0000b702 R_MIPS_32         00001bec   _SDIO_RegisterHostCont
+000002a0  0000a502 R_MIPS_32         00001fb0   _SDIO_UnregisterHostCo
+000002c0  00007c02 R_MIPS_32         00002290   FilterPnpInfo
+000002e0  00007302 R_MIPS_32         00002298   IsPotentialIdMatch
+00000300  0000c602 R_MIPS_32         000022d8   NotifyDeviceRemove
+00000320  0000bb02 R_MIPS_32         0000297c   RemoveHcdFunctions
+00000340  00008002 R_MIPS_32         00002ba0   RemoveAllFunctions
+00000360  00008e02 R_MIPS_32         00002d70   _SDIO_RegisterFunction
+00000380  00008202 R_MIPS_32         00003234   _SDIO_UnregisterFuncti
+000003a0  0000c402 R_MIPS_32         00003444   ProbeForFunction
+000003c0  00000202 R_MIPS_32         00000000   .text
+000003e0  00000202 R_MIPS_32         00000000   .text
+00000400  00000202 R_MIPS_32         00000000   .text
+00000420  00000202 R_MIPS_32         00000000   .text
+00000440  0000a302 R_MIPS_32         00003c6c   SDMaskUnmaskFunctionIR
+00000460  0000c902 R_MIPS_32         00003dfc   SDFunctionAckInterrupt
+00000480  0000c802 R_MIPS_32         00003fb0   SDIOIrqHelperFunction
+000004a0  00008c02 R_MIPS_32         00004324   DeviceInterrupt
+000004c0  0000bf02 R_MIPS_32         00004888   _SDIO_HandleHcdEvent
+000004e0  0000a402 R_MIPS_32         00005588   DeviceAttach
+00000500  00007d02 R_MIPS_32         0000566c   DeviceDetach
+00000520  0000c502 R_MIPS_32         0000573c   CardDetectHelperFuncti
+00000540  00008902 R_MIPS_32         00005a20   _SDIO_BusGetDefaultSet
+00000560  00000202 R_MIPS_32         00000000   .text
+00000580  00000202 R_MIPS_32         00000000   .text
+000005a0  00000202 R_MIPS_32         00000000   .text
+000005c0  00009f02 R_MIPS_32         00005a7c   release
+000005e0  00000202 R_MIPS_32         00000000   .text
+00000600  00000402 R_MIPS_32         00000000   .exit.text
+00000620  00000602 R_MIPS_32         00000000   .init.text
+00000640  0000c002 R_MIPS_32         00005ad8   Do_OS_IncHcdReference
+00000660  00000202 R_MIPS_32         00000000   .text
+00000680  0000a602 R_MIPS_32         00005c18   Do_OS_DecHcdReference
+000006a0  0000ad02 R_MIPS_32         00005c4c   SDIO_HandleHcdEvent
+000006c0  0000ab02 R_MIPS_32         00005c5c   SDIO_UnregisterFunctio
+000006e0  00008302 R_MIPS_32         00005ca8   SDIO_UnregisterHostCon
+00000700  0000b802 R_MIPS_32         00005cb8   SDIO_RegisterHostContr
+00000720  00009702 R_MIPS_32         00005cc8   SDIO_RegisterFunction
+00000740  0000b602 R_MIPS_32         00005dec   OS_AddDevice
+00000760  0000ba02 R_MIPS_32         00005e90   OS_RemoveDevice
+00000780  00008802 R_MIPS_32         00005f3c   SDIO_BusRemoveOSDevice
+000007a0  0000ca02 R_MIPS_32         00006024   OS_InitializeDevice
+000007c0  00007502 R_MIPS_32         0000620c   SDIO_BusAddOSDevice
+
+The decoding of unwind sections for machine type MIPS R3000 is not currently supported.
+
+Symbol table '.symtab' contains 206 entries:
+   Num:    Value  Size Type    Bind   Vis      Ndx Name
+     0: 00000000     0 NOTYPE  LOCAL  DEFAULT  UND 
+     1: 00000000     0 SECTION LOCAL  DEFAULT    1 
+     2: 00000000     0 SECTION LOCAL  DEFAULT    2 
+     3: 00000000     0 SECTION LOCAL  DEFAULT    3 
+     4: 00000000     0 SECTION LOCAL  DEFAULT    4 
+     5: 00000000     0 SECTION LOCAL  DEFAULT    5 
+     6: 00000000     0 SECTION LOCAL  DEFAULT    6 
+     7: 00000000     0 SECTION LOCAL  DEFAULT    7 
+     8: 00000000     0 SECTION LOCAL  DEFAULT    8 
+     9: 00000000     0 SECTION LOCAL  DEFAULT    9 
+    10: 00000000     0 SECTION LOCAL  DEFAULT   10 
+    11: 00000000     0 SECTION LOCAL  DEFAULT   11 
+    12: 00000000     0 SECTION LOCAL  DEFAULT   12 
+    13: 00000000     0 SECTION LOCAL  DEFAULT   13 
+    14: 00000000     0 SECTION LOCAL  DEFAULT   14 
+    15: 00000000     0 SECTION LOCAL  DEFAULT   15 
+    16: 00000000     0 SECTION LOCAL  DEFAULT   16 
+    17: 00000000     0 SECTION LOCAL  DEFAULT   17 
+    18: 00000000     0 SECTION LOCAL  DEFAULT   18 
+    19: 00000000     0 SECTION LOCAL  DEFAULT   19 
+    20: 00000000     0 SECTION LOCAL  DEFAULT   20 
+    21: 00000000     0 SECTION LOCAL  DEFAULT   21 
+    22: 00000000     0 SECTION LOCAL  DEFAULT   22 
+    23: 00000000     0 SECTION LOCAL  DEFAULT   23 
+    24: 00000000     0 SECTION LOCAL  DEFAULT   24 
+    25: 00000000     0 SECTION LOCAL  DEFAULT   25 
+    26: 00000000     0 SECTION LOCAL  DEFAULT   26 
+    27: 00000000     0 SECTION LOCAL  DEFAULT   27 
+    28: 00000000     0 SECTION LOCAL  DEFAULT   28 
+    29: 00000000     0 SECTION LOCAL  DEFAULT   29 
+    30: 00000000     0 SECTION LOCAL  DEFAULT   30 
+    31: 00000000     0 SECTION LOCAL  DEFAULT   31 
+    32: 00000000     0 FILE    LOCAL  DEFAULT  ABS sdio_bus.c
+    33: 00000000   180 FUNC    LOCAL  DEFAULT    2 SynchCompletion
+    34: 00000614    16 FUNC    LOCAL  DEFAULT    2 DestroySignal
+    35: 00001808   232 FUNC    LOCAL  DEFAULT    2 HcdConfigComplete
+    36: 00001608    84 FUNC    LOCAL  DEFAULT    2 CleanupHcd
+    37: 00000000     0 FILE    LOCAL  DEFAULT  ABS sdio_function.c
+    38: 00000000     0 FILE    LOCAL  DEFAULT  ABS sdio_bus_misc.c
+    39: 00003a80    80 FUNC    LOCAL  DEFAULT    2 HcdAckComplete
+    40: 00003ad0   276 FUNC    LOCAL  DEFAULT    2 RawHcdIrqControl
+    41: 00003be4    64 FUNC    LOCAL  DEFAULT    2 RawHcdDisableIrqPseudoCom
+    42: 00003c24    72 FUNC    LOCAL  DEFAULT    2 RawHcdEnableIrqPseudoComp
+    43: 00000000     0 FILE    LOCAL  DEFAULT  ABS sdio_bus_events.c
+    44: 00000000     0 NOTYPE  LOCAL  DEFAULT   10 $LC0
+    45: 00000000     0 FILE    LOCAL  DEFAULT  ABS sdio_bus_linux.c
+    46: 00000010     4 OBJECT  LOCAL  DEFAULT   24 RequestRetries
+    47: 00000150     4 OBJECT  LOCAL  DEFAULT   20 RequestListSize
+    48: 0000014c     4 OBJECT  LOCAL  DEFAULT   20 SignalSemListSize
+    49: 00000148     4 OBJECT  LOCAL  DEFAULT   20 HcdRCount
+    50: 00005a58     8 FUNC    LOCAL  DEFAULT    2 sdio_get_resources
+    51: 00005a60     8 FUNC    LOCAL  DEFAULT    2 sdio_set_resources
+    52: 00005a68    20 FUNC    LOCAL  DEFAULT    2 sdio_disable_resources
+    53: 00005a84    84 FUNC    LOCAL  DEFAULT    2 driver_probe
+    54: 00000000    92 FUNC    LOCAL  DEFAULT    4 sdio_busdriver_cleanup
+    55: 00000000   320 FUNC    LOCAL  DEFAULT    6 sdio_busdriver_init
+    56: 00005bf0    40 FUNC    LOCAL  DEFAULT    2 UnregisterDriver
+    57: 0000016c    12 OBJECT  LOCAL  DEFAULT    8 pnp_idtable
+    58: 00000014     4 OBJECT  LOCAL  DEFAULT   24 InUseDevices
+    59: 00000018     4 OBJECT  LOCAL  DEFAULT   24 slotNumber.12587
+    60: 00000000     8 OBJECT  LOCAL  DEFAULT   11 __ksymtab_SDIO_Unregister
+    61: 00000000    24 OBJECT  LOCAL  DEFAULT   18 __kstrtab_SDIO_Unregister
+    62: 00000000     4 OBJECT  LOCAL  DEFAULT   13 __kcrctab_SDIO_Unregister
+    63: 00000008     8 OBJECT  LOCAL  DEFAULT   11 __ksymtab_SDIO_RegisterFu
+    64: 00000018    22 OBJECT  LOCAL  DEFAULT   18 __kstrtab_SDIO_RegisterFu
+    65: 00000004     4 OBJECT  LOCAL  DEFAULT   13 __kcrctab_SDIO_RegisterFu
+    66: 00000010     8 OBJECT  LOCAL  DEFAULT   11 __ksymtab_SDIO_HandleHcdE
+    67: 00000030    20 OBJECT  LOCAL  DEFAULT   18 __kstrtab_SDIO_HandleHcdE
+    68: 00000008     4 OBJECT  LOCAL  DEFAULT   13 __kcrctab_SDIO_HandleHcdE
+    69: 00000018     8 OBJECT  LOCAL  DEFAULT   11 __ksymtab_SDIO_Unregister
+    70: 00000044    30 OBJECT  LOCAL  DEFAULT   18 __kstrtab_SDIO_Unregister
+    71: 0000000c     4 OBJECT  LOCAL  DEFAULT   13 __kcrctab_SDIO_Unregister
+    72: 00000020     8 OBJECT  LOCAL  DEFAULT   11 __ksymtab_SDIO_RegisterHo
+    73: 00000064    28 OBJECT  LOCAL  DEFAULT   18 __kstrtab_SDIO_RegisterHo
+    74: 00000010     4 OBJECT  LOCAL  DEFAULT   13 __kcrctab_SDIO_RegisterHo
+    75: 00000000    36 OBJECT  LOCAL  DEFAULT   15 __mod_author716
+    76: 00000024    28 OBJECT  LOCAL  DEFAULT   15 __mod_description715
+    77: 00000040    20 OBJECT  LOCAL  DEFAULT   15 __mod_license714
+    78: 00000028     8 OBJECT  LOCAL  DEFAULT   11 __ksymtab_SDIO_BusRemoveO
+    79: 00000080    23 OBJECT  LOCAL  DEFAULT   18 __kstrtab_SDIO_BusRemoveO
+    80: 00000014     4 OBJECT  LOCAL  DEFAULT   13 __kcrctab_SDIO_BusRemoveO
+    81: 00000030     8 OBJECT  LOCAL  DEFAULT   11 __ksymtab_SDIO_BusAddOSDe
+    82: 00000098    20 OBJECT  LOCAL  DEFAULT   18 __kstrtab_SDIO_BusAddOSDe
+    83: 00000018     4 OBJECT  LOCAL  DEFAULT   13 __kcrctab_SDIO_BusAddOSDe
+    84: 00000054    43 OBJECT  LOCAL  DEFAULT   15 __mod_HcdRCount76
+    85: 00000080    23 OBJECT  LOCAL  DEFAULT   15 __mod_HcdRCounttype75
+    86: 00000000    20 OBJECT  LOCAL  DEFAULT   16 __param_HcdRCount
+    87: 00000178    10 OBJECT  LOCAL  DEFAULT    8 __param_str_HcdRCount
+    88: 00000098    24 OBJECT  LOCAL  DEFAULT   15 __mod_SignalSemListSize57
+    89: 000000b0    31 OBJECT  LOCAL  DEFAULT   15 __mod_SignalSemListSizety
+    90: 00000014    20 OBJECT  LOCAL  DEFAULT   16 __param_SignalSemListSize
+    91: 00000184    18 OBJECT  LOCAL  DEFAULT    8 __param_str_SignalSemList
+    92: 000000d0    22 OBJECT  LOCAL  DEFAULT   15 __mod_RequestListSize54
+    93: 000000e8    29 OBJECT  LOCAL  DEFAULT   15 __mod_RequestListSizetype
+    94: 00000028    20 OBJECT  LOCAL  DEFAULT   16 __param_RequestListSize
+    95: 00000198    16 OBJECT  LOCAL  DEFAULT    8 __param_str_RequestListSi
+    96: 00000108    46 OBJECT  LOCAL  DEFAULT   15 __mod_RequestRetries36
+    97: 00000138    28 OBJECT  LOCAL  DEFAULT   15 __mod_RequestRetriestype3
+    98: 0000003c    20 OBJECT  LOCAL  DEFAULT   16 __param_RequestRetries
+    99: 000001a8    15 OBJECT  LOCAL  DEFAULT    8 __param_str_RequestRetrie
+   100: 00000154    54 OBJECT  LOCAL  DEFAULT   15 __mod_debuglevel32
+   101: 0000018c    24 OBJECT  LOCAL  DEFAULT   15 __mod_debugleveltype31
+   102: 00000050    20 OBJECT  LOCAL  DEFAULT   16 __param_debuglevel
+   103: 000001b8    11 OBJECT  LOCAL  DEFAULT    8 __param_str_debuglevel
+   104: 0000009c     0 NOTYPE  LOCAL  DEFAULT   10 $LC3
+   105: 000000a8     0 NOTYPE  LOCAL  DEFAULT   10 $LC4
+   106: 00000034     0 NOTYPE  LOCAL  DEFAULT   10 $LC0
+   107: 00000048     0 NOTYPE  LOCAL  DEFAULT   10 $LC1
+   108: 00000064     0 NOTYPE  LOCAL  DEFAULT   10 $LC2
+   109: 00000000     0 FILE    LOCAL  DEFAULT  ABS sdio_busdriver.mod.c
+   110: 000001a4    35 OBJECT  LOCAL  DEFAULT   15 __mod_srcversion59
+   111: 000001c8    17 OBJECT  LOCAL  DEFAULT   15 __module_depends
+   112: 00000000  1984 OBJECT  LOCAL  DEFAULT   19 ____versions
+   113: 000001dc    64 OBJECT  LOCAL  DEFAULT   15 __mod_vermagic5
+   114: 00000fd0   400 FUNC    GLOBAL DEFAULT    2 SendSyncedHcdBusConfig
+   115: 00002298    64 FUNC    GLOBAL DEFAULT    2 IsPotentialIdMatch
+   116: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND pnp_register_protocol
+   117: 0000620c   748 FUNC    GLOBAL DEFAULT    2 SDIO_BusAddOSDevice
+   118: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND pnp_unregister_protocol
+   119: 00000008   320 OBJECT  GLOBAL DEFAULT   20 sdio_protocol
+   120: 00000000   352 OBJECT  GLOBAL DEFAULT   22 __this_module
+   121: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND snprintf
+   122: 7b17b051     0 NOTYPE  GLOBAL DEFAULT  ABS __crc_SDIO_BusRemoveOSDev
+   123: 00001444   452 FUNC    GLOBAL DEFAULT    2 AddDeviceToList
+   124: 00002290     8 FUNC    GLOBAL DEFAULT    2 FilterPnpInfo
+   125: 0000566c   208 FUNC    GLOBAL DEFAULT    2 DeviceDetach
+   126: 00000000     1 OBJECT  GLOBAL DEFAULT    8 g_Version
+   127: 00000000    92 FUNC    GLOBAL DEFAULT    4 cleanup_module
+   128: 00002ba0   464 FUNC    GLOBAL DEFAULT    2 RemoveAllFunctions
+   129: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND kfree
+   130: 00003234   528 FUNC    GLOBAL DEFAULT    2 _SDIO_UnregisterFunction
+   131: 00005ca8    16 FUNC    GLOBAL DEFAULT    2 SDIO_UnregisterHostContro
+   132: 000002e8    16 FUNC    GLOBAL DEFAULT    2 IssueAllocRequest
+   133: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND pnp_init_resource_table
+   134: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND __down
+   135: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND init_waitqueue_head
+   136: 00005f3c   232 FUNC    GLOBAL DEFAULT    2 SDIO_BusRemoveOSDevice
+   137: 00005a20    56 FUNC    GLOBAL DEFAULT    2 _SDIO_BusGetDefaultSettin
+   138: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND SDLIB_CreateMessageQueue
+   139: 00000000   320 FUNC    GLOBAL DEFAULT    6 init_module
+   140: 00004324  1380 FUNC    GLOBAL DEFAULT    2 DeviceInterrupt
+   141: 000000b4   564 FUNC    GLOBAL DEFAULT    2 AllocateRequest
+   142: 00002d70  1220 FUNC    GLOBAL DEFAULT    2 _SDIO_RegisterFunction
+   143: 30c7c894     0 NOTYPE  GLOBAL DEFAULT  ABS __crc_SDIO_HandleHcdEvent
+   144: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND schedule_timeout
+   145: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND kmem_cache_alloc
+   146: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND SDLIB_OSCreateHelper
+   147: 00000e98    24 FUNC    GLOBAL DEFAULT    2 IssueBusRequest
+   148: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND module_put
+   149: 000002f8   228 FUNC    GLOBAL DEFAULT    2 AllocateDevice
+   150: 6613f19c     0 NOTYPE  GLOBAL DEFAULT  ABS __crc_SDIO_RegisterHostCo
+   151: 00005cc8   292 FUNC    GLOBAL DEFAULT    2 SDIO_RegisterFunction
+   152: 000018f0   764 FUNC    GLOBAL DEFAULT    2 _SDIO_BusDriverInitialize
+   153: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND pnp_add_device
+   154: 00001160   168 FUNC    GLOBAL DEFAULT    2 IssueBusConfig
+   155: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND pnp_register_driver
+   156: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND SDLIB_OSDeleteHelper
+   157: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND preempt_schedule
+   158: 4a39156b     0 NOTYPE  GLOBAL DEFAULT  ABS __crc_SDIO_RegisterFuncti
+   159: 00005a7c     8 FUNC    GLOBAL DEFAULT    2 release
+   160: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND cpu_data
+   161: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND SDLIB_DeleteMessageQueue
+   162: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND pnp_remove_device
+   163: 00003c6c   400 FUNC    GLOBAL DEFAULT    2 SDMaskUnmaskFunctionIRQ
+   164: 00005588   228 FUNC    GLOBAL DEFAULT    2 DeviceAttach
+   165: 00001fb0   596 FUNC    GLOBAL DEFAULT    2 _SDIO_UnregisterHostContr
+   166: 00005c18    52 FUNC    GLOBAL DEFAULT    2 Do_OS_DecHcdReference
+   167: 10c983c5     0 NOTYPE  GLOBAL DEFAULT  ABS __crc_SDIO_BusAddOSDevice
+   168: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND printk
+   169: 00000000     4 OBJECT  GLOBAL DEFAULT   20 debuglevel
+   170: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND memset
+   171: 00005c5c    76 FUNC    GLOBAL DEFAULT    2 SDIO_UnregisterFunction
+   172: 0000165c   428 FUNC    GLOBAL DEFAULT    2 _SDIO_BusDriverCleanup
+   173: 00005c4c    16 FUNC    GLOBAL DEFAULT    2 SDIO_HandleHcdEvent
+   174: 00001218    16 FUNC    GLOBAL DEFAULT    2 FreeDevice
+   175: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND pnp_unregister_driver
+   176: 00001208    16 FUNC    GLOBAL DEFAULT    2 IssueFreeRequest
+   177: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND pnp_add_id
+   178: 376908f8     0 NOTYPE  GLOBAL DEFAULT  ABS __crc_SDIO_UnregisterHost
+   179: 000003dc   568 FUNC    GLOBAL DEFAULT    2 AllocateSignal
+   180: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND param_set_int
+   181: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND __up
+   182: 00005dec   164 FUNC    GLOBAL DEFAULT    2 OS_AddDevice
+   183: 00001bec   964 FUNC    GLOBAL DEFAULT    2 _SDIO_RegisterHostControl
+   184: 00005cb8    16 FUNC    GLOBAL DEFAULT    2 SDIO_RegisterHostControll
+   185: 0000072c  1900 FUNC    GLOBAL DEFAULT    2 IssueRequestToHCD
+   186: 00005e90   172 FUNC    GLOBAL DEFAULT    2 OS_RemoveDevice
+   187: 0000297c   548 FUNC    GLOBAL DEFAULT    2 RemoveHcdFunctions
+   188: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND SDLIB_PostMessage
+   189: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND SDLIB_GetMessage
+   190: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND malloc_sizes
+   191: 00004888  3328 FUNC    GLOBAL DEFAULT    2 _SDIO_HandleHcdEvent
+   192: 00005ad8   280 FUNC    GLOBAL DEFAULT    2 Do_OS_IncHcdReference
+   193: 835c68b8     0 NOTYPE  GLOBAL DEFAULT  ABS __crc_SDIO_UnregisterFunc
+   194: 00000624   264 FUNC    GLOBAL DEFAULT    2 FreeSignal
+   195: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND __down_interruptible
+   196: 00003444  1428 FUNC    GLOBAL DEFAULT    2 ProbeForFunction
+   197: 0000573c   592 FUNC    GLOBAL DEFAULT    2 CardDetectHelperFunction
+   198: 000022d8  1700 FUNC    GLOBAL DEFAULT    2 NotifyDeviceRemove
+   199: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND param_get_int
+   200: 00003fb0   884 FUNC    GLOBAL DEFAULT    2 SDIOIrqHelperFunction
+   201: 00003dfc   436 FUNC    GLOBAL DEFAULT    2 SDFunctionAckInterrupt
+   202: 00006024   488 FUNC    GLOBAL DEFAULT    2 OS_InitializeDevice
+   203: 00000eb0   288 FUNC    GLOBAL DEFAULT    2 FreeRequest
+   204: 00001228   540 FUNC    GLOBAL DEFAULT    2 DeleteDevices
+   205: 00000000     4 OBJECT  GLOBAL DEFAULT   24 pBusContext
+
+No version information found in this file.

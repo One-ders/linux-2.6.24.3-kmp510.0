@@ -1,0 +1,331 @@
+00001160 <HW_StartDMA>:
+HW_StartDMA():
+    1160:	27bdffc8 	addiu	sp,sp,-56 ! alloc 56 bytes on stack
+    1164:	3c02b004 	lui	v0,0xb004 ! v0=0xb0040000
+    1168:	afbf0034 	sw	ra,52(sp) ! save ra
+    116c:	afb60030 	sw	s6,48(sp) ! save s6
+    1170:	afb5002c 	sw	s5,44(sp) ! save s5
+    1174:	afb40028 	sw	s4,40(sp) ! save s4
+    1178:	afb30024 	sw	s3,36(sp) ! save s3
+    117c:	afb20020 	sw	s2,32(sp) ! save s2
+    1180:	afb1001c 	sw	s1,28(sp) ! save s1
+    1184:	afb00018 	sw	s0,24(sp) ! save s0
+    1188:	3446300c 	ori	a2,v0,0x300c ! a2=&SSISR
+    118c:	8cc30000 	lw	v1,0(a2)  ! v1=SSISR
+    1190:	00804021 	move	t0,a0     ! t0=hcd_ctx
+    1194:	30630040 	andi	v1,v1,0x40! v1=SSISR&SSISR_BUSY
+    1198:	8c960040 	lw	s6,64(a0) ! s6=hcd_ctx->pDev
+    119c:	8c930028 	lw	s3,40(a0) ! s3=hcd_ctx->w40
+ >  11a0:	1060000d 	beqz	v1,11d8 <HW_StartDMA+0x78> ! to 11d8 if !busy
+    11a4:	8c87002c 	lw	a3,44(a0) ! a3=hcd_ctx->w44
+   // udelay(10) ??
+    11a8:	3c020000 	lui	v0,0x0
+			11a8: R_MIPS_HI16	cpu_data
+    11ac:	3c030041 	lui	v1,0x41
+    11b0:	8c440000 	lw	a0,0(v0)
+			11b0: R_MIPS_LO16	cpu_data
+    11b4:	3465893a 	ori	a1,v1,0x893a
+11d4 --->
+    11b8:	00a40019 	multu	a1,a0
+    11bc:	00001010 	mfhi	v0
+>   11c0:	1440ffff 	bnez	v0,11c0 <HW_StartDMA+0x60>
+    11c4:	2442ffff 	addiu	v0,v0,-1
+    11c8:	8cc30000 	lw	v1,0(a2) ! v1=SSISR
+    11cc:	30630040 	andi	v1,v1,0x40 !v1=SSISR&SSISR_BUSY
+>   11d0:	1460fff9 	bnez	v1,11b8 <HW_StartDMA+0x58> ! to 11b8 if busy
+    11d4:	00000000 	nop
+11a4 --->
+    11d8:	3c04b004 	lui	a0,0xb004     ! a0=b0040000
+    11dc:	34853004 	ori	a1,a0,0x3004  ! a1=b0043004
+    11e0:	94a30000 	lhu	v1,0(a1)      ! v1=SSICR0
+    11e4:	3484300c 	ori	a0,a0,0x300c  ! a0=&SSISR
+    11e8:	3063ffff 	andi	v1,v1,0xffff  ! v1=v1&0xffff
+    11ec:	34630002 	ori	v1,v1,0x2     ! v1=v1|2
+    11f0:	a4a30000 	sh	v1,0(a1)      ! SSICR0=v1(RFLUSH)
+    11f4:	94a20000 	lhu	v0,0(a1)      ! v0=SSICR0
+    11f8:	3042ffff 	andi	v0,v0,0xffff  ! v0=v0&0xffff
+    11fc:	34420004 	ori	v0,v0,0x4     ! v0=v0|4
+    1200:	a4a20000 	sh	v0,0(a1)      ! SSICR0=v0(TFLUSH)
+    1204:	8c830000 	lw	v1,0(a0)      ! v1=SSISR
+    1208:	2402fffc 	li	v0,-4         ! v0=0xfffc
+    120c:	00621824 	and	v1,v1,v0      ! v1=v1&0xfffc
+    1210:	ac830000 	sw	v1,0(a0)      ! SSISR="Clear UNDR and OVER"
+    1214:	94a20000 	lhu	v0,0(a1)      ! v0=SSICR0
+    1218:	3042afff 	andi	v0,v0,0xafff  ! v0=v0&0xafff
+    121c:	a4a20000 	sh	v0,0(a1)      ! SSICR0=!TIE and ! TEIE
+    1220:	94a30000 	lhu	v1,0(a1)      ! v1=SSICR0
+    1224:	3063d7ff 	andi	v1,v1,0xd7ff  ! v1=v1&0xd7ff
+    1228:	a4a30000 	sh	v1,0(a1)      ! SSICR0=!RIE and !REIE
+    122c:	91020030 	lbu	v0,48(t0)     ! v0=hcd_ctx->b48
+>   1230:	1040004c 	beqz	v0,1364 <HW_StartDMA+0x204> ! to 1364 if ! v0
+    1234:	94a30000 	lhu	v1,0(a1)      ! v1=SSICR0
+    1238:	94a20000 	lhu	v0,0(a1)      ! v0=SSICR0
+    123c:	3042fffe 	andi	v0,v0,0xfffe  ! v0=v0&0xfffe
+    1240:	a4a20000 	sh	v0,0(a1)      ! SSICR0=!DISREV
+    1244:	8ec40074 	lw	a0,116(s6)    ! a0=spi_dev->RxDmaCHannel
+>   1248:	04800004 	bltz	a0,125c <HW_StartDMA+0xfc> !to 125c if<0
+    124c:	00000000 	nop
+    1250:	8ec20078 	lw	v0,120(s6)    ! v0=spi_dev->w120
+>   1254:	144000c1 	bnez	v0,155c <HW_StartDMA+0x3fc> !to 155c if !=0 enable dma and out
+    1258:	3c020000 	lui	v0,0x0        ! v0=.text
+			1258: R_MIPS_HI16	enable_dma
+1248 --->
+    125c:	afa00010 	sw	zero,16(sp)   ! sp[16]=0
+>   1260:	18e0001f 	blez	a3,12e0 <HW_StartDMA+0x180> !to 12e0 if w44 <=0
+    1264:	3c02b004 	lui	v0,0xb004     ! v0=0xb0040000
+    1268:	3446300c 	ori	a2,v0,0x300c  ! a2=&SSISR
+    126c:	34453000 	ori	a1,v0,0x3000  ! a1=&SSIDR
+    1270:	3408ffff 	li	t0,0xffff     ! t0=0xffff
+    1274:	00c02021 	move	a0,a2         ! a0=&SSISR
+12d8 --->
+    1278:	8fa20010 	lw	v0,16(sp)     ! v0=sp[16]
+    127c:	28420010 	slti	v0,v0,16      ! v0=1 if v0<16
+>   1280:	1040000b 	beqz	v0,12b0 <HW_StartDMA+0x150> ! to 12b0 if v0=0
+    1284:	00000000 	nop
+    1288:	00c01821 	move	v1,a2         ! v1=&SSISR
+1294 --->
+    128c:	8c620000 	lw	v0,0(v1)      ! v1=SSISR
+    1290:	30420020 	andi	v0,v0,0x20    ! v0=SSISR&TFF
+>   1294:	1440fffd 	bnez	v0,128c <HW_StartDMA+0x12c> !to 128c if transmitt fifo full
+    1298:	00000000 	nop
+    129c:	aca80000 	sw	t0,0(a1)      ! t0=SSIDR
+    12a0:	8fa20010 	lw	v0,16(sp)     ! v0=sp[16]
+    12a4:	24e7fffe 	addiu	a3,a3,-2      ! a3=a3-2  ! value of w44-=2
+    12a8:	24420001 	addiu	v0,v0,1       ! v0(sp[16])+=1
+    12ac:	afa20010 	sw	v0,16(sp)     ! sp[16]=v0
+1280 --->
+    12b0:	8c820000 	lw	v0,0(a0)      ! v0=SSISR
+    12b4:	3042ff00 	andi	v0,v0,0xff00  ! v0=SSISR->RFIFO-NUM
+>   12b8:	10400007 	beqz	v0,12d8 <HW_StartDMA+0x178> ! to 12d8 if rfifo-num==0
+    12bc:	00000000 	nop		      !
+    12c0:	8ca30000 	lw	v1,0(a1)      ! v1=SSIDR
+    12c4:	a6630000 	sh	v1,0(s3)      ! *w40=v1
+    12c8:	8fa20010 	lw	v0,16(sp)     ! v0=sp[16]
+    12cc:	26730002 	addiu	s3,s3,2	      ! w40+=2
+    12d0:	2442ffff 	addiu	v0,v0,-1      ! v0-=1
+    12d4:	afa20010 	sw	v0,16(sp)     ! sp[16]=v0
+12b8 --->
+>   12d8:	1ce0ffe7 	bgtz	a3,1278 <HW_StartDMA+0x118> ! to 1278 if w44>0
+    12dc:	00000000 	nop
+1260 --->
+    12e0:	8fa20010 	lw	v0,16(sp)     ! v0=sp[16]
+>   12e4:	18400038 	blez	v0,13c8 <HW_StartDMA+0x268> ! to 13c8 if v0<=0
+    12e8:	3c03b004 	lui	v1,0xb004     ! v1=0xb0040000
+    12ec:	3c020000 	lui	v0,0x0	      ! v0=.text
+			12ec: R_MIPS_HI16	printk
+    12f0:	24540000 	addiu	s4,v0,0       ! s4=printk
+			12f0: R_MIPS_LO16	printk
+    12f4:	34753000 	ori	s5,v1,0x3000  ! s5=SSIDR
+    12f8:	3472300c 	ori	s2,v1,0x300c  ! s2=SSISR
+    12fc:	3c110000 	lui	s1,0x0        ! s1=LC13
+			12fc: R_MIPS_HI16	$LC13
+    1300:	2410752f 	li	s0,29999      ! s0=29999
+1318, 1360 --->
+    1304:	8e420000 	lw	v0,0(s2)      ! v0=SSISR
+    1308:	26240000 	addiu	a0,s1,0       ! a0=LC13
+			1308: R_MIPS_LO16	$LC13
+    130c:	3042ff00 	andi	v0,v0,0xff00  ! v0=RFIFO_NUM
+>   1310:	1440000a 	bnez	v0,133c <HW_StartDMA+0x1dc> ! to 133c if RFIFO_NUM
+    1314:	2610ffff 	addiu	s0,s0,-1      ! s0-=1
+1338 --->
+>   1318:	1600fffa 	bnez	s0,1304 <HW_StartDMA+0x1a4> ! to 1304 if s0
+    131c:	00000000 	nop
+	// printk("Colman: Wait for SSI RX FIF0 Timeout!\n");
+    1320:	0280f809 	jalr	s4            ! call printk
+    1324:	00000000 	nop
+    1328:	8e420000 	lw	v0,0(s2)      ! v0=SSISR
+    132c:	26240000 	addiu	a0,s1,0       ! a0=LC13
+			132c: R_MIPS_LO16	$LC13
+    1330:	3042ff00 	andi	v0,v0,0xff00  ! v0=SSISR->RFIFO_NUM
+>   1334:	1040fff8 	beqz	v0,1318 <HW_StartDMA+0x1b8> ! to 1318 if !v0
+    1338:	2610ffff 	addiu	s0,s0,-1      ! s0-=1
+1310 --->
+    133c:	8ea20000 	lw	v0,0(s5)      ! v0=SSIDR
+    1340:	a6620000 	sh	v0,0(s3)      ! *w40=v0
+    1344:	8fa30010 	lw	v1,16(sp)     ! v1=sp[16]
+    1348:	2463ffff 	addiu	v1,v1,-1      ! v1-=1
+    134c:	afa30010 	sw	v1,16(sp)     ! sp[16]=v1
+    1350:	8fa20010 	lw	v0,16(sp)     ! v0=sp[16]
+>   1354:	1840001c 	blez	v0,13c8 <HW_StartDMA+0x268> ! to 13c8 if v0<=0
+    1358:	26730002 	addiu	s3,s3,2	      ! w40+=2
+>   135c:	080004c1 	j	1304 <HW_StartDMA+0x1a4>    ! to 1304
+			135c: R_MIPS_26	.text
+    1360:	2410752f 	li	s0,29999      ! s0=29999
+=============================================================================
+1234 --->
+    1364:	94a20000 	lhu	v0,0(a1)      ! v0=SSICR0
+    1368:	3042ffff 	andi	v0,v0,0xffff  ! v0=v0&0xffff
+    136c:	34420001 	ori	v0,v0,0x1     ! v0=v0|1
+    1370:	a4a20000 	sh	v0,0(a1)      ! SSICR0=DISREV
+    1374:	8ec40070 	lw	a0,112(s6)    ! a0=TxDmaChannel
+>   1378:	04800004 	bltz	a0,138c <HW_StartDMA+0x22c> ! 138c if a0<0
+    137c:	00000000 	nop
+    1380:	8ec20078 	lw	v0,120(s6)    ! v0=hcd_ctx->w120
+>   1384:	1440006a 	bnez	v0,1530 <HW_StartDMA+0x3d0> ! to 1530 if v0
+    1388:	3c190000 	lui	t9,0x0        ! t9=hi(enable_dma)
+			1388: R_MIPS_HI16	enable_dma
+1378 --->
+>   138c:	18e0003c 	blez	a3,1480 <HW_StartDMA+0x320> ! to 1480 if w44<=0
+    1390:	3c03b004 	lui	v1,0xb004                   ! v1=0xb0040000
+    1394:	3c04b004 	lui	a0,0xb004                   ! a0=0xb0040000
+13c4 --->
+    1398:	3483300c 	ori	v1,a0,0x300c                ! v1=&SSISR
+13a4 --->
+    139c:	8c620000 	lw	v0,0(v1)                    ! v0=SSISR
+    13a0:	30420020 	andi	v0,v0,0x20                  ! v0=SSISR&TFF
+>   13a4:	1440fffd 	bnez	v0,139c <HW_StartDMA+0x23c> ! to 139c if transmit fifo full
+    13a8:	34823000 	ori	v0,a0,0x3000                ! v0=SSIDR
+    13ac:	96630000 	lhu	v1,0(s3)                    ! v1=*w40
+    13b0:	24e7fffe 	addiu	a3,a3,-2	            ! a3-=2 (w44)
+    13b4:	ac430000 	sw	v1,0(v0)                    ! SSIDR=*w40
+>   13b8:	18e00030 	blez	a3,147c <HW_StartDMA+0x31c> ! to 147c if a3<=0
+    13bc:	26730002 	addiu	s3,s3,2			    ! w40+=2
+>   13c0:	080004e6 	j	1398 <HW_StartDMA+0x238>
+			13c0: R_MIPS_26	.text
+    13c4:	3c04b004 	lui	a0,0xb004		    ! a0=0xb0040000
+===================================================================================
+12e4, 13d8 --->
+    13c8:	3c03b004 	lui	v1,0xb004                   ! v1=0xb0040000
+    13cc:	3463300c 	ori	v1,v1,0x300c		    ! v1=&SSISR
+    13d0:	8c620000 	lw	v0,0(v1)		    ! v0=SSISR
+    13d4:	30420080 	andi	v0,v0,0x80		    ! v0=SSISR&END
+>   13d8:	1040fffb 	beqz	v0,13c8 <HW_StartDMA+0x268> ! to 13c8 if !v0
+    13dc:	00602021 	move	a0,v1			    ! a0=&SSISR
+    13e0:	3c0300ff 	lui	v1,0xff			    ! v1=0x00ff0000
+13ec --->
+    13e4:	8c820000 	lw	v0,0(a0)		    ! v0=SSISR
+    13e8:	00431024 	and	v0,v0,v1		    ! v0=SSISR&TFIFO-NUM
+>   13ec:	1440fffd 	bnez	v0,13e4 <HW_StartDMA+0x284> ! to 13e4 if v0!=0
+    13f0:	00000000 	nop
+    13f4:	2403fffd 	li	v1,-3			    ! v1=0xfffd
+    13f8:	ac830000 	sw	v1,0(a0)                    ! SSISR=~UNDR
+    13fc:	8c820000 	lw	v0,0(a0)		    ! v0=SSISR
+    1400:	30420040 	andi	v0,v0,0x40		    ! v0=SSISR&BUSY
+>   1404:	1040000e 	beqz	v0,1440 <HW_StartDMA+0x2e0> ! to 1440 if not BUSY
+     // While busy; usleep loop
+    1408:	3c020000 	lui	v0,0x0
+			1408: R_MIPS_HI16	cpu_data
+    140c:	8c440000 	lw	a0,0(v0)
+			140c: R_MIPS_LO16	cpu_data
+    1410:	3c030041 	lui	v1,0x41
+    1414:	3c02b004 	lui	v0,0xb004
+    1418:	3465893a 	ori	a1,v1,0x893a
+    141c:	3446300c 	ori	a2,v0,0x300c 		   ! a2=&SSISR
+1438 --->
+    1420:	00a40019 	multu	a1,a0
+    1424:	00001010 	mfhi	v0
+>   1428:	1440ffff 	bnez	v0,1428 <HW_StartDMA+0x2c8>
+    142c:	2442ffff 	addiu	v0,v0,-1
+    1430:	8cc30000 	lw	v1,0(a2)                   ! v1=SSISR
+    1434:	30630040 	andi	v1,v1,0x40		   ! v1=SSISR&BUSY
+>   1438:	1460fff9 	bnez	v1,1420 <HW_StartDMA+0x2c0>! to 1420 if busy
+    143c:	00000000 	nop
+1404, 14b8 --->
+    1440:	aec00064 	sw	zero,100(s6)		   ! spi_dev->w100=0
+    1444:	3c190000 	lui	t9,0x0			   ! t9=.text
+			1444: R_MIPS_HI16	.text
+    1448:	02c02021 	move	a0,s6			   ! a0=spi_dev
+    144c:	26c50054 	addiu	a1,s6,84		   ! a1=&spi_dev->dmacomplete_work
+    1450:	8fbf0034 	lw	ra,52(sp)		   ! restore ra
+    1454:	8fb60030 	lw	s6,48(sp)                  ! restore s6
+    1458:	8fb5002c 	lw	s5,44(sp)		   ! restore s5
+    145c:	8fb40028 	lw	s4,40(sp)		   ! restore s4
+    1460:	8fb30024 	lw	s3,36(sp)		   ! restore s3
+    1464:	8fb20020 	lw	s2,32(sp) 		   ! restore s2
+    1468:	8fb1001c 	lw	s1,28(sp)		   ! restore s1
+    146c:	8fb00018 	lw	s0,24(sp)		   ! restore s0
+    1470:	27390770 	addiu	t9,t9,1904		   ! t9=QueueWork
+			1470: R_MIPS_LO16	.text
+	// QueueWork(spi_dev, &spi_dev->dmacomplete_work)
+    1474:	03200008 	jr	t9
+    1478:	27bd0038 	addiu	sp,sp,56		   ! dealloc stack
+===============================================================================
+13b8, 148c --->
+    147c:	3c03b004 	lui	v1,0xb004                  ! v1=0xb0040000
+1390 --->
+    1480:	3463300c 	ori	v1,v1,0x300c		   ! v1=&SSISR
+    1484:	8c620000 	lw	v0,0(v1)		   ! v0=SSISR
+    1488:	30420080 	andi	v0,v0,0x80		   ! V0=SSISR&END
+>   148c:	1040fffb 	beqz	v0,147c <HW_StartDMA+0x31c>!to 147c if not END
+    1490:	00602021 	move	a0,v1			   ! a0=&SSISR
+    1494:	3c0300ff 	lui	v1,0xff			   ! v1=0x00ff0000
+14a0 --->
+    1498:	8c820000 	lw	v0,0(a0)		   ! v0=SSISR
+    149c:	00431024 	and	v0,v0,v1		   ! v0=SSISR&TFIFO_NUM
+>   14a0:	1440fffd 	bnez	v0,1498 <HW_StartDMA+0x338>! to 1498 if TFIFO_NUM
+    14a4:	00000000 	nop
+    14a8:	2403fffd 	li	v1,-3			   ! v1=0xfffd
+    14ac:	ac830000 	sw	v1,0(a0)		   ! SSISR=~UNDER
+    14b0:	8c820000 	lw	v0,0(a0)		   ! v0=SSISR
+    14b4:	30420040 	andi	v0,v0,0x40		   ! v0=SSISR&BUSY
+>   14b8:	1040ffe1 	beqz	v0,1440 <HW_StartDMA+0x2e0>! to 1440 if not BUSY
+    14bc:	3c020000 	lui	v0,0x0
+			14bc: R_MIPS_HI16	cpu_data
+    14c0:	8c440000 	lw	a0,0(v0)		   !
+			14c0: R_MIPS_LO16	cpu_data
+    14c4:	3c030041 	lui	v1,0x41
+    14c8:	3c02b004 	lui	v0,0xb004		   ! a0=0xb0040000
+    14cc:	3465893a 	ori	a1,v1,0x893a
+    14d0:	3446300c 	ori	a2,v0,0x300c		   ! a2=&SSISR
+14f0 --->  // While BUSY do usleep
+    14d4:	00a40019 	multu	a1,a0
+    14d8:	00001010 	mfhi	v0
+    14dc:	00000000 	nop
+>   14e0:	1440ffff 	bnez	v0,14e0 <HW_StartDMA+0x380>
+    14e4:	2442ffff 	addiu	v0,v0,-1
+    14e8:	8cc30000 	lw	v1,0(a2)	           ! v1=SSISR&BUSY
+    14ec:	30630040 	andi	v1,v1,0x40
+>   14f0:	1460fff8 	bnez	v1,14d4 <HW_StartDMA+0x374>! to 14d4 if BUSY
+    14f4:	3c190000 	lui	t9,0x0
+			14f4: R_MIPS_HI16	.text
+    14f8:	aec00064 	sw	zero,100(s6)		   ! spi_dev->w100=0
+    14fc:	02c02021 	move	a0,s6			   ! a0=spi_dev
+    1500:	26c50054 	addiu	a1,s6,84		   ! a1=&spi_dev->dmacomplete_work
+    1504:	8fbf0034 	lw	ra,52(sp)		   ! restore ra
+    1508:	8fb60030 	lw	s6,48(sp)		   ! restore s6
+    150c:	8fb5002c 	lw	s5,44(sp)		   ! restore s5
+    1510:	8fb40028 	lw	s4,40(sp)		   ! restore s4
+    1514:	8fb30024 	lw	s3,36(sp)		   ! restore s3
+    1518:	8fb20020 	lw	s2,32(sp)		   ! restore s2
+    151c:	8fb1001c 	lw	s1,28(sp)		   ! restore s1
+    1520:	8fb00018 	lw	s0,24(sp)		   ! restore s0
+    1524:	27390770 	addiu	t9,t9,1904		   ! t9=QueueWork
+			1524: R_MIPS_LO16	.text
+	// QueueWork(spi_dev,&spi_dev->dmacomplete_work) and return
+    1528:	03200008 	jr	t9			   !
+    152c:	27bd0038 	addiu	sp,sp,56		   ! deallocate stack
+===========================================================
+1384 ---> out
+    1530:	8fbf0034 	lw	ra,52(sp)		   ! restore ra
+    1534:	8fb60030 	lw	s6,48(sp)		   ! restore s6
+    1538:	8fb5002c 	lw	s5,44(sp)		   ! restore s5
+    153c:	8fb40028 	lw	s4,40(sp)		   ! restore s4
+    1540:	8fb30024 	lw	s3,36(sp)		   ! restore s3
+    1544:	8fb20020 	lw	s2,32(sp)		   ! restore s2
+    1548:	8fb1001c 	lw	s1,28(sp)		   ! restore s1
+    154c:	8fb00018 	lw	s0,24(sp)		   ! restore s0
+    1550:	27390000 	addiu	t9,t9,0			   ! t9=enable_dma
+			1550: R_MIPS_LO16	enable_dma
+	// enable_dma(spi_dev->TxDmaChannel) and out
+    1554:	03200008 	jr	t9
+    1558:	27bd0038 	addiu	sp,sp,56		   ! dealloc stack
+==========================================================
+1258 ---> out2
+    155c:	24500000 	addiu	s0,v0,0			   ! s0=enable_dma
+			155c: R_MIPS_LO16	enable_dma
+	// enable_dma(spi_dev->RxDmaChannel)
+    1560:	0200f809 	jalr	s0
+    1564:	00000000 	nop
+    1568:	8ec40070 	lw	a0,112(s6) 		! a0=spi_dev->TxDmaChannel
+    156c:	0200c821 	move	t9,s0			! t9=enable_dma
+    1570:	8fbf0034 	lw	ra,52(sp)		! restore ra
+    1574:	8fb60030 	lw	s6,48(sp)		! restore s6
+    1578:	8fb5002c 	lw	s5,44(sp)		! restore s5
+    157c:	8fb40028 	lw	s4,40(sp)		! restore s4
+    1580:	8fb30024 	lw	s3,36(sp)		! restore s3
+    1584:	8fb20020 	lw	s2,32(sp)		! restore s2
+    1588:	8fb1001c 	lw	s1,28(sp)		! restore s1
+    158c:	8fb00018 	lw	s0,24(sp)		! restore s0
+	enable_dma(spi_dev->TxDmaChannel) and return
+    1590:	03200008 	jr	t9
+    1594:	27bd0038 	addiu	sp,sp,56		! deallocate stack

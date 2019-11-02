@@ -67,7 +67,36 @@
 #include "jz4755_spi.h"
 #include "ath_spi_hcd.h"
 
+#define DPRINTK(a...) if (debuglevel>=3) printk(a)
+
+
 void DumpRequest(struct hcd_context *hcd_ctx) {
+
+	DPRINTK("<1>************************REQUEST DUMP***********************\n");
+//1b70
+	if (!(hcd_ctx->uh16&0x4)) {   // PIO mode
+// 1c70
+		DPRINTK("<1>PIO Request %s , %s , Address :  0x%4.4X\n",
+				(!(hcd_ctx->uh16&0x10))?"INTERNAL":"EXTERNAL",
+				(hcd_ctx->uh16&0x80)?"READ":"WRITE", hcd_ctx->uh24);
+
+		if (!(hcd_ctx->uh16&0x10)) {
+			if (!(hcd_ctx->uh16&0x80)) {
+//1c60
+				DPRINTK("<1>INTERNAL WRITE data:  0x%4.4X\n", hcd_ctx->uw20);
+			}
+		} else {
+			DPRINTK("<1>EXTERNAL Access : %d bytes buffer:0x%X\n", hcd_ctx->uh26, hcd_ctx->w44);
+		}
+	} else {
+//1bb0
+		DPRINTK("<1>DMA Request %s , Address : 0x%4.4X\n", (hcd_ctx->uh16&0x80)?"READ":"WRITE", hcd_ctx->uh24);
+
+//1c00
+		DPRINTK("<1>   %d  bytes  buffer:0x%X\n", hcd_ctx->uh26, hcd_ctx->w44);
+	}
+
+	DPRINTK("<1>************************************************************\n");
 }
 
 void DoPioWriteInternal(struct hcd_context *hcd_ctx, int x, int y);
@@ -125,7 +154,7 @@ void HcdDmaCompletion(struct hcd_context *hcd_ctx, SDIO_STATUS status) {
 	}
 // 2d20
 	if (status != SDIO_STATUS_PENDING) {
-		hcd_ctx->b26=0;
+		hcd_ctx->uh26=0;
 		req->Status=status;
 		dodidodi=1;
 		EnableDisableSPIIRQHwDetect(hcd_ctx,dodidodi);
@@ -140,7 +169,103 @@ void HcdDmaCompletion(struct hcd_context *hcd_ctx, SDIO_STATUS status) {
 
 	if (dodidodi) {
 		SDIO_HandleHcdEvent(&hcd_ctx->pHcd,EVENT_HCD_TRANSFER_DONE);
-	} 
+	}
 	return;
 }
 
+#if 0
+int get_dma_count(int dmanr);
+
+SDIO_STATUS HW_SpiSetUpDMA(struct hcd_context *hcd_ctx) {
+	struct spi_dev *spi_dev=hcd_ctx->pDev;
+	unsigned short int *bufp=hcd_ctx->w40;
+	unsigned int len=hcd_ctx->w44;
+	unsigned int cnt=get_dma_count(len);
+
+	spi_dev->w124=len-cnt;
+	spi_dev->w120=cnt;
+	spi_dev->w132=0;
+	spi_dev->w128=0;
+
+	if (hcd_ctx->ub49!=1) {
+//1808
+		printk("AR6k only support 16-bit spi transfer\n");
+		return SDIO_STATUS_INVALID_PARAMETER;
+	}
+//1850
+
+	if (((unsigned int)bufp)&1) {
+//1adc
+		printk("AR6k buffer address misaligned");
+		return SDIO_STATUS_INVALID_PARAMETER;
+	}
+//185c
+	if (len>4096) {
+//1b2c
+		panic("=========>transfer count too large!!!\n");
+	}
+
+//1864
+	if (cnt==0) {
+//1aac
+		return SDIO_STATUS_PENDING;
+	}
+//186c
+	if (hcd_ctx->ub48) {
+		int txch,rxch;
+		unsigned int physbuf;
+//1878
+		if (spi_dev->RxDmaChannel<0) {
+//1aac
+			return SDIO_STATUS_PENDING;
+		}
+//1880
+		txch=spi_dev->TxDmaChannel;
+		disable_dma(txch);
+		jz_set_dma_src_width(txch,32);
+		jz_set_dma_dest_width(txch,16);
+		jz_set_dma_block_size(txch, 16);
+		set_dma_mode(txch,1);
+		set_dma_addr(txch, 0x10003034);
+		set_dma_count(txch, cnt+15);
+
+//1914
+//1b24
+//191c
+		REG_DMAC_DCMD(txch)&=(~DMAC_DCMD_SAI);
+		REG_RTC_HSPR=-1;
+		dma_cache_wback_inv((int)spi_dev->pDmaCommonBuffer, len);
+
+		rxch=spi_dev->RxDmaChannel;
+		physbuf=spi_dev->DmaCommonBufferPhys;
+		disable_dma(rxch);
+		jz_set_dma_src_width(rxch,16);
+		jz_set_dma_dest_width(rxch,32);
+		jz_set_dma_block_size(rxch,16);
+		set_dma_mode(rxch,0),
+		set_dma_addr(rxch, physbuf);
+		set_dma_count(rxch, cnt+15);
+	} else {
+		int txch;
+		int physbuf;
+//19e0
+		if (spi_dev->TxDmaChannel>=0) {
+//19e8
+			memcpy(spi_dev->pDmaDescriptorBuffer, bufp, len);
+			dma_cache_wback_inv((int)spi_dev->pDmaDescriptorBuffer, len);
+			txch=spi_dev->TxDmaChannel;
+			physbuf=spi_dev->DmaDescriptorPhys;
+			disable_dma(txch);
+			jz_set_dma_src_width(txch,32);
+			jz_set_dma_dest_width(txch, 16);
+			jz_set_dma_block_size(txch, 16);
+			set_dma_mode(txch,1);
+			set_dma_addr(txch, physbuf);
+			set_dma_count(txch, cnt+15);
+//1aa4
+			return SDIO_STATUS_PENDING;
+		}
+	}
+	return SDIO_STATUS_PENDING;
+}
+#endif

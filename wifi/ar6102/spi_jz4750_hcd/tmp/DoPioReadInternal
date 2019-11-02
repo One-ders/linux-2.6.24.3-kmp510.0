@@ -1,0 +1,38 @@
+00001d24 <DoPioReadInternal>:
+DoPioReadInternal():
+    1d24:	27bdffe0 	addiu	sp,sp,-32			! allocate 32 bytes
+    1d28:	3c020000 	lui	v0,0x0				! v0 = HI(HW_InOut_Token)
+			1d28: R_MIPS_HI16	HW_InOut_Token
+    1d2c:	30a5ffff 	andi	a1,a1,0xffff			! a1=a1&0xffff (unsigned short int)
+    1d30:	afb20018 	sw	s2,24(sp)			! save s2
+    1d34:	afb10014 	sw	s1,20(sp)			! save s1
+    1d38:	afb00010 	sw	s0,16(sp)			! save s0
+    1d3c:	00c08821 	move	s1,a2				! s1=a2
+    1d40:	34a5c000 	ori	a1,a1,0xc000			! a1=a1&0xc000
+    1d44:	24060001 	li	a2,1				! a2=1
+    1d48:	00003821 	move	a3,zero				! a3=0
+    1d4c:	afbf001c 	sw	ra,28(sp)			! save ra
+    1d50:	24520000 	addiu	s2,v0,0				! s2=HW_InOut_Token
+			1d50: R_MIPS_LO16	HW_InOut_Token
+		HW_InOut_Token(a0,a1,1,0)
+    1d54:	0240f809 	jalr	s2
+    1d58:	00808021 	move	s0,a0				! s0=a0
+    1d5c:	02002021 	move	a0,s0				! a0=s0
+    1d60:	02203821 	move	a3,s1				! a3=s1
+    1d64:	2405ffff 	li	a1,-1				! a1=-1
+>   1d68:	04400008 	bltz	v0,1d8c <DoPioReadInternal+0x68> ! to 1d8c if hw_inout ret<0
+    1d6c:	24060001 	li	a2,1				! a2=1
+    1d70:	0240c821 	move	t9,s2				! t9=s2
+    1d74:	8fbf001c 	lw	ra,28(sp)			! restore ra
+    1d78:	8fb20018 	lw	s2,24(sp)			! restore s2
+    1d7c:	8fb10014 	lw	s1,20(sp)			! restore s1
+    1d80:	8fb00010 	lw	s0,16(sp)			! restore s0
+    1d84:	03200008 	jr	t9				! call HW_InOut_Token and return
+    1d88:	27bd0020 	addiu	sp,sp,32			! dealloc stack
+1d68  ---->
+    1d8c:	8fbf001c 	lw	ra,28(sp)			! restore ra
+    1d90:	8fb20018 	lw	s2,24(sp)			! restore s2
+    1d94:	8fb10014 	lw	s1,20(sp)			! restore s1
+    1d98:	8fb00010 	lw	s0,16(sp)			! restore s0
+    1d9c:	03e00008 	jr	ra				! return
+    1da0:	27bd0020 	addiu	sp,sp,32			! dealloc stack

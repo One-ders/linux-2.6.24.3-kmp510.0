@@ -219,14 +219,12 @@ unsigned int g_isforce;
 //extern struct spi_data ar6k_spi;
 static struct hcd_context ar6k_spi = {
   .pad0 = {0,0,0,0},
-  .ub16 = 0,
-  .ub17 = 0,
+  .uh16 = 0,
   .ub18 = 0,
   .ub19 = 0,
-  .pad20= 0,
-  .pad24= 0,
-  .b26=0,
-  .pad27=0,
+  .uw20= 0,
+  .uh24= 0,
+  .uh26= 0,
   .pad28={0,0,0},
   .w40=0,
   .w44=0,
@@ -237,7 +235,7 @@ static struct hcd_context ar6k_spi = {
   .op_clock = 0x1f78a40,                     // 60,    33MHz
   .pDev = &dev_spi,                          // 64
   .pHcd.Version = 0x27,                      // 68
-  .pHcd.pName = 0x1f4,                       // 80
+  .pHcd.pName = (char *)0x1f4,               // 80
   .pHcd.Attributes = SDHCD_ATTRIB_RAW_MODE,  // 84
   .pHcd.MaxBytesPerBlock=0x800,              // 88,    2048
   .pHcd.MaxBlocksPerTrans=0x1,               // 90
@@ -246,97 +244,11 @@ static struct hcd_context ar6k_spi = {
   .b248 = 2,
 };
 
+#if 0
 int get_dma_count(int);
+void set_spi_clock(unsigned int *arg);
+#endif
 
-static int HW_SpiSetUpDMA(struct hcd_context *hcd_ctx) {
-	unsigned int len=hcd_ctx->w44;
-	unsigned int cnt=get_dma_count(len);
-	struct spi_dev *spi_dev=hcd_ctx->pDev;
-	unsigned char *bufp=hcd_ctx->w40;
-
-	spi_dev->w124=len-cnt;
-	spi_dev->w120=cnt;
-	spi_dev->w132=0;
-	spi_dev->w128=0;
-
-	if (likely(hcd_ctx->ub49!=1)) {
-//1808
-		printk("AR6k only support 16-bit spi transfer\n");
-		return SDIO_STATUS_INVALID_PARAMETER;
-	}
-//1850
-
-	if (((unsigned int)bufp)&1) {
-//1adc
-		printk("AR6k buffer address misaligned");
-		return SDIO_STATUS_INVALID_PARAMETER;
-	}
-//185c
-	if (len>4096) {
-//1b2c
-		panic("=========>transfer count too large!!!\n");
-	}
-
-//1864
-	if (unlikely(cnt==0)) {
-//1aac
-		return SDIO_STATUS_PENDING;
-	}
-//186c
-	if (unlikely(hcd_ctx->ub48==0)) {
-//19e0
-		if (spi_dev->TxDmaChannel>=0) {
-//19e8
-			memcpy(spi_dev->pDmaDescriptorBuffer, bufp, len);
-			dma_cache_wback_inv(spi_dev->pDmaDescriptorBuffer, hcd_ctx->w44);
-			disable_dma(spi_dev->TxDmaChannel);
-			jz_set_dma_src_width(spi_dev->TxDmaChannel,32);
-			jz_set_dma_dest_width(spi_dev->TxDmaChannel, 16);
-			jz_set_dma_block_size(spi_dev->TxDmaChannel, 16);
-			set_dma_mode(spi_dev->TxDmaChannel,1);
-			set_dma_addr(spi_dev->TxDmaChannel, spi_dev->DmaDescriptorPhys);
-			set_dma_count(spi_dev->TxDmaChannel, cnt+15);
-//1aa4
-			return SDIO_STATUS_PENDING;
-		}
-	} else {
-		int tc;
-//1878
-		if (spi_dev->RxDmaChannel<0) {
-//1aac
-			return SDIO_STATUS_PENDING;
-		}
-//1880
-		disable_dma(spi_dev->TxDmaChannel);
-		jz_set_dma_src_width(spi_dev->TxDmaChannel,32);
-		jz_set_dma_dest_width(spi_dev->TxDmaChannel,16);
-		jz_set_dma_block_size(spi_dev->TxDmaChannel, 16);
-		set_dma_mode(spi_dev->TxDmaChannel,1);
-		set_dma_addr(spi_dev->TxDmaChannel, 0x10003034);
-		set_dma_count(spi_dev->TxDmaChannel, cnt+15);
-
-//1914
-		tc=spi_dev->TxDmaChannel;
-		if (unlikely(spi_dev->TxDmaChannel<0)) {
-//1b24
-			tc=spi_dev->TxDmaChannel+3;
-		}
-//191c
-
-		REG_DMAC_DCMD(tc)&=(~DMAC_DCMD_SAI);
-		REG_RTC_HSPR=-1;
-		dma_cache_wback_inv(spi_dev->pDmaCommonBuffer, len);
-
-		disable_dma(spi_dev->RxDmaChannel);
-		jz_set_dma_src_width(spi_dev->RxDmaChannel,16);
-		jz_set_dma_dest_width(spi_dev->RxDmaChannel,32);
-		jz_set_dma_block_size(spi_dev->RxDmaChannel,16);
-		set_dma_mode(spi_dev->RxDmaChannel,0),
-		set_dma_addr(spi_dev->RxDmaChannel, spi_dev->DmaCommonBufferPhys);
-		set_dma_count(spi_dev->RxDmaChannel, cnt+15);
-	}
-	return SDIO_STATUS_PENDING;
-}
 static int QueueWork(struct spi_dev *dev, struct work_struct *w) {
 	int rc;
 	rc=schedule_work(w);
@@ -344,221 +256,6 @@ static int QueueWork(struct spi_dev *dev, struct work_struct *w) {
 		return 0;
 	}
 	return 3;
-}
-
-void HW_EnableDisableSPIIRQ(struct hcd_context *hcd_ctx, unsigned char spiirq_enable, unsigned char irqs_enabled) {
-	unsigned long int flags=0;
-	struct spi_dev *spi_dev=hcd_ctx->pDev;
-
-	if (!irqs_enabled) {
-		local_irq_save(flags);
-		preempt_disable();
-	}
-
-	if (spiirq_enable) {
-		if (!spi_dev->ub105) {
-			spi_dev->ub105=1;
-			enable_irq(194);
-		}
-	} else {
-		if (spi_dev->ub105) {
-			spi_dev->ub105=0;
-			disable_irq(194);
-		}
-	}
-
-	if (!irqs_enabled) {
-		local_irq_restore(flags);
-		preempt_enable();
-	}
-}
-
-
-static void hcd_procirq_wqueue_handler(struct work_struct *p) {
-	struct spi_dev *spi_dev=
-		container_of(p, struct spi_dev, procirq_work);
-	HcdSpiInterrupt(spi_dev->pHcd_ctx);
-}
-
-static void hcd_dmacomplete_wqueue_handler(struct work_struct *p) {
-	struct spi_dev *spi_dev=
-		container_of(p, struct spi_dev, dmacomplete_work);
-	HcdDmaCompletion(spi_dev->pHcd_ctx, spi_dev->w100);
-}
-
-
-static irqreturn_t hcd_spi_irq(int irq, void *vdev) {
-	struct spi_dev *spi_dev=(struct spi_dev *)vdev;
-
-	HW_EnableDisableSPIIRQ(spi_dev->pHcd_ctx,0,1);
-	QueueWork(spi_dev, &spi_dev->procirq_work);
-	return 1;
-}
-
-void HW_StartDMA(struct hcd_context *hcd_ctx) {
-//1160
-	struct spi_dev *spi_dev=hcd_ctx->pDev;
-//11a0
-	while (__ssi_is_busy(0)) {
-//11b8
-//11c0
-		udelay(100);
-//11d0
-	}
-
-//11d8
-	__ssi_flush_rxfifo(0);
-	__ssi_flush_txfifo(0);
-	__ssi_clear_errors(0);
-	__ssi_disable_tx_intr(0);
-	__ssi_disable_rx_intr(0);
-
-//1230
-	if (!hcd_ctx->ub48) {
-//1364
-		__ssi_disable_receive(0);
-//1378
-		if (spi_dev->TxDmaChannel>=0) {
-//1380
-			if (spi_dev->w120) {
-//1530
-				enable_dma(spi_dev->TxDmaChannel);
-				return;
-			}
-		}
-
-// 138c
-		while (hcd_ctx->w44>0) {
-//1390
-			while(__ssi_txfifo_full(0));
-			__ssi_transmit_data(0,*hcd_ctx->w40);
-			hcd_ctx->w44-=2;
-			hcd_ctx->w40++;
-		}
-// 1480
-		while(!__ssi_transfer_end(0));
-// 1494
-		while((REG_SSI_SR(0) & SSI_SR_TFIFONUM_MASK));
-
-// 14a8
-		__ssi_clear_underrun(0);
-// 14b8
-		if (__ssi_is_busy(0)) {
-//14d4
-			while(__ssi_is_busy(0)) {
-//14e0
-				udelay(10);
-//14f0
-			}
-// 14f8
-			spi_dev->w100=0;
-// 1524
-			QueueWork(spi_dev, &spi_dev->dmacomplete_work);
-			return;
-		}
-
-	} else {
-		int stackData;
-//1234
-		__ssi_enable_receive(0);
-//1248
-		if (spi_dev->RxDmaChannel>=0) {
-//1250
-			if (spi_dev->w120) {
-//155c
-				enable_dma(spi_dev->RxDmaChannel);
-				enable_dma(spi_dev->TxDmaChannel);
-				return;
-			}
-		}
-//125c
-		stackData=0;
-//1260
-		while (hcd_ctx->w44) {
-//1278
-//1280
-			if (stackData<16) {
-//1288
-				while(__ssi_txfifo_full(0));
-//129c
-				__ssi_transmit_data(0,-1);
-				hcd_ctx->w44-=2;
-				stackData++;
-			}
-//12b0
-//12b8
-			if ((REG_SSI_SR(0) & SSI_SR_RFIFONUM_MASK)) {
-//12c0
-				*hcd_ctx->w40=__ssi_receive_data(0);
-				hcd_ctx->w40++;
-				stackData--;
-//12d4
-			}
-//12d8
-		}
-//12e0
-		while (stackData>0) {
-//12ec
-			int count=29999;
-			while(!(REG_SSI_SR(0) & SSI_SR_RFIFONUM_MASK)) {
-//1304
-//1310
-				count--;
-//1318
-				if (count==0) {
-//1320
-					printk("Colman: Wait for SSI RX FIF0 Timeout!\n");
-				}
-			}
-//133c
-			hcd_ctx->w40=__ssi_receive_data(0);
-			stackData--;
-		}
-
-//13c8
-		while(!__ssi_transfer_end(0));
-//13e4
-		while(REG_SSI_SR(0) & SSI_SR_TFIFONUM_MASK);
-		__ssi_clear_underrun(0);
-		while(__ssi_is_busy(0)) {
-			udelay(10);
-		}
-	}
-
-//1440
-	spi_dev->w100=0;
-	QueueWork(spi_dev, &spi_dev->dmacomplete_work);
-	return;
-}
-
-
-void HW_UsecDelay(void *a0, unsigned int usec) {
-	udelay(usec);
-}
-
-
-
-void HW_StopTimer(struct hcd_context *hcd_ctx) {
-	struct spi_dev *spi_dev=hcd_ctx->pDev;
-	unsigned long int flags;
-
-	local_irq_save(flags);
-	preempt_disable();
-
-	if (spi_dev->ub24) {
-		spi_dev->ub25=1;
-		spi_dev->ub24=0;
-
-		local_irq_restore(flags);
-		preempt_enable();
-
-		del_timer(&spi_dev->spi_timer);
-
-		return;
-	}
-	local_irq_restore(flags);
-	preempt_enable();
-
 }
 
 void set_spi_clock(unsigned int *arg) {
@@ -601,6 +298,310 @@ void set_spi_clock(unsigned int *arg) {
 	return;
 }
 
+int get_dma_count(int dmanr) {
+
+	int d=dmanr>>4;
+	if (dmanr<33) {
+		return 0;
+	} else {
+		return d<<4;
+	}
+}
+
+static inline void program_dma(unsigned int dma_ch, unsigned int pbuf, int cnt) {
+	disable_dma(dma_ch);
+	jz_set_dma_src_width(dma_ch,32);
+	jz_set_dma_dest_width(dma_ch, 16);
+	jz_set_dma_block_size(dma_ch, 16);
+	set_dma_mode(dma_ch,1);
+	set_dma_addr(dma_ch, pbuf);
+	set_dma_count(dma_ch, cnt+15);
+}
+
+SDIO_STATUS HW_SpiSetUpDMA(struct hcd_context *h_ctx) {
+	struct spi_dev *spi_dev=h_ctx->pDev;
+	unsigned short int *bufp=h_ctx->w40;
+	unsigned int len=h_ctx->w44;
+	unsigned int cnt=get_dma_count(len);
+
+	spi_dev->w124=len-cnt;
+	spi_dev->w120=cnt;
+	spi_dev->w132=0;
+	spi_dev->w128=0;
+
+	if (h_ctx->ub49!=1) {
+//1808
+		printk("AR6k only support 16-bit spi transfer\n");
+		return SDIO_STATUS_INVALID_PARAMETER;
+	}
+//1850
+
+	if (((unsigned int)bufp)&1) {
+//1adc
+		printk("AR6k buffer address misaligned");
+		return SDIO_STATUS_INVALID_PARAMETER;
+	}
+//185c
+	if (len>4096) {
+//1b2c
+		panic("=========>transfer count too large!!!\n");
+	}
+
+//1864
+	if (cnt==0) {
+//1aac
+		return SDIO_STATUS_PENDING;
+	}
+//186c
+	if (h_ctx->ub48) {
+		int txch,rxch;
+		unsigned int physbuf;
+//1878
+		if (spi_dev->RxDmaChannel<0) {
+//1aac
+			return SDIO_STATUS_PENDING;
+		}
+//1880
+
+		txch=spi_dev->TxDmaChannel;
+		program_dma(txch, 0x10003034, cnt);
+#if 0
+		txch=spi_dev->TxDmaChannel;
+		disable_dma(txch);
+		jz_set_dma_src_width(txch,32);
+		jz_set_dma_dest_width(txch,16);
+		jz_set_dma_block_size(txch, 16);
+		set_dma_mode(txch,1);
+		set_dma_addr(txch, 0x10003034);
+		set_dma_count(txch, cnt+15);
+#endif
+
+//1914
+//1b24
+//191c
+		REG_DMAC_DCMD(txch)&=(~DMAC_DCMD_SAI);
+		REG_RTC_HSPR=-1;
+		dma_cache_wback_inv((int)spi_dev->pDmaCommonBuffer, len);
+
+		rxch=spi_dev->RxDmaChannel;
+		physbuf=spi_dev->DmaCommonBufferPhys;
+		disable_dma(rxch);
+		jz_set_dma_src_width(rxch,16);
+		jz_set_dma_dest_width(rxch,32);
+		jz_set_dma_block_size(rxch,16);
+		set_dma_mode(rxch,0),
+		set_dma_addr(rxch, physbuf);
+		set_dma_count(rxch, cnt+15);
+	} else {
+//		int txch;
+//		int physbuf;
+//19e0
+		if (spi_dev->TxDmaChannel>=0) {
+//19e8
+			memcpy(spi_dev->pDmaDescriptorBuffer, bufp, len);
+			dma_cache_wback_inv((int)spi_dev->pDmaDescriptorBuffer, len);
+//			txch=spi_dev->TxDmaChannel;
+//			physbuf=spi_dev->DmaDescriptorPhys;
+			program_dma(spi_dev->TxDmaChannel,spi_dev->DmaDescriptorPhys,cnt);
+#if 0
+			disable_dma(txch);
+			jz_set_dma_src_width(txch,32);
+			jz_set_dma_dest_width(txch, 16);
+			jz_set_dma_block_size(txch, 16);
+			set_dma_mode(txch,1);
+			set_dma_addr(txch, physbuf);
+			set_dma_count(txch, cnt+15);
+#endif
+//1aa4
+			return SDIO_STATUS_PENDING;
+		}
+	}
+	return SDIO_STATUS_PENDING;
+}
+int HW_QueueDeferredCompletion(struct hcd_context *hc) {
+	struct spi_dev *spi_dev=hc->pDev;
+
+	QueueWork(spi_dev,&spi_dev->iocomplete_work);
+	return 0;
+}
+
+void HW_EnableDisableSPIIRQ(struct hcd_context *hcd_ctx, unsigned char spiirq_enable, unsigned char irqs_enabled) {
+	unsigned long int flags=0;
+	struct spi_dev *spi_dev=hcd_ctx->pDev;
+
+	if (!irqs_enabled) {
+		local_irq_save(flags);
+		preempt_disable();
+	}
+
+	if (spiirq_enable) {
+		if (!spi_dev->ub105) {
+			spi_dev->ub105=1;
+			enable_irq(194);
+		}
+	} else {
+		if (spi_dev->ub105) {
+			spi_dev->ub105=0;
+			disable_irq(194);
+		}
+	}
+
+	if (!irqs_enabled) {
+		local_irq_restore(flags);
+		preempt_enable();
+	}
+}
+
+void HW_StartDMA(struct hcd_context *hcd_ctx) {
+//1160
+//	volatile int stackData;
+	struct spi_dev *spi_dev=hcd_ctx->pDev;
+	unsigned short int *w40=hcd_ctx->w40;
+	int w44=hcd_ctx->w44;
+
+//11a0
+	while (__ssi_is_busy(0)) {
+//11b8
+//11c0
+		udelay(10);
+//11d0
+	}
+
+//11d8
+	__ssi_flush_rxfifo(0);
+	__ssi_flush_txfifo(0);
+	__ssi_clear_errors(0);
+	__ssi_disable_tx_intr(0);
+	__ssi_disable_rx_intr(0);
+
+//1230
+	REG_SSI_CR0(0);
+	if (hcd_ctx->ub48) {
+		volatile int stackData;
+//1234
+//		REG_SSI_CR0(0);
+		__ssi_enable_receive(0);
+//1248
+		if (spi_dev->RxDmaChannel>=0) {
+//1250
+			if (spi_dev->w120) {
+//155c
+				enable_dma(spi_dev->RxDmaChannel);
+				enable_dma(spi_dev->TxDmaChannel);
+				return;
+			}
+		}
+//125c
+		stackData=0;
+//1260
+		while (w44>0) {
+//1278
+//1280
+			if (stackData<16) {
+//1288
+				while(REG_SSI_SR(0)&SSI_SR_TFF);
+//129c
+				REG_SSI_DR(0)=0xffff;
+				w44-=2;
+				stackData++;
+			}
+//12b0
+//12b8
+			if ((REG_SSI_SR(0) & SSI_SR_RFIFONUM_MASK)) {
+//12c0
+				*w40=REG_SSI_DR(0);
+				w40++;
+				stackData--;
+//12d4
+			}
+//12d8
+		}
+//12e0
+		while (stackData>0) {
+//1300
+			int count=30000;
+//1304
+//1310
+			do {
+				count--;
+//1314
+//1318
+				if (!count)  {
+					printk("Colman: Wait for SSI RX FIF0 Timeout!\n");
+				}
+			} while (!(REG_SSI_SR(0) & SSI_SR_RFIFONUM_MASK));
+
+//133c
+			*w40=REG_SSI_DR(0);
+			w40++;
+			stackData--;
+
+//1360
+		}
+//13c8
+		while(!__ssi_transfer_end(0));
+//13e4
+		while(REG_SSI_SR(0) & SSI_SR_TFIFONUM_MASK);
+//13f8
+		__ssi_clear_underrun(0);
+		while(__ssi_is_busy(0)) {
+			udelay(10);
+		}
+	} else {
+//		REG_SSI_CR0(0) |= SSI_CR0_DISREV;
+//1364
+		__ssi_disable_receive(0);
+//1378
+		if (spi_dev->TxDmaChannel>=0) {
+//1380
+			if (spi_dev->w120) {
+//1530
+				enable_dma(spi_dev->TxDmaChannel);
+				return;
+			}
+		}
+
+// 138c
+		while (w44>0) {
+//1390
+			while(__ssi_txfifo_full(0));
+//13b0
+			w44-=2;
+//13b4
+			REG_SSI_DR(0)=*w40;
+//13bc
+			w40++;
+		}
+// 1480
+		while(!__ssi_transfer_end(0));
+// 1494
+		while((REG_SSI_SR(0) & SSI_SR_TFIFONUM_MASK));
+
+// 14a8
+		__ssi_clear_underrun(0);
+// 14b8
+		if (__ssi_is_busy(0)) {
+//14d4
+			do {
+//14e0
+				udelay(10);
+//14f0
+			} while(__ssi_is_busy(0));
+
+// 14f8
+			spi_dev->w100=0;
+// 1524
+			QueueWork(spi_dev, &spi_dev->dmacomplete_work);
+			return;
+		}
+	}
+
+//1440
+	spi_dev->w100=0;
+	QueueWork(spi_dev, &spi_dev->dmacomplete_work);
+	return;
+}
+
 
 void HW_PowerUpDown(void) {
 	printk("Enter %s,  to be done\n", __FUNCTION__);
@@ -614,6 +615,60 @@ void HW_StopDMATransfer(struct hcd_context *hcd_ctx) {
 
 	disable_dma(spi_dev->TxDmaChannel);
 	disable_dma(spi_dev->RxDmaChannel);
+}
+
+void HW_ToggleDebugSignal(void) {
+	printk("Enter %s, to be done\n", __FUNCTION__);
+}
+
+void HW_SetDebugSignal(void) {
+	printk("Enter %s, to be done\n", __FUNCTION__);
+}
+
+SDIO_STATUS HW_InOut_Token(struct hcd_context *hcd_ctx,
+		unsigned int out_token,
+		unsigned char datasize,
+		unsigned int *in_token,
+		BOOL stat_check) {
+
+	unsigned short int itok;
+	if (datasize!=ATH_TRANS_DS_16) {
+		printk("AR6k only support 16-bit spi transfer\n");
+		return SDIO_STATUS_INVALID_PARAMETER;
+	}
+
+	while(__ssi_is_busy(0)) {
+		udelay(10);
+	}
+	__ssi_flush_rxfifo(0);
+	__ssi_flush_txfifo(0);
+	__ssi_clear_errors(0);
+	__ssi_disable_tx_intr(0);
+	__ssi_disable_rx_intr(0);
+	REG_SSI_CR0(0);
+	__ssi_enable_receive(0);
+	while(__ssi_txfifo_full(0));
+	__ssi_transmit_data(0,out_token);
+	while(!__ssi_transfer_end(0));
+	while(!__ssi_get_rxfifo_count(0));
+	itok=__ssi_receive_data(0);
+	__ssi_clear_underrun(0);
+	while(__ssi_is_busy(0)) {
+		udelay(10);
+	}
+
+	if (in_token) {
+		*in_token=itok;
+	}
+
+	if (debuglevel>=8) {
+		printk("Colman: %s: OutToken=%X InToken=%X", __FUNCTION__, out_token, itok);
+	}
+
+	return SDIO_STATUS_SUCCESS;
+}
+void HW_UsecDelay(void *a0, unsigned int usec) {
+	udelay(usec);
 }
 
 
@@ -632,6 +687,141 @@ void HW_StartTimer(struct hcd_context *hcd_ctx, int ms, int w28) {
 	spi_dev->ub25=0;
 	add_timer(&spi_dev->spi_timer);
 }
+void HW_SetClock(struct hcd_context *hc, unsigned int *op_clock_ptr ) {
+	struct spi_dev *spi_dev=hc->pDev;
+	unsigned int op_clock_in=*op_clock_ptr;
+	unsigned int op_clock_out;
+
+	set_spi_clock(op_clock_ptr);
+	op_clock_out=*op_clock_ptr;
+	spi_dev->op_clock_current=op_clock_out;
+	printk("AR6k spi clk request = %d Hz, actual = %d Hz\n",
+			op_clock_in, op_clock_out);
+}
+
+static void hcd_iocomplete_wqueue_handler(struct work_struct *ioc_data) {
+	struct spi_dev *sdev =
+		container_of(ioc_data, struct spi_dev, iocomplete_work);
+	struct hcd_context *pHcdc=sdev->pHcd_ctx;
+	PSDHCD pHcd=&pHcdc->pHcd;
+	SDIO_HandleHcdEvent(pHcd, EVENT_HCD_TRANSFER_DONE);
+}
+
+static void hcd_procirq_wqueue_handler(struct work_struct *p) {
+	struct spi_dev *spi_dev=
+		container_of(p, struct spi_dev, procirq_work);
+	HcdSpiInterrupt(spi_dev->pHcd_ctx);
+}
+
+static void hcd_dmacomplete_wqueue_handler(struct work_struct *p) {
+	struct spi_dev *spi_dev=
+		container_of(p, struct spi_dev, dmacomplete_work);
+	HcdDmaCompletion(spi_dev->pHcd_ctx, spi_dev->w100);
+}
+
+static void hcd_ssicomplete_wqueue_handler(struct work_struct *p) {
+	struct spi_dev *spi_dev=
+		container_of(p, struct spi_dev, ssicomplete_work);
+	struct hcd_context *hcd_ctx=spi_dev->pHcd_ctx;
+//9fc
+	if (spi_dev->w124) {
+		if (hcd_ctx->ub48) {
+// b1c
+			short int *p=(short int *)
+				(spi_dev->pDmaCommonBuffer+
+				spi_dev->w120);
+			int cnt=0;
+			while (spi_dev->w124>0) {
+// b40
+				while(__ssi_txfifo_full(0));
+// b50
+				__ssi_transmit_data(0,0xffff);
+// b5c
+				cnt++;
+				if (REG_SSI_SR(0) & SSI_SR_RFIFONUM_MASK) {
+					*p=__ssi_receive_data(0);
+					cnt--;
+					p++;
+				}
+// b74 b78 b80
+				spi_dev->w124-=2;
+// b7c
+			}
+//b84
+			while(cnt>0) {
+//b94-ba0
+				while(!(REG_SSI_SR(0) & SSI_SR_RFIFONUM_MASK));
+//ba4 bac
+				*p=__ssi_receive_data(0);
+//ba8
+				cnt--;
+				p++;
+			}
+//			if (!__ssi_transfer_end(0)) {
+//					break;
+//			}
+		} else {
+			unsigned char *ddbufp=spi_dev->pDmaDescriptorBuffer;
+			unsigned short int *p=(unsigned short int *)
+						(ddbufp+spi_dev->w120);
+			while (spi_dev->w124>0) {
+				while(__ssi_txfifo_full(0));
+
+				__ssi_transmit_data(0,*p);
+				p++;
+				spi_dev->w124-=2;
+//				if (!spi_dev->w124) {
+//					break;
+//				}
+			}
+		}
+
+	}
+// a58-a6c
+	while(!__ssi_transfer_end(0));
+// a74-a84
+	while(REG_SSI_SR(0) & SSI_SR_TFIFONUM_MASK);
+// a88-a8c
+	__ssi_clear_underrun(0);
+
+// a90-ad4
+	while(__ssi_is_busy(0)) {
+		udelay(10);
+	}
+// ad8-af4
+	if (hcd_ctx->ub48) {
+		memcpy(hcd_ctx->w40, spi_dev->pDmaCommonBuffer,hcd_ctx->w44);
+	}
+// af8-b18
+
+	spi_dev->w100=0;
+	HcdDmaCompletion(spi_dev->pHcd_ctx, 0);
+	return;
+
+// b1c
+//b1c:;
+}
+void enable_spi_interface(void) {
+	__gpio_as_spi();
+}
+
+void enable_spi_controller(void) {
+	unsigned int clk=0xb71b00;
+
+	REG_SSI_CR0(0)=0x46;
+	REG_SSI_CR1(0)=0xc01e3;
+	REG_SSI_ITR(0)=1;
+	REG_SSI_ICR(0)=0;
+
+	set_spi_clock(&clk);
+
+	REG_SSI_CR0(0)=0x80|REG_SSI_CR0(0);
+	REG_SSI_CR0(0)=0x8000|REG_SSI_CR0(0);
+
+	return;
+}
+
+
 static void TimerTimeout(unsigned long arg) {
 	struct spi_dev *spi_dev=(struct spi_dev *)arg;
 
@@ -641,13 +831,6 @@ static void TimerTimeout(unsigned long arg) {
 		return;
 	}
 	return;
-}
-
-int HW_QueueDeferredCompletion(struct hcd_context *hc) {
-	struct spi_dev *spi_dev=hc->pDev;
-
-	QueueWork(spi_dev,&spi_dev->iocomplete_work);
-	return 0;
 }
 
 static irqreturn_t spi_dma_irq(int irq, void *dev_id) {
@@ -698,199 +881,13 @@ static irqreturn_t spi_dma_irq(int irq, void *dev_id) {
 
 	return 1;
 }
-static void hcd_iocomplete_wqueue_handler(struct work_struct *ioc_data) {
-	struct spi_dev *sdev =
-		container_of(ioc_data, struct spi_dev, iocomplete_work);
-	struct hcd_context *pHcdc=sdev->pHcd_ctx;
-	PSDHCD pHcd=&pHcdc->pHcd;
-	SDIO_HandleHcdEvent(pHcd, EVENT_HCD_TRANSFER_DONE);
-}
 
+static irqreturn_t hcd_spi_irq(int irq, void *vdev) {
+	struct spi_dev *spi_dev=(struct spi_dev *)vdev;
 
-int stack_force_interrupt(void) {
-	int rc;
-	g_isforce=1;
-
-	ar6k_spi.pHcd.IrqProcState=0;
-	rc=SDIO_HandleHcdEvent(&ar6k_spi.pHcd, EVENT_HCD_SDIO_IRQ_PENDING);
-	return rc;
-}
-
-void HW_ToggleDebugSignal(void) {
-	printk("Enter %s, to be done\n", __func__);
-}
-
-void HW_SetDebugSignal(void) {
-	printk("Enter %s, to be done\n", __func__);
-}
-
-SDIO_STATUS HW_InOut_Token(struct hcd_context *hcd_ctx,
-		unsigned int out_token,
-		unsigned char datasize,
-		unsigned int *in_token,
-		BOOL stat_check) {
-
-	unsigned short int itok;
-	if (datasize!=ATH_TRANS_DS_16) {
-		printk("AR6k only support 16-bit spi transfer\n");
-		return SDIO_STATUS_INVALID_PARAMETER;
-	}
-
-	while(__ssi_is_busy(0)) {
-		udelay(100);
-	}
-	__ssi_flush_rxfifo(0);
-	__ssi_flush_txfifo(0);
-	__ssi_clear_errors(0);
-	__ssi_disable_tx_intr(0);
-	__ssi_disable_rx_intr(0);
-	__ssi_enable_receive(0);
-	while(__ssi_txfifo_full(0));
-	__ssi_transmit_data(0,out_token);
-	while(!__ssi_transfer_end(0));
-	while(!__ssi_get_rxfifo_count(0));
-	itok=__ssi_receive_data(0);
-	__ssi_clear_underrun(0);
-	while(__ssi_is_busy(0)) {
-		udelay(100);
-	}
-
-	if (in_token) {
-		*in_token=itok;
-	}
-
-	if (debuglevel>=8) {
-		printk("Colman: %s: OutToken=%X InToken=%X", __FUNCTION__, out_token, itok);
-	}
-
-	return SDIO_STATUS_SUCCESS;
-}
-
-
-static void hcd_ssicomplete_wqueue_handler(struct work_struct *p) {
-	struct spi_dev *spi_dev=
-		container_of(p, struct spi_dev, ssicomplete_work);
-	struct hcd_context *hcd_ctx=spi_dev->pHcd_ctx;
-//9fc
-	if (spi_dev->w124) {
-		if (hcd_ctx->ub48) {
-// b1c
-			short int *p=(short int *)
-				(spi_dev->pDmaCommonBuffer+
-				spi_dev->w120);
-			int cnt=0;
-			while (spi_dev->w124>0) {
-// b40
-				while(__ssi_txfifo_full(0));
-// b50
-				__ssi_transmit_data(0,0xffff);
-// b5c
-				cnt++;
-				if (REG_SSI_SR(0) & SSI_SR_RFIFONUM_MASK) {
-					*p=__ssi_receive_data(0);
-					cnt--;
-					p++;
-				}
-// b74 b78 b80
-				spi_dev->w124-=2;
-// b7c
-			}
-//b84
-			while(cnt>0) {
-//b94-ba0
-				while(!(REG_SSI_SR(0) & SSI_SR_RFIFONUM_MASK));
-//ba4 bac
-				*p=__ssi_receive_data(0);
-//ba8
-				cnt--;
-				p++;
-			}
-//			if (!__ssi_transfer_end(0)) {
-//					break;
-//			}
-		} else {
-			unsigned char *ddbufp=spi_dev->pDmaDescriptorBuffer;
-			unsigned short int *p=ddbufp+spi_dev->w120;
-			while (spi_dev->w124>0) {
-				while(__ssi_txfifo_full(0));
-
-				__ssi_transmit_data(0,*p);
-				p++;
-				spi_dev->w124-=2;
-//				if (!spi_dev->w124) {
-//					break;
-//				}
-			}
-		}
-
-	}
-// a58-a6c
-	while(!__ssi_transfer_end(0));
-// a74-a84
-	while(REG_SSI_SR(0) & SSI_SR_TFIFONUM_MASK);
-// a88-a8c
-	__ssi_clear_underrun(0);
-
-// a90-ad4
-	while(__ssi_is_busy(0)) {
-		udelay(10);
-	}
-// ad8-af4
-	if (hcd_ctx->ub48) {
-		memcpy(hcd_ctx->w40, spi_dev->pDmaCommonBuffer,hcd_ctx->w44);
-	}
-// af8-b18
-
-	spi_dev->w100=0;
-	HcdDmaCompletion(spi_dev->pHcd_ctx, 0);
-	return;
-
-// b1c
-//b1c:;
-}
-
-
-void HW_SetClock(struct hcd_context *hc, unsigned int *op_clock_ptr ) {
-	struct spi_dev *spi_dev=hc->pDev;
-	unsigned int op_clock_in=*op_clock_ptr;
-	unsigned int op_clock_out;
-
-	set_spi_clock(op_clock_ptr);
-	op_clock_out=*op_clock_ptr;
-	spi_dev->op_clock_current=op_clock_out;
-	printk("AR6k spi clk request = %d Hz, actual = %d Hz\n",
-			op_clock_in, op_clock_out);
-}
-
-
-int get_dma_count(int dmanr) {
-
-	int d=dmanr>>4;
-	if (dmanr<33) {
-		return 0;
-	} else {
-		return d<<4;
-	}
-}
-
-void enable_spi_interface(void) {
-	__gpio_as_spi();
-}
-
-void enable_spi_controller(void) {
-	unsigned int clk=0xb71b00;
-
-	REG_SSI_CR0(0)=0x46;
-	REG_SSI_CR1(0)=0xc01e3;
-	REG_SSI_ITR(0)=1;
-	REG_SSI_ICR(0)=0;
-
-	set_spi_clock(&clk);
-
-	REG_SSI_CR0(0)=0x80|REG_SSI_CR0(0);
-	REG_SSI_CR0(0)=0x8000|REG_SSI_CR0(0);
-
-	return;
+	HW_EnableDisableSPIIRQ(spi_dev->pHcd_ctx,0,1);
+	QueueWork(spi_dev, &spi_dev->procirq_work);
+	return 1;
 }
 
 void module_power_on(void) {
@@ -911,6 +908,16 @@ void module_power_off(void) {
 	REG_GPIO_PXDIRS(3) = 0x400000;
 	REG_GPIO_PXDATS(3) = 0x400000;
 	return;
+}
+
+
+int stack_force_interrupt(void) {
+	int rc;
+	g_isforce=1;
+
+	ar6k_spi.pHcd.IrqProcState=0;
+	rc=SDIO_HandleHcdEvent(&ar6k_spi.pHcd, EVENT_HCD_SDIO_IRQ_PENDING);
+	return rc;
 }
 
 int stack_force_interrupt_clear(void) {
@@ -944,24 +951,6 @@ void deinit_hardware(struct spi_dev *spi_dev) {
 }
 
 
-void remove_driver(void) {
-	struct spi_dev *spi_dev=&dev_spi;
-
-	if (spi_dev->ub104&0x20) {
-		SDIO_HandleHcdEvent(&ar6k_spi.pHcd, EVENT_HCD_DETACH);
-		flush_scheduled_work();
-		SDIO_UnregisterHostController(&ar6k_spi.pHcd);
-	}
-
-	if (spi_dev->ub104&0x40) {
-		HcdDeinitialize(&ar6k_spi);
-	}
-
-	deinit_hardware(ar6k_spi.pDev);
-	module_power_off();
-}
-
-
 int init_hardware(struct spi_dev *spi_dev) {
 	int rc;
 
@@ -984,8 +973,6 @@ int init_hardware(struct spi_dev *spi_dev) {
 	INIT_WORK(&(spi_dev->procirq_work), hcd_procirq_wqueue_handler);
 	INIT_WORK(&(spi_dev->dmacomplete_work), hcd_dmacomplete_wqueue_handler);
 	INIT_WORK(&(spi_dev->ssicomplete_work), hcd_ssicomplete_wqueue_handler);
-
-//	setup_timer(&spi_dev->spi_timer, TimerTimeout, (unsigned long)spi_dev);
 
 	init_timer(&spi_dev->spi_timer);
 
@@ -1019,21 +1006,22 @@ int init_hardware(struct spi_dev *spi_dev) {
 
 	if (dma_mode!=0) {
 		void *vaddr;
-		vaddr=__get_free_pages(GFP_KERNEL,0);
+
+		vaddr=(void *)__get_free_pages(GFP_KERNEL,0);
+		spi_dev->pDmaDescriptorBuffer=vaddr;
 		spi_dev->DmaDescriptorPhys=
 			virt_to_phys(vaddr);
-		spi_dev->pDmaDescriptorBuffer=vaddr;
 
-		vaddr=__get_free_pages(GFP_KERNEL,0);
+		vaddr=(void *)__get_free_pages(GFP_KERNEL,0);
+		spi_dev->pDmaCommonBuffer=vaddr;
 		spi_dev->DmaCommonBufferPhys=
 			virt_to_phys(vaddr);
-		spi_dev->pDmaCommonBuffer=vaddr;
 
 		spi_dev->TxDmaChannel=
-		   jz_request_dma(DMA_ID_SSI0_TX, "Ar6k SPI DMA TX", spi_dma_irq, 0, spi_dev);
+			jz_request_dma(DMA_ID_SSI0_TX, "Ar6k SPI DMA TX", spi_dma_irq, 0, spi_dev);
 
 		spi_dev->RxDmaChannel=
-		   jz_request_dma(DMA_ID_SSI0_RX, "Ar6k SPI DMA RX", spi_dma_irq, 0, spi_dev);
+			jz_request_dma(DMA_ID_SSI0_RX, "Ar6k SPI DMA RX", spi_dma_irq, 0, spi_dev);
 
 		printk("Ar6k SPI use TX/RX DMA channel: %d/%d\n",
 			spi_dev->TxDmaChannel, spi_dev->RxDmaChannel);
@@ -1047,18 +1035,29 @@ int init_hardware(struct spi_dev *spi_dev) {
 	spi_dev->RxDmaChannel=-1;
 	return 0;
 }
-/*
- * module cleanup
- */
-static void __exit spi_jz4750_cleanup(void) {
-	printk("Unload athspi_jz4755_hcd\n");
-	remove_driver();
+
+void remove_driver(void) {
+	struct spi_dev *spi_dev=&dev_spi;
+
+	if (spi_dev->ub104&0x20) {
+		SDIO_HandleHcdEvent(&ar6k_spi.pHcd, EVENT_HCD_DETACH);
+		flush_scheduled_work();
+		SDIO_UnregisterHostController(&ar6k_spi.pHcd);
+	}
+
+	if (spi_dev->ub104&0x40) {
+		HcdDeinitialize(&ar6k_spi);
+	}
+
+	deinit_hardware(ar6k_spi.pDev);
+	module_power_off();
 }
+
 
 /*
  * module init
  */
-static int __init spi_jz4750_init(void) {
+int __init spi_jz4750_init(void) {
 	char *dmode;
 	SDIO_STATUS rc;
 	if (dma_mode==0) {
@@ -1095,12 +1094,51 @@ static int __init spi_jz4750_init(void) {
 	return SDIOErrorToOSError(rc);
 }
 
-MODULE_LICENSE("GPL");
-MODULE_DESCRIPTION(DESCRIPTION);
-MODULE_AUTHOR(AUTHOR);
+/*
+ * module cleanup
+ */
+void __exit spi_jz4750_cleanup(void) {
+	printk("Unload athspi_jz4755_hcd\n");
+	remove_driver();
+}
 
-module_init(spi_jz4750_init);
+
+void HW_StopTimer(struct hcd_context *hcd_ctx) {
+	struct spi_dev *spi_dev=hcd_ctx->pDev;
+	unsigned long int flags;
+
+	local_irq_save(flags);
+	preempt_disable();
+
+	if (spi_dev->ub24) {
+		spi_dev->ub25=1;
+		spi_dev->ub24=0;
+
+		local_irq_restore(flags);
+		preempt_enable();
+
+		del_timer(&spi_dev->spi_timer);
+
+		return;
+	}
+	local_irq_restore(flags);
+	preempt_enable();
+}
+
+
 module_exit(spi_jz4750_cleanup);
+module_init(spi_jz4750_init);
+
+EXPORT_SYMBOL(stack_force_interrupt);
+EXPORT_SYMBOL(stack_force_interrupt_get);
+EXPORT_SYMBOL(stack_force_interrupt_clear);
+
+MODULE_AUTHOR(AUTHOR);
+MODULE_DESCRIPTION(DESCRIPTION);
+MODULE_LICENSE("GPL");
+MODULE_VERSION(VERSION);
+
+
 #if 0
 SDIO_STATUS HcdRequest(PSDHCD pHcd) {
 }

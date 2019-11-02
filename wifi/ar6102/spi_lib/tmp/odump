@@ -1,0 +1,932 @@
+
+sdio_lib.ko:     file format elf32-tradlittlemips
+
+Disassembly of section .text:
+
+00000000 <_SDLIB_IssueConfig>:
+_SDLIB_IssueConfig():
+   0:	27bdffd8 	addiu	sp,sp,-40
+   4:	afbf0020 	sw	ra,32(sp)
+   8:	a7a50010 	sh	a1,16(sp)
+   c:	afa60014 	sw	a2,20(sp)
+  10:	afa70018 	sw	a3,24(sp)
+  14:	8c820014 	lw	v0,20(a0)
+  18:	0040f809 	jalr	v0
+  1c:	27a50010 	addiu	a1,sp,16
+  20:	8fbf0020 	lw	ra,32(sp)
+  24:	03e00008 	jr	ra
+  28:	27bd0028 	addiu	sp,sp,40
+
+0000002c <_DeleteMessageQueue>:
+_DeleteMessageQueue():
+  2c:	27bdffd8 	addiu	sp,sp,-40
+  30:	afb10014 	sw	s1,20(sp)
+  34:	afbf0020 	sw	ra,32(sp)
+  38:	afb3001c 	sw	s3,28(sp)
+  3c:	afb20018 	sw	s2,24(sp)
+  40:	afb00010 	sw	s0,16(sp)
+  44:	00808821 	move	s1,a0
+  48:	40136000 	mfc0	s3,c0_status
+  4c:	3661001f 	ori	at,s3,0x1f
+  50:	3821001f 	xori	at,at,0x1f
+  54:	40816000 	mtc0	at,c0_status
+  58:	00000040 	ssnop
+  5c:	00000040 	ssnop
+  60:	00000040 	ssnop
+  64:	000000c0 	sll	zero,zero,0x3
+  68:	8f820014 	lw	v0,20(gp)
+  6c:	24420001 	addiu	v0,v0,1
+  70:	af820014 	sw	v0,20(gp)
+  74:	24900008 	addiu	s0,a0,8
+  78:	8e050004 	lw	a1,4(s0)
+  7c:	12050045 	beq	s0,a1,194 <_DeleteMessageQueue+0x168>
+  80:	00000000 	nop
+  84:	8ca20004 	lw	v0,4(a1)
+  88:	8ca30000 	lw	v1,0(a1)
+  8c:	00a03021 	move	a2,a1
+  90:	ac430000 	sw	v1,0(v0)
+  94:	8ca40000 	lw	a0,0(a1)
+  98:	3c120000 	lui	s2,0x0
+			98: R_MIPS_HI16	kfree
+  9c:	ac820004 	sw	v0,4(a0)
+  a0:	aca50000 	sw	a1,0(a1)
+  a4:	08000032 	j	c8 <_DeleteMessageQueue+0x9c>
+			a4: R_MIPS_26	.text
+  a8:	aca50004 	sw	a1,4(a1)
+  ac:	8ca20004 	lw	v0,4(a1)
+  b0:	8ca30000 	lw	v1,0(a1)
+  b4:	ac430000 	sw	v1,0(v0)
+  b8:	8ca40000 	lw	a0,0(a1)
+  bc:	aca50000 	sw	a1,0(a1)
+  c0:	ac820004 	sw	v0,4(a0)
+  c4:	aca50004 	sw	a1,4(a1)
+  c8:	26420000 	addiu	v0,s2,0
+			c8: R_MIPS_LO16	kfree
+  cc:	0040f809 	jalr	v0
+  d0:	00c02021 	move	a0,a2
+  d4:	8e050004 	lw	a1,4(s0)
+  d8:	1605fff4 	bne	s0,a1,ac <_DeleteMessageQueue+0x80>
+  dc:	00a03021 	move	a2,a1
+  e0:	8e250004 	lw	a1,4(s1)
+  e4:	12250011 	beq	s1,a1,12c <_DeleteMessageQueue+0x100>
+  e8:	00a03021 	move	a2,a1
+  ec:	8ca20004 	lw	v0,4(a1)
+  f0:	08000040 	j	100 <_DeleteMessageQueue+0xd4>
+			f0: R_MIPS_26	.text
+  f4:	8ca30000 	lw	v1,0(a1)
+  f8:	8ca20004 	lw	v0,4(a1)
+  fc:	8ca30000 	lw	v1,0(a1)
+ 100:	ac430000 	sw	v1,0(v0)
+ 104:	8ca40000 	lw	a0,0(a1)
+ 108:	aca50000 	sw	a1,0(a1)
+ 10c:	ac820004 	sw	v0,4(a0)
+ 110:	aca50004 	sw	a1,4(a1)
+ 114:	26420000 	addiu	v0,s2,0
+			114: R_MIPS_LO16	kfree
+ 118:	0040f809 	jalr	v0
+ 11c:	00c02021 	move	a0,a2
+ 120:	8e250004 	lw	a1,4(s1)
+ 124:	1625fff4 	bne	s1,a1,f8 <_DeleteMessageQueue+0xcc>
+ 128:	00a03021 	move	a2,a1
+ 12c:	40016000 	mfc0	at,c0_status
+ 130:	32730001 	andi	s3,s3,0x1
+ 134:	3421001f 	ori	at,at,0x1f
+ 138:	3821001f 	xori	at,at,0x1f
+ 13c:	02619825 	or	s3,s3,at
+ 140:	40936000 	mtc0	s3,c0_status
+ 144:	00000040 	ssnop
+ 148:	00000040 	ssnop
+ 14c:	00000040 	ssnop
+ 150:	000000c0 	sll	zero,zero,0x3
+ 154:	8f830014 	lw	v1,20(gp)
+ 158:	2463ffff 	addiu	v1,v1,-1
+ 15c:	af830014 	sw	v1,20(gp)
+ 160:	8f830008 	lw	v1,8(gp)
+ 164:	30630004 	andi	v1,v1,0x4
+ 168:	1460000c 	bnez	v1,19c <_DeleteMessageQueue+0x170>
+ 16c:	3c020000 	lui	v0,0x0
+			16c: R_MIPS_HI16	preempt_schedule
+ 170:	02202021 	move	a0,s1
+ 174:	26590000 	addiu	t9,s2,0
+			174: R_MIPS_LO16	kfree
+ 178:	8fbf0020 	lw	ra,32(sp)
+ 17c:	8fb3001c 	lw	s3,28(sp)
+ 180:	8fb20018 	lw	s2,24(sp)
+ 184:	8fb10014 	lw	s1,20(sp)
+ 188:	8fb00010 	lw	s0,16(sp)
+ 18c:	03200008 	jr	t9
+ 190:	27bd0028 	addiu	sp,sp,40
+ 194:	08000038 	j	e0 <_DeleteMessageQueue+0xb4>
+			194: R_MIPS_26	.text
+ 198:	3c120000 	lui	s2,0x0
+			198: R_MIPS_HI16	kfree
+ 19c:	24420000 	addiu	v0,v0,0
+			19c: R_MIPS_LO16	preempt_schedule
+ 1a0:	0040f809 	jalr	v0
+ 1a4:	00000000 	nop
+ 1a8:	0800005d 	j	174 <_DeleteMessageQueue+0x148>
+			1a8: R_MIPS_26	.text
+ 1ac:	02202021 	move	a0,s1
+
+000001b0 <_SDLIB_PrintBuffer>:
+_SDLIB_PrintBuffer():
+ 1b0:	3c030000 	lui	v1,0x0
+			1b0: R_MIPS_HI16	debuglevel
+ 1b4:	8c620000 	lw	v0,0(v1)
+			1b4: R_MIPS_LO16	debuglevel
+ 1b8:	27bdff70 	addiu	sp,sp,-144
+ 1bc:	afb5007c 	sw	s5,124(sp)
+ 1c0:	afb40078 	sw	s4,120(sp)
+ 1c4:	afb00068 	sw	s0,104(sp)
+ 1c8:	afbf008c 	sw	ra,140(sp)
+ 1cc:	afbe0088 	sw	s8,136(sp)
+ 1d0:	afb70084 	sw	s7,132(sp)
+ 1d4:	afb60080 	sw	s6,128(sp)
+ 1d8:	afb30074 	sw	s3,116(sp)
+ 1dc:	afb20070 	sw	s2,112(sp)
+ 1e0:	afb1006c 	sw	s1,108(sp)
+ 1e4:	0080a821 	move	s5,a0
+ 1e8:	00a0a021 	move	s4,a1
+ 1ec:	04400008 	bltz	v0,210 <_SDLIB_PrintBuffer+0x60>
+ 1f0:	00c08021 	move	s0,a2
+ 1f4:	3c040000 	lui	a0,0x0
+			1f4: R_MIPS_HI16	$LC0
+ 1f8:	3c020000 	lui	v0,0x0
+			1f8: R_MIPS_HI16	printk
+ 1fc:	24420000 	addiu	v0,v0,0
+			1fc: R_MIPS_LO16	printk
+ 200:	0040f809 	jalr	v0
+ 204:	24840000 	addiu	a0,a0,0
+			204: R_MIPS_LO16	$LC0
+ 208:	3c030000 	lui	v1,0x0
+			208: R_MIPS_HI16	debuglevel
+ 20c:	8c620000 	lw	v0,0(v1)
+			20c: R_MIPS_LO16	debuglevel
+ 210:	1200007c 	beqz	s0,404 <_SDLIB_PrintBuffer+0x254>
+ 214:	00000000 	nop
+ 218:	04400014 	bltz	v0,26c <_SDLIB_PrintBuffer+0xbc>
+ 21c:	3c110000 	lui	s1,0x0
+			21c: R_MIPS_HI16	printk
+ 220:	3c040000 	lui	a0,0x0
+			220: R_MIPS_HI16	$LC1
+ 224:	24840000 	addiu	a0,a0,0
+			224: R_MIPS_LO16	$LC1
+ 228:	26220000 	addiu	v0,s1,0
+			228: R_MIPS_LO16	printk
+ 22c:	0040f809 	jalr	v0
+ 230:	02002821 	move	a1,s0
+ 234:	3c030000 	lui	v1,0x0
+			234: R_MIPS_HI16	debuglevel
+ 238:	8c620000 	lw	v0,0(v1)
+			238: R_MIPS_LO16	debuglevel
+ 23c:	0440000b 	bltz	v0,26c <_SDLIB_PrintBuffer+0xbc>
+ 240:	26300000 	addiu	s0,s1,0
+			240: R_MIPS_LO16	printk
+ 244:	3c040000 	lui	a0,0x0
+			244: R_MIPS_HI16	$LC3
+ 248:	0200f809 	jalr	s0
+ 24c:	24840000 	addiu	a0,a0,0
+			24c: R_MIPS_LO16	$LC3
+ 250:	3c030000 	lui	v1,0x0
+			250: R_MIPS_HI16	debuglevel
+ 254:	8c620000 	lw	v0,0(v1)
+			254: R_MIPS_LO16	debuglevel
+ 258:	04400004 	bltz	v0,26c <_SDLIB_PrintBuffer+0xbc>
+ 25c:	00000000 	nop
+ 260:	3c040000 	lui	a0,0x0
+			260: R_MIPS_HI16	$LC4
+ 264:	0200f809 	jalr	s0
+ 268:	24840000 	addiu	a0,a0,0
+			268: R_MIPS_LO16	$LC4
+ 26c:	12800051 	beqz	s4,3b4 <_SDLIB_PrintBuffer+0x204>
+ 270:	3c020000 	lui	v0,0x0
+			270: R_MIPS_HI16	strcat
+ 274:	24560000 	addiu	s6,v0,0
+			274: R_MIPS_LO16	strcat
+ 278:	3c020000 	lui	v0,0x0
+			278: R_MIPS_HI16	sprintf
+ 27c:	24570000 	addiu	s7,v0,0
+			27c: R_MIPS_LO16	sprintf
+ 280:	afa00060 	sw	zero,96(sp)
+ 284:	27be001a 	addiu	s8,sp,26
+ 288:	27b30015 	addiu	s3,sp,21
+ 28c:	3c020000 	lui	v0,0x0
+			28c: R_MIPS_HI16	$LC5
+ 290:	8fa60060 	lw	a2,96(sp)
+ 294:	27a40010 	addiu	a0,sp,16
+ 298:	24450000 	addiu	a1,v0,0
+			298: R_MIPS_LO16	$LC5
+ 29c:	a3a0002b 	sb	zero,43(sp)
+ 2a0:	a3a0001a 	sb	zero,26(sp)
+ 2a4:	a3a00010 	sb	zero,16(sp)
+ 2a8:	02e0f809 	jalr	s7
+ 2ac:	00008821 	move	s1,zero
+ 2b0:	080000c7 	j	31c <_SDLIB_PrintBuffer+0x16c>
+			2b0: R_MIPS_26	.text
+ 2b4:	3c050000 	lui	a1,0x0
+			2b4: R_MIPS_HI16	$LC6
+ 2b8:	92b00000 	lbu	s0,0(s5)
+ 2bc:	02003021 	move	a2,s0
+ 2c0:	02e0f809 	jalr	s7
+ 2c4:	2610ffe0 	addiu	s0,s0,-32
+ 2c8:	321000ff 	andi	s0,s0,0xff
+ 2cc:	27a4002b 	addiu	a0,sp,43
+ 2d0:	02c0f809 	jalr	s6
+ 2d4:	02602821 	move	a1,s3
+ 2d8:	2e10005f 	sltiu	s0,s0,95
+ 2dc:	3c030000 	lui	v1,0x0
+			2dc: R_MIPS_HI16	$LC7
+ 2e0:	02602021 	move	a0,s3
+ 2e4:	24650000 	addiu	a1,v1,0
+			2e4: R_MIPS_LO16	$LC7
+ 2e8:	1200002c 	beqz	s0,39c <_SDLIB_PrintBuffer+0x1ec>
+ 2ec:	2406002e 	li	a2,46
+ 2f0:	02e0f809 	jalr	s7
+ 2f4:	92a60000 	lbu	a2,0(s5)
+ 2f8:	03c02021 	move	a0,s8
+ 2fc:	02c0f809 	jalr	s6
+ 300:	02602821 	move	a1,s3
+ 304:	26310001 	addiu	s1,s1,1
+ 308:	24020010 	li	v0,16
+ 30c:	26b50001 	addiu	s5,s5,1
+ 310:	12220011 	beq	s1,v0,358 <_SDLIB_PrintBuffer+0x1a8>
+ 314:	2694ffff 	addiu	s4,s4,-1
+ 318:	3c050000 	lui	a1,0x0
+			318: R_MIPS_HI16	$LC6
+ 31c:	24a50000 	addiu	a1,a1,0
+			31c: R_MIPS_LO16	$LC6
+ 320:	1680ffe5 	bnez	s4,2b8 <_SDLIB_PrintBuffer+0x108>
+ 324:	02602021 	move	a0,s3
+ 328:	3c050000 	lui	a1,0x0
+			328: R_MIPS_HI16	$LC8
+ 32c:	24a50000 	addiu	a1,a1,0
+			32c: R_MIPS_LO16	$LC8
+ 330:	02c0f809 	jalr	s6
+ 334:	27a4002b 	addiu	a0,sp,43
+ 338:	3c050000 	lui	a1,0x0
+			338: R_MIPS_HI16	$LC9
+ 33c:	03c02021 	move	a0,s8
+ 340:	02c0f809 	jalr	s6
+ 344:	24a50000 	addiu	a1,a1,0
+			344: R_MIPS_LO16	$LC9
+ 348:	26310001 	addiu	s1,s1,1
+ 34c:	24020010 	li	v0,16
+ 350:	1622fff1 	bne	s1,v0,318 <_SDLIB_PrintBuffer+0x168>
+ 354:	00000000 	nop
+ 358:	3c030000 	lui	v1,0x0
+			358: R_MIPS_HI16	debuglevel
+ 35c:	8c620000 	lw	v0,0(v1)
+			35c: R_MIPS_LO16	debuglevel
+ 360:	04400008 	bltz	v0,384 <_SDLIB_PrintBuffer+0x1d4>
+ 364:	3c040000 	lui	a0,0x0
+			364: R_MIPS_HI16	$LC10
+ 368:	3c030000 	lui	v1,0x0
+			368: R_MIPS_HI16	printk
+ 36c:	24840000 	addiu	a0,a0,0
+			36c: R_MIPS_LO16	$LC10
+ 370:	27a50010 	addiu	a1,sp,16
+ 374:	27a6002b 	addiu	a2,sp,43
+ 378:	24630000 	addiu	v1,v1,0
+			378: R_MIPS_LO16	printk
+ 37c:	0060f809 	jalr	v1
+ 380:	03c03821 	move	a3,s8
+ 384:	1280000b 	beqz	s4,3b4 <_SDLIB_PrintBuffer+0x204>
+ 388:	8fa30060 	lw	v1,96(sp)
+ 38c:	24620010 	addiu	v0,v1,16
+ 390:	3042ffff 	andi	v0,v0,0xffff
+ 394:	080000a3 	j	28c <_SDLIB_PrintBuffer+0xdc>
+			394: R_MIPS_26	.text
+ 398:	afa20060 	sw	v0,96(sp)
+ 39c:	3c020000 	lui	v0,0x0
+			39c: R_MIPS_HI16	$LC7
+ 3a0:	02602021 	move	a0,s3
+ 3a4:	02e0f809 	jalr	s7
+ 3a8:	24450000 	addiu	a1,v0,0
+			3a8: R_MIPS_LO16	$LC7
+ 3ac:	080000bf 	j	2fc <_SDLIB_PrintBuffer+0x14c>
+			3ac: R_MIPS_26	.text
+ 3b0:	03c02021 	move	a0,s8
+ 3b4:	3c030000 	lui	v1,0x0
+			3b4: R_MIPS_HI16	debuglevel
+ 3b8:	8c620000 	lw	v0,0(v1)
+			3b8: R_MIPS_LO16	debuglevel
+ 3bc:	04400005 	bltz	v0,3d4 <_SDLIB_PrintBuffer+0x224>
+ 3c0:	3c020000 	lui	v0,0x0
+			3c0: R_MIPS_HI16	printk
+ 3c4:	3c040000 	lui	a0,0x0
+			3c4: R_MIPS_HI16	$LC0
+ 3c8:	24420000 	addiu	v0,v0,0
+			3c8: R_MIPS_LO16	printk
+ 3cc:	0040f809 	jalr	v0
+ 3d0:	24840000 	addiu	a0,a0,0
+			3d0: R_MIPS_LO16	$LC0
+ 3d4:	8fbf008c 	lw	ra,140(sp)
+ 3d8:	8fbe0088 	lw	s8,136(sp)
+ 3dc:	8fb70084 	lw	s7,132(sp)
+ 3e0:	8fb60080 	lw	s6,128(sp)
+ 3e4:	8fb5007c 	lw	s5,124(sp)
+ 3e8:	8fb40078 	lw	s4,120(sp)
+ 3ec:	8fb30074 	lw	s3,116(sp)
+ 3f0:	8fb20070 	lw	s2,112(sp)
+ 3f4:	8fb1006c 	lw	s1,108(sp)
+ 3f8:	8fb00068 	lw	s0,104(sp)
+ 3fc:	03e00008 	jr	ra
+ 400:	27bd0090 	addiu	sp,sp,144
+ 404:	0440ff99 	bltz	v0,26c <_SDLIB_PrintBuffer+0xbc>
+ 408:	00000000 	nop
+ 40c:	3c110000 	lui	s1,0x0
+			40c: R_MIPS_HI16	printk
+ 410:	3c040000 	lui	a0,0x0
+			410: R_MIPS_HI16	$LC2
+ 414:	26220000 	addiu	v0,s1,0
+			414: R_MIPS_LO16	printk
+ 418:	0040f809 	jalr	v0
+ 41c:	24840000 	addiu	a0,a0,0
+			41c: R_MIPS_LO16	$LC2
+ 420:	0800008e 	j	238 <_SDLIB_PrintBuffer+0x88>
+			420: R_MIPS_26	.text
+ 424:	3c030000 	lui	v1,0x0
+			424: R_MIPS_HI16	debuglevel
+
+00000428 <_GetMessage>:
+_GetMessage():
+ 428:	27bdffd8 	addiu	sp,sp,-40
+ 42c:	afb3001c 	sw	s3,28(sp)
+ 430:	afb10014 	sw	s1,20(sp)
+ 434:	afbf0020 	sw	ra,32(sp)
+ 438:	afb20018 	sw	s2,24(sp)
+ 43c:	afb00010 	sw	s0,16(sp)
+ 440:	00808821 	move	s1,a0
+ 444:	00c09821 	move	s3,a2
+ 448:	40126000 	mfc0	s2,c0_status
+ 44c:	3641001f 	ori	at,s2,0x1f
+ 450:	3821001f 	xori	at,at,0x1f
+ 454:	40816000 	mtc0	at,c0_status
+ 458:	00000040 	ssnop
+ 45c:	00000040 	ssnop
+ 460:	00000040 	ssnop
+ 464:	000000c0 	sll	zero,zero,0x3
+ 468:	8f820014 	lw	v0,20(gp)
+ 46c:	24420001 	addiu	v0,v0,1
+ 470:	af820014 	sw	v0,20(gp)
+ 474:	8c900004 	lw	s0,4(a0)
+ 478:	10900034 	beq	a0,s0,54c <_GetMessage+0x124>
+ 47c:	00000000 	nop
+ 480:	8e040004 	lw	a0,4(s0)
+ 484:	8e020000 	lw	v0,0(s0)
+ 488:	ac820000 	sw	v0,0(a0)
+ 48c:	8e030000 	lw	v1,0(s0)
+ 490:	ae100000 	sw	s0,0(s0)
+ 494:	ac640004 	sw	a0,4(v1)
+ 498:	ae100004 	sw	s0,4(s0)
+ 49c:	8cc20000 	lw	v0,0(a2)
+ 4a0:	8e060008 	lw	a2,8(s0)
+ 4a4:	0046102a 	slt	v0,v0,a2
+ 4a8:	1440002a 	bnez	v0,554 <_GetMessage+0x12c>
+ 4ac:	3c020000 	lui	v0,0x0
+			4ac: R_MIPS_HI16	memcpy
+ 4b0:	00a02021 	move	a0,a1
+ 4b4:	24420000 	addiu	v0,v0,0
+			4b4: R_MIPS_LO16	memcpy
+ 4b8:	0040f809 	jalr	v0
+ 4bc:	2605000c 	addiu	a1,s0,12
+ 4c0:	8e030008 	lw	v1,8(s0)
+ 4c4:	26220008 	addiu	v0,s1,8
+ 4c8:	ae630000 	sw	v1,0(s3)
+ 4cc:	8c440004 	lw	a0,4(v0)
+ 4d0:	ae020000 	sw	v0,0(s0)
+ 4d4:	ae040004 	sw	a0,4(s0)
+ 4d8:	8c430004 	lw	v1,4(v0)
+ 4dc:	00009821 	move	s3,zero
+ 4e0:	ac500004 	sw	s0,4(v0)
+ 4e4:	ac700000 	sw	s0,0(v1)
+ 4e8:	40016000 	mfc0	at,c0_status
+ 4ec:	32520001 	andi	s2,s2,0x1
+ 4f0:	3421001f 	ori	at,at,0x1f
+ 4f4:	3821001f 	xori	at,at,0x1f
+ 4f8:	02419025 	or	s2,s2,at
+ 4fc:	40926000 	mtc0	s2,c0_status
+ 500:	00000040 	ssnop
+ 504:	00000040 	ssnop
+ 508:	00000040 	ssnop
+ 50c:	000000c0 	sll	zero,zero,0x3
+ 510:	8f830014 	lw	v1,20(gp)
+ 514:	2463ffff 	addiu	v1,v1,-1
+ 518:	af830014 	sw	v1,20(gp)
+ 51c:	8f830008 	lw	v1,8(gp)
+ 520:	30630004 	andi	v1,v1,0x4
+ 524:	14600014 	bnez	v1,578 <_GetMessage+0x150>
+ 528:	3c020000 	lui	v0,0x0
+			528: R_MIPS_HI16	preempt_schedule
+ 52c:	02601021 	move	v0,s3
+ 530:	8fbf0020 	lw	ra,32(sp)
+ 534:	8fb3001c 	lw	s3,28(sp)
+ 538:	8fb20018 	lw	s2,24(sp)
+ 53c:	8fb10014 	lw	s1,20(sp)
+ 540:	8fb00010 	lw	s0,16(sp)
+ 544:	03e00008 	jr	ra
+ 548:	27bd0028 	addiu	sp,sp,40
+ 54c:	0800013a 	j	4e8 <_GetMessage+0xc0>
+			54c: R_MIPS_26	.text
+ 550:	2413fff6 	li	s3,-10
+ 554:	ae660000 	sw	a2,0(s3)
+ 558:	8e220004 	lw	v0,4(s1)
+ 55c:	2413fff7 	li	s3,-9
+ 560:	ae020004 	sw	v0,4(s0)
+ 564:	8e230004 	lw	v1,4(s1)
+ 568:	ae110000 	sw	s1,0(s0)
+ 56c:	ae300004 	sw	s0,4(s1)
+ 570:	0800013a 	j	4e8 <_GetMessage+0xc0>
+			570: R_MIPS_26	.text
+ 574:	ac700000 	sw	s0,0(v1)
+ 578:	24420000 	addiu	v0,v0,0
+			578: R_MIPS_LO16	preempt_schedule
+ 57c:	0040f809 	jalr	v0
+ 580:	00000000 	nop
+ 584:	0800014c 	j	530 <_GetMessage+0x108>
+			584: R_MIPS_26	.text
+ 588:	02601021 	move	v0,s3
+
+0000058c <_PostMessage>:
+_PostMessage():
+ 58c:	27bdffd8 	addiu	sp,sp,-40
+ 590:	afb3001c 	sw	s3,28(sp)
+ 594:	afb20018 	sw	s2,24(sp)
+ 598:	afbf0020 	sw	ra,32(sp)
+ 59c:	afb10014 	sw	s1,20(sp)
+ 5a0:	afb00010 	sw	s0,16(sp)
+ 5a4:	8c820010 	lw	v0,16(a0)
+ 5a8:	00809021 	move	s2,a0
+ 5ac:	0046102a 	slt	v0,v0,a2
+ 5b0:	1440003c 	bnez	v0,6a4 <_PostMessage+0x118>
+ 5b4:	00c09821 	move	s3,a2
+ 5b8:	40116000 	mfc0	s1,c0_status
+ 5bc:	3621001f 	ori	at,s1,0x1f
+ 5c0:	3821001f 	xori	at,at,0x1f
+ 5c4:	40816000 	mtc0	at,c0_status
+ 5c8:	00000040 	ssnop
+ 5cc:	00000040 	ssnop
+ 5d0:	00000040 	ssnop
+ 5d4:	000000c0 	sll	zero,zero,0x3
+ 5d8:	8f830014 	lw	v1,20(gp)
+ 5dc:	24630001 	addiu	v1,v1,1
+ 5e0:	af830014 	sw	v1,20(gp)
+ 5e4:	24820008 	addiu	v0,a0,8
+ 5e8:	8c500004 	lw	s0,4(v0)
+ 5ec:	10500036 	beq	v0,s0,6c8 <_PostMessage+0x13c>
+ 5f0:	00000000 	nop
+ 5f4:	8e040004 	lw	a0,4(s0)
+ 5f8:	8e020000 	lw	v0,0(s0)
+ 5fc:	ac820000 	sw	v0,0(a0)
+ 600:	8e030000 	lw	v1,0(s0)
+ 604:	3c020000 	lui	v0,0x0
+			604: R_MIPS_HI16	memcpy
+ 608:	ac640004 	sw	a0,4(v1)
+ 60c:	ae100000 	sw	s0,0(s0)
+ 610:	ae100004 	sw	s0,4(s0)
+ 614:	24420000 	addiu	v0,v0,0
+			614: R_MIPS_LO16	memcpy
+ 618:	0040f809 	jalr	v0
+ 61c:	2604000c 	addiu	a0,s0,12
+ 620:	ae130008 	sw	s3,8(s0)
+ 624:	8e420000 	lw	v0,0(s2)
+ 628:	ae120004 	sw	s2,4(s0)
+ 62c:	ae020000 	sw	v0,0(s0)
+ 630:	8e430000 	lw	v1,0(s2)
+ 634:	ae500000 	sw	s0,0(s2)
+ 638:	ac700004 	sw	s0,4(v1)
+ 63c:	00008021 	move	s0,zero
+ 640:	40016000 	mfc0	at,c0_status
+ 644:	32310001 	andi	s1,s1,0x1
+ 648:	3421001f 	ori	at,at,0x1f
+ 64c:	3821001f 	xori	at,at,0x1f
+ 650:	02218825 	or	s1,s1,at
+ 654:	40916000 	mtc0	s1,c0_status
+ 658:	00000040 	ssnop
+ 65c:	00000040 	ssnop
+ 660:	00000040 	ssnop
+ 664:	000000c0 	sll	zero,zero,0x3
+ 668:	8f830014 	lw	v1,20(gp)
+ 66c:	2463ffff 	addiu	v1,v1,-1
+ 670:	af830014 	sw	v1,20(gp)
+ 674:	8f830008 	lw	v1,8(gp)
+ 678:	30630004 	andi	v1,v1,0x4
+ 67c:	14600014 	bnez	v1,6d0 <_PostMessage+0x144>
+ 680:	3c020000 	lui	v0,0x0
+			680: R_MIPS_HI16	preempt_schedule
+ 684:	02001021 	move	v0,s0
+ 688:	8fbf0020 	lw	ra,32(sp)
+ 68c:	8fb3001c 	lw	s3,28(sp)
+ 690:	8fb20018 	lw	s2,24(sp)
+ 694:	8fb10014 	lw	s1,20(sp)
+ 698:	8fb00010 	lw	s0,16(sp)
+ 69c:	03e00008 	jr	ra
+ 6a0:	27bd0028 	addiu	sp,sp,40
+ 6a4:	2410fff7 	li	s0,-9
+ 6a8:	02001021 	move	v0,s0
+ 6ac:	8fbf0020 	lw	ra,32(sp)
+ 6b0:	8fb3001c 	lw	s3,28(sp)
+ 6b4:	8fb20018 	lw	s2,24(sp)
+ 6b8:	8fb10014 	lw	s1,20(sp)
+ 6bc:	8fb00010 	lw	s0,16(sp)
+ 6c0:	03e00008 	jr	ra
+ 6c4:	27bd0028 	addiu	sp,sp,40
+ 6c8:	08000190 	j	640 <_PostMessage+0xb4>
+			6c8: R_MIPS_26	.text
+ 6cc:	2410fff9 	li	s0,-7
+ 6d0:	24420000 	addiu	v0,v0,0
+			6d0: R_MIPS_LO16	preempt_schedule
+ 6d4:	0040f809 	jalr	v0
+ 6d8:	00000000 	nop
+ 6dc:	080001a2 	j	688 <_PostMessage+0xfc>
+			6dc: R_MIPS_26	.text
+ 6e0:	02001021 	move	v0,s0
+
+000006e4 <_CreateMessageQueue>:
+_CreateMessageQueue():
+ 6e4:	27bdffc8 	addiu	sp,sp,-56
+ 6e8:	afbe0030 	sw	s8,48(sp)
+ 6ec:	afb7002c 	sw	s7,44(sp)
+ 6f0:	afb20018 	sw	s2,24(sp)
+ 6f4:	afbf0034 	sw	ra,52(sp)
+ 6f8:	afb60028 	sw	s6,40(sp)
+ 6fc:	afb50024 	sw	s5,36(sp)
+ 700:	afb40020 	sw	s4,32(sp)
+ 704:	afb3001c 	sw	s3,28(sp)
+ 708:	afb10014 	sw	s1,20(sp)
+ 70c:	afb00010 	sw	s0,16(sp)
+ 710:	3c020000 	lui	v0,0x0
+			710: R_MIPS_HI16	malloc_sizes
+ 714:	0080f021 	move	s8,a0
+ 718:	8c440004 	lw	a0,4(v0)
+			718: R_MIPS_LO16	malloc_sizes
+ 71c:	3c020000 	lui	v0,0x0
+			71c: R_MIPS_HI16	kmem_cache_alloc
+ 720:	00a09021 	move	s2,a1
+ 724:	24420000 	addiu	v0,v0,0
+			724: R_MIPS_LO16	kmem_cache_alloc
+ 728:	0040f809 	jalr	v0
+ 72c:	240500d0 	li	a1,208
+ 730:	10400039 	beqz	v0,818 <_CreateMessageQueue+0x134>
+ 734:	0040b821 	move	s7,v0
+ 738:	0040a021 	move	s4,v0
+ 73c:	3c020000 	lui	v0,0x0
+			73c: R_MIPS_HI16	memset
+ 740:	26f10008 	addiu	s1,s7,8
+ 744:	24500000 	addiu	s0,v0,0
+			744: R_MIPS_LO16	memset
+ 748:	02e02021 	move	a0,s7
+ 74c:	00002821 	move	a1,zero
+ 750:	0200f809 	jalr	s0
+ 754:	24060014 	li	a2,20
+ 758:	ae970000 	sw	s7,0(s4)
+ 75c:	ae970004 	sw	s7,4(s4)
+ 760:	aef10008 	sw	s1,8(s7)
+ 764:	aef1000c 	sw	s1,12(s7)
+ 768:	1bc00027 	blez	s8,808 <_CreateMessageQueue+0x124>
+ 76c:	aef20010 	sw	s2,16(s7)
+ 770:	3c020000 	lui	v0,0x0
+			770: R_MIPS_HI16	__kmalloc
+ 774:	2653000f 	addiu	s3,s2,15
+ 778:	24550000 	addiu	s5,v0,0
+			778: R_MIPS_LO16	__kmalloc
+ 77c:	0200b021 	move	s6,s0
+ 780:	080001eb 	j	7ac <_CreateMessageQueue+0xc8>
+			780: R_MIPS_26	.text
+ 784:	00009021 	move	s2,zero
+ 788:	02c0f809 	jalr	s6
+ 78c:	26520001 	addiu	s2,s2,1
+ 790:	8e230004 	lw	v1,4(s1)
+ 794:	ae030004 	sw	v1,4(s0)
+ 798:	8e220004 	lw	v0,4(s1)
+ 79c:	ae110000 	sw	s1,0(s0)
+ 7a0:	ae300004 	sw	s0,4(s1)
+ 7a4:	13d2000b 	beq	s8,s2,7d4 <_CreateMessageQueue+0xf0>
+ 7a8:	ac500000 	sw	s0,0(v0)
+ 7ac:	02602021 	move	a0,s3
+ 7b0:	02a0f809 	jalr	s5
+ 7b4:	240500d0 	li	a1,208
+ 7b8:	00408021 	move	s0,v0
+ 7bc:	00402021 	move	a0,v0
+ 7c0:	00002821 	move	a1,zero
+ 7c4:	1440fff0 	bnez	v0,788 <_CreateMessageQueue+0xa4>
+ 7c8:	02603021 	move	a2,s3
+ 7cc:	1240000f 	beqz	s2,80c <_CreateMessageQueue+0x128>
+ 7d0:	3c020000 	lui	v0,0x0
+			7d0: R_MIPS_HI16	_DeleteMessageQueue
+ 7d4:	02801021 	move	v0,s4
+ 7d8:	8fbf0034 	lw	ra,52(sp)
+ 7dc:	8fbe0030 	lw	s8,48(sp)
+ 7e0:	8fb7002c 	lw	s7,44(sp)
+ 7e4:	8fb60028 	lw	s6,40(sp)
+ 7e8:	8fb50024 	lw	s5,36(sp)
+ 7ec:	8fb40020 	lw	s4,32(sp)
+ 7f0:	8fb3001c 	lw	s3,28(sp)
+ 7f4:	8fb20018 	lw	s2,24(sp)
+ 7f8:	8fb10014 	lw	s1,20(sp)
+ 7fc:	8fb00010 	lw	s0,16(sp)
+ 800:	03e00008 	jr	ra
+ 804:	27bd0038 	addiu	sp,sp,56
+ 808:	3c020000 	lui	v0,0x0
+			808: R_MIPS_HI16	_DeleteMessageQueue
+ 80c:	24420000 	addiu	v0,v0,0
+			80c: R_MIPS_LO16	_DeleteMessageQueue
+ 810:	0040f809 	jalr	v0
+ 814:	02e02021 	move	a0,s7
+ 818:	0000a021 	move	s4,zero
+ 81c:	02801021 	move	v0,s4
+ 820:	8fbf0034 	lw	ra,52(sp)
+ 824:	8fbe0030 	lw	s8,48(sp)
+ 828:	8fb7002c 	lw	s7,44(sp)
+ 82c:	8fb60028 	lw	s6,40(sp)
+ 830:	8fb50024 	lw	s5,36(sp)
+ 834:	8fb40020 	lw	s4,32(sp)
+ 838:	8fb3001c 	lw	s3,28(sp)
+ 83c:	8fb20018 	lw	s2,24(sp)
+ 840:	8fb10014 	lw	s1,20(sp)
+ 844:	8fb00010 	lw	s0,16(sp)
+ 848:	03e00008 	jr	ra
+ 84c:	27bd0038 	addiu	sp,sp,56
+
+00000850 <SDLIB_GetMessage>:
+SDLIB_GetMessage():
+ 850:	3c190000 	lui	t9,0x0
+			850: R_MIPS_HI16	_GetMessage
+ 854:	27390000 	addiu	t9,t9,0
+			854: R_MIPS_LO16	_GetMessage
+ 858:	03200008 	jr	t9
+ 85c:	00000000 	nop
+
+00000860 <SDLIB_PostMessage>:
+SDLIB_PostMessage():
+ 860:	3c190000 	lui	t9,0x0
+			860: R_MIPS_HI16	_PostMessage
+ 864:	27390000 	addiu	t9,t9,0
+			864: R_MIPS_LO16	_PostMessage
+ 868:	03200008 	jr	t9
+ 86c:	00000000 	nop
+
+00000870 <SDLIB_DeleteMessageQueue>:
+SDLIB_DeleteMessageQueue():
+ 870:	3c190000 	lui	t9,0x0
+			870: R_MIPS_HI16	_DeleteMessageQueue
+ 874:	27390000 	addiu	t9,t9,0
+			874: R_MIPS_LO16	_DeleteMessageQueue
+ 878:	03200008 	jr	t9
+ 87c:	00000000 	nop
+
+00000880 <SDLIB_CreateMessageQueue>:
+SDLIB_CreateMessageQueue():
+ 880:	3c190000 	lui	t9,0x0
+			880: R_MIPS_HI16	_CreateMessageQueue
+ 884:	27390000 	addiu	t9,t9,0
+			884: R_MIPS_LO16	_CreateMessageQueue
+ 888:	03200008 	jr	t9
+ 88c:	00000000 	nop
+
+00000890 <SDLIB_OSDeleteHelper>:
+SDLIB_OSDeleteHelper():
+ 890:	27bdffe8 	addiu	sp,sp,-24
+ 894:	afb00010 	sw	s0,16(sp)
+ 898:	afbf0014 	sw	ra,20(sp)
+ 89c:	8c820000 	lw	v0,0(a0)
+ 8a0:	00808021 	move	s0,a0
+ 8a4:	10400016 	beqz	v0,900 <SDLIB_OSDeleteHelper+0x70>
+ 8a8:	24850008 	addiu	a1,a0,8
+ 8ac:	24020001 	li	v0,1
+ 8b0:	a0820004 	sb	v0,4(a0)
+ 8b4:	3c030000 	lui	v1,0x0
+			8b4: R_MIPS_HI16	cpu_data
+ 8b8:	8c620008 	lw	v0,8(v1)
+			8b8: R_MIPS_LO16	cpu_data
+ 8bc:	3c040001 	lui	a0,0x1
+ 8c0:	00441024 	and	v0,v0,a0
+ 8c4:	10400012 	beqz	v0,910 <SDLIB_OSDeleteHelper+0x80>
+ 8c8:	00000000 	nop
+ 8cc:	c2030008 	ll	v1,8(s0)
+ 8d0:	24620001 	addiu	v0,v1,1
+ 8d4:	e2020008 	sc	v0,8(s0)
+ 8d8:	1040007d 	beqz	v0,ad0 <SDLIB_IssueConfig+0x10>
+ 8dc:	00000000 	nop
+ 8e0:	24620001 	addiu	v0,v1,1
+ 8e4:	18400021 	blez	v0,96c <SDLIB_OSDeleteHelper+0xdc>
+ 8e8:	00a02021 	move	a0,a1
+ 8ec:	3c020000 	lui	v0,0x0
+			8ec: R_MIPS_HI16	wait_for_completion
+ 8f0:	24420000 	addiu	v0,v0,0
+			8f0: R_MIPS_LO16	wait_for_completion
+ 8f4:	0040f809 	jalr	v0
+ 8f8:	26040014 	addiu	a0,s0,20
+ 8fc:	ae000000 	sw	zero,0(s0)
+ 900:	8fbf0014 	lw	ra,20(sp)
+ 904:	8fb00010 	lw	s0,16(sp)
+ 908:	03e00008 	jr	ra
+ 90c:	27bd0018 	addiu	sp,sp,24
+ 910:	40036000 	mfc0	v1,c0_status
+ 914:	3461001f 	ori	at,v1,0x1f
+ 918:	3821001f 	xori	at,at,0x1f
+ 91c:	40816000 	mtc0	at,c0_status
+ 920:	00000040 	ssnop
+ 924:	00000040 	ssnop
+ 928:	00000040 	ssnop
+ 92c:	000000c0 	sll	zero,zero,0x3
+ 930:	8e020008 	lw	v0,8(s0)
+ 934:	24420001 	addiu	v0,v0,1
+ 938:	ae020008 	sw	v0,8(s0)
+ 93c:	40016000 	mfc0	at,c0_status
+ 940:	30630001 	andi	v1,v1,0x1
+ 944:	3421001f 	ori	at,at,0x1f
+ 948:	3821001f 	xori	at,at,0x1f
+ 94c:	00611825 	or	v1,v1,at
+ 950:	40836000 	mtc0	v1,c0_status
+ 954:	00000040 	ssnop
+ 958:	00000040 	ssnop
+ 95c:	00000040 	ssnop
+ 960:	000000c0 	sll	zero,zero,0x3
+ 964:	08000239 	j	8e4 <SDLIB_OSDeleteHelper+0x54>
+			964: R_MIPS_26	.text
+ 968:	00000000 	nop
+ 96c:	3c020000 	lui	v0,0x0
+			96c: R_MIPS_HI16	__up
+ 970:	24420000 	addiu	v0,v0,0
+			970: R_MIPS_LO16	__up
+ 974:	0040f809 	jalr	v0
+ 978:	00000000 	nop
+ 97c:	0800023c 	j	8f0 <SDLIB_OSDeleteHelper+0x60>
+			97c: R_MIPS_26	.text
+ 980:	3c020000 	lui	v0,0x0
+			980: R_MIPS_HI16	wait_for_completion
+
+00000984 <SDLIB_OSCreateHelper>:
+SDLIB_OSCreateHelper():
+ 984:	27bdffe0 	addiu	sp,sp,-32
+ 988:	3c020000 	lui	v0,0x0
+			988: R_MIPS_HI16	memset
+ 98c:	afbf001c 	sw	ra,28(sp)
+ 990:	afb20018 	sw	s2,24(sp)
+ 994:	afb10014 	sw	s1,20(sp)
+ 998:	00809021 	move	s2,a0
+ 99c:	afb00010 	sw	s0,16(sp)
+ 9a0:	00c08821 	move	s1,a2
+ 9a4:	00a08021 	move	s0,a1
+ 9a8:	24060028 	li	a2,40
+ 9ac:	24420000 	addiu	v0,v0,0
+			9ac: R_MIPS_LO16	memset
+ 9b0:	0040f809 	jalr	v0
+ 9b4:	00002821 	move	a1,zero
+ 9b8:	ae500024 	sw	s0,36(s2)
+ 9bc:	3c100000 	lui	s0,0x0
+			9bc: R_MIPS_HI16	init_waitqueue_head
+ 9c0:	26100000 	addiu	s0,s0,0
+			9c0: R_MIPS_LO16	init_waitqueue_head
+ 9c4:	2644000c 	addiu	a0,s2,12
+ 9c8:	ae510020 	sw	s1,32(s2)
+ 9cc:	ae400008 	sw	zero,8(s2)
+ 9d0:	0200f809 	jalr	s0
+ 9d4:	00000000 	nop
+ 9d8:	26440018 	addiu	a0,s2,24
+ 9dc:	0200f809 	jalr	s0
+ 9e0:	ae400014 	sw	zero,20(s2)
+ 9e4:	3c040000 	lui	a0,0x0
+			9e4: R_MIPS_HI16	HelperLaunch
+ 9e8:	3c060000 	lui	a2,0x0
+			9e8: R_MIPS_HI16	$LC3
+ 9ec:	24840000 	addiu	a0,a0,0
+			9ec: R_MIPS_LO16	HelperLaunch
+ 9f0:	24c60000 	addiu	a2,a2,0
+			9f0: R_MIPS_LO16	$LC3
+ 9f4:	12200017 	beqz	s1,a54 <SDLIB_OSCreateHelper+0xd0>
+ 9f8:	02402821 	move	a1,s2
+ 9fc:	3c040000 	lui	a0,0x0
+			9fc: R_MIPS_HI16	HelperLaunch
+ a00:	3c060000 	lui	a2,0x0
+			a00: R_MIPS_HI16	$LC2
+ a04:	3c020000 	lui	v0,0x0
+			a04: R_MIPS_HI16	kthread_create
+ a08:	24840000 	addiu	a0,a0,0
+			a08: R_MIPS_LO16	HelperLaunch
+ a0c:	24420000 	addiu	v0,v0,0
+			a0c: R_MIPS_LO16	kthread_create
+ a10:	0040f809 	jalr	v0
+ a14:	24c60000 	addiu	a2,a2,0
+			a14: R_MIPS_LO16	$LC2
+ a18:	ae420000 	sw	v0,0(s2)
+ a1c:	8e420000 	lw	v0,0(s2)
+ a20:	10400012 	beqz	v0,a6c <SDLIB_OSCreateHelper+0xe8>
+ a24:	00402021 	move	a0,v0
+ a28:	3c020000 	lui	v0,0x0
+			a28: R_MIPS_HI16	wake_up_process
+ a2c:	24420000 	addiu	v0,v0,0
+			a2c: R_MIPS_LO16	wake_up_process
+ a30:	0040f809 	jalr	v0
+ a34:	00000000 	nop
+ a38:	00001021 	move	v0,zero
+ a3c:	8fbf001c 	lw	ra,28(sp)
+ a40:	8fb20018 	lw	s2,24(sp)
+ a44:	8fb10014 	lw	s1,20(sp)
+ a48:	8fb00010 	lw	s0,16(sp)
+ a4c:	03e00008 	jr	ra
+ a50:	27bd0020 	addiu	sp,sp,32
+ a54:	3c020000 	lui	v0,0x0
+			a54: R_MIPS_HI16	kthread_create
+ a58:	24420000 	addiu	v0,v0,0
+			a58: R_MIPS_LO16	kthread_create
+ a5c:	0040f809 	jalr	v0
+ a60:	00000000 	nop
+ a64:	08000287 	j	a1c <SDLIB_OSCreateHelper+0x98>
+			a64: R_MIPS_26	.text
+ a68:	ae420000 	sw	v0,0(s2)
+ a6c:	3c020000 	lui	v0,0x0
+			a6c: R_MIPS_HI16	SDLIB_OSDeleteHelper
+ a70:	24420000 	addiu	v0,v0,0
+			a70: R_MIPS_LO16	SDLIB_OSDeleteHelper
+ a74:	0040f809 	jalr	v0
+ a78:	02402021 	move	a0,s2
+ a7c:	0800028f 	j	a3c <SDLIB_OSCreateHelper+0xb8>
+			a7c: R_MIPS_26	.text
+ a80:	2402fff9 	li	v0,-7
+
+00000a84 <HelperLaunch>:
+HelperLaunch():
+ a84:	27bdffe8 	addiu	sp,sp,-24
+ a88:	afb00010 	sw	s0,16(sp)
+ a8c:	afbf0014 	sw	ra,20(sp)
+ a90:	8c820024 	lw	v0,36(a0)
+ a94:	0040f809 	jalr	v0
+ a98:	00808021 	move	s0,a0
+ a9c:	00402821 	move	a1,v0
+ aa0:	3c020000 	lui	v0,0x0
+			aa0: R_MIPS_HI16	complete_and_exit
+ aa4:	24420000 	addiu	v0,v0,0
+			aa4: R_MIPS_LO16	complete_and_exit
+ aa8:	0040f809 	jalr	v0
+ aac:	26040014 	addiu	a0,s0,20
+
+00000ab0 <SDLIB_PrintBuffer>:
+SDLIB_PrintBuffer():
+ ab0:	3c190000 	lui	t9,0x0
+			ab0: R_MIPS_HI16	_SDLIB_PrintBuffer
+ ab4:	27390000 	addiu	t9,t9,0
+			ab4: R_MIPS_LO16	_SDLIB_PrintBuffer
+ ab8:	03200008 	jr	t9
+ abc:	00000000 	nop
+
+00000ac0 <SDLIB_IssueConfig>:
+SDLIB_IssueConfig():
+ ac0:	3c190000 	lui	t9,0x0
+			ac0: R_MIPS_HI16	_SDLIB_IssueConfig
+ ac4:	27390000 	addiu	t9,t9,0
+			ac4: R_MIPS_LO16	_SDLIB_IssueConfig
+ ac8:	03200008 	jr	t9
+ acc:	30a5ffff 	andi	a1,a1,0xffff
+ ad0:	1000ff7e 	b	8cc <SDLIB_OSDeleteHelper+0x3c>
+ ad4:	00000000 	nop
+	...
+Disassembly of section .exit.text:
+
+00000000 <cleanup_module>:
+cleanup_module():
+   0:	3c020000 	lui	v0,0x0
+			0: R_MIPS_HI16	debuglevel
+   4:	8c430000 	lw	v1,0(v0)
+			4: R_MIPS_LO16	debuglevel
+   8:	3c040000 	lui	a0,0x0
+			8: R_MIPS_HI16	$LC0
+   c:	28630007 	slti	v1,v1,7
+  10:	10600003 	beqz	v1,20 <cleanup_module+0x20>
+  14:	24840000 	addiu	a0,a0,0
+			14: R_MIPS_LO16	$LC0
+  18:	03e00008 	jr	ra
+  1c:	00000000 	nop
+  20:	3c190000 	lui	t9,0x0
+			20: R_MIPS_HI16	printk
+  24:	27390000 	addiu	t9,t9,0
+			24: R_MIPS_LO16	printk
+  28:	03200008 	jr	t9
+  2c:	00000000 	nop
+Disassembly of section .init.text:
+
+00000000 <init_module>:
+init_module():
+   0:	27bdffe8 	addiu	sp,sp,-24
+   4:	afbf0010 	sw	ra,16(sp)
+   8:	3c020000 	lui	v0,0x0
+			8: R_MIPS_HI16	debuglevel
+   c:	8c430000 	lw	v1,0(v0)
+			c: R_MIPS_LO16	debuglevel
+  10:	3c040000 	lui	a0,0x0
+			10: R_MIPS_HI16	$LC1
+  14:	28630007 	slti	v1,v1,7
+  18:	14600005 	bnez	v1,30 <init_module+0x30>
+  1c:	24840000 	addiu	a0,a0,0
+			1c: R_MIPS_LO16	$LC1
+  20:	3c020000 	lui	v0,0x0
+			20: R_MIPS_HI16	printk
+  24:	24420000 	addiu	v0,v0,0
+			24: R_MIPS_LO16	printk
+  28:	0040f809 	jalr	v0
+  2c:	00000000 	nop
+  30:	8fbf0010 	lw	ra,16(sp)
+  34:	00001021 	move	v0,zero
+  38:	03e00008 	jr	ra
+  3c:	27bd0018 	addiu	sp,sp,24

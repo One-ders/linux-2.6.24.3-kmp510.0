@@ -1,0 +1,208 @@
+00001b40 <DumpRequest>:
+DumpRequest():
+    1b40:	27bdffe0 	addiu	sp,sp,-32			! alloc 32 bytes
+    1b44:	afb10014 	sw	s1,20(sp)			! save s1
+    1b48:	afb00010 	sw	s0,16(sp)			! save s0
+    1b4c:	afbf001c 	sw	ra,28(sp)			! save ra
+    1b50:	afb20018 	sw	s2,24(sp)			! save s2
+    1b54:	3c110000 	lui	s1,0x0
+			1b54: R_MIPS_HI16	debuglevel
+    1b58:	8e230000 	lw	v1,0(s1)			! v1=debuglevel
+			1b58: R_MIPS_LO16	debuglevel
+    1b5c:	28620003 	slti	v0,v1,3				! v0=1 if v1<3
+>   1b60:	10400058 	beqz	v0,1cc4 <DumpRequest+0x184>     ! to 1cc4 if not  --> print header
+    1b64:	00808021 	move	s0,a0				! s0=arg0 (hcd_ctx)
+1cd8 ----->
+    1b68:	96040010 	lhu	a0,16(s0)			! a0=uh16
+    1b6c:	30820004 	andi	v0,a0,0x4			! v0=a0&0x4
+>   1b70:	1440000f 	bnez	v0,1bb0 <DumpRequest+0x70>	! to 1bb0 if v0      --> print and leave
+    1b74:	28620003 	slti	v0,v1,3				! v0=1 if v1<3
+>   1b78:	1040003d 	beqz	v0,1c70 <DumpRequest+0x130>	! to 1c70 if not v0
+    1b7c:	30820010 	andi	v0,a0,0x10			! v0=a0&0x10
+>   1b80:	1040002e 	beqz	v0,1c3c <DumpRequest+0xfc>	! to 1c3c if not v0 --> Internal
+    1b84:	30820080 	andi	v0,a0,0x80			! v0=a0&0x80 v0 r/w flag
+1cb4 ----->
+    1b88:	8e220000 	lw	v0,0(s1)			! v0=debuglevel
+			1b88: R_MIPS_LO16	debuglevel
+    1b8c:	28420003 	slti	v0,v0,3				! v0=1 if v0<3
+>   1b90:	1040005c 	beqz	v0,1d04 <DumpRequest+0x1c4>	! to 1d04 if not v0, print
+    1b94:	3c020000 	lui	v0,0x0				! v0=printk
+			1b94: R_MIPS_HI16	printk
+1c10 ------>
+    1b98:	8fbf001c 	lw	ra,28(sp)			! restore ra   out
+1bb0, 1bec, 1c48 ----->
+    1b9c:	8fb20018 	lw	s2,24(sp)			! restore s2
+    1ba0:	8fb10014 	lw	s1,20(sp)			! restore s1
+    1ba4:	8fb00010 	lw	s0,16(sp)			! restore ra
+    1ba8:	03e00008 	jr	ra				! return
+    1bac:	27bd0020 	addiu	sp,sp,32			! dealloc stack
+1b70 ---> v0&0x04
+>   1bb0:	1440fffa 	bnez	v0,1b9c <DumpRequest+0x5c>      ! to 1b9c if v0!=0    --> out
+    1bb4:	8fbf001c 	lw	ra,28(sp)			! restore ra
+    1bb8:	30820080 	andi	v0,a0,0x80			! v0=a0&0x80     --> 0x80 = WRITE
+>   1bbc:	1040004f 	beqz	v0,1cfc <DumpRequest+0x1bc>	! to 1cfc if v0==0
+    1bc0:	3c020000 	lui	v0,0x0				! v0=LC4
+			1bc0: R_MIPS_HI16	$LC4
+    1bc4:	3c020000 	lui	v0,0x0				! v0=LC3
+			1bc4: R_MIPS_HI16	$LC3
+    1bc8:	24450000 	addiu	a1,v0,0
+			1bc8: R_MIPS_LO16	$LC3			! a1=LC3
+1cfc ---->
+    1bcc:	3c020000 	lui	v0,0x0				! v0=printk
+			1bcc: R_MIPS_HI16	printk
+    1bd0:	96060018 	lhu	a2,24(s0)			! a2=hcd_context->uh24
+    1bd4:	3c040000 	lui	a0,0x0				! a0=LC8
+			1bd4: R_MIPS_HI16	$LC8
+    1bd8:	24520000 	addiu	s2,v0,0				! s2=printk
+			1bd8: R_MIPS_LO16	printk
+		printk("<1>DMA Request %s , Address : 0x%4.4X", "READ/WRITE", uh24);
+    1bdc:	0240f809 	jalr	s2
+    1be0:	24840000 	addiu	a0,a0,0
+			1be0: R_MIPS_LO16	$LC8			! a0=LC8
+    1be4:	8e230000 	lw	v1,0(s1)			! v1=debuglevel
+			1be4: R_MIPS_LO16	debuglevel
+    1be8:	28630003 	slti	v1,v1,3				! v1=1 if v1<3
+    1bec:	1460ffeb 	bnez	v1,1b9c <DumpRequest+0x5c>	! to 1b9c if v1!=0   ---> out
+    1bf0:	8fbf001c 	lw	ra,28(sp)			! restore ra
+    1bf4:	3c040000 	lui	a0,0x0				! a0=HI(LC9)
+			1bf4: R_MIPS_HI16	$LC9
+    1bf8:	8e06002c 	lw	a2,44(s0)			! a2=hcd_ctx->w44
+    1bfc:	9605001a 	lhu	a1,26(s0)			! a1=hcd_ctx->uh26
+	printk(<1>   %d  bytes  buffer:0x%X , uh26, w44);
+    1c00:	0240f809 	jalr	s2
+    1c04:	24840000 	addiu	a0,a0,0				! a0=LC9
+			1c04: R_MIPS_LO16	$LC9
+    1c08:	8e220000 	lw	v0,0(s1)			! v0=debuglevel
+			1c08: R_MIPS_LO16	debuglevel
+1c68, 1c3c, 1d1c ------>
+    1c0c:	28420003 	slti	v0,v0,3				! v0=1 if v0<3
+>   1c10:	1440ffe1 	bnez	v0,1b98 <DumpRequest+0x58>	! to 1b98 if v0!=0  ----> out
+    1c14:	3c190000 	lui	t9,0x0				! t9=HI(printk)
+			1c14: R_MIPS_HI16	printk
+    1c18:	3c040000 	lui	a0,0x0				! a0=HI(LC10)
+			1c18: R_MIPS_HI16	$LC10
+    1c1c:	8fbf001c 	lw	ra,28(sp)			! restore ra
+    1c20:	8fb20018 	lw	s2,24(sp)			! restore s2
+    1c24:	8fb10014 	lw	s1,20(sp)			! restore s1
+    1c28:	8fb00010 	lw	s0,16(sp)			! restore s0
+    1c2c:	24840000 	addiu	a0,a0,0				! a0=LC10
+			1c2c: R_MIPS_LO16	$LC10
+    1c30:	27390000 	addiu	t9,t9,0				! t9=printk
+			1c30: R_MIPS_LO16	printk
+	printk("<1>************************************************************ ");  end and return
+    1c34:	03200008 	jr	t9
+    1c38:	27bd0020 	addiu	sp,sp,32			! dealloc stack, let printk return
+============================================================================================================
+1b80, 1cbc ---->  print internal write
+>   1c3c:	1440fff3 	bnez	v0,1c0c <DumpRequest+0xcc>	! to 1c0c if v0!=0 v0=rflag
+    1c40:	8e220000 	lw	v0,0(s1)			! v0=debuglevel
+			1c40: R_MIPS_LO16	debuglevel
+    1c44:	28420003 	slti	v0,v0,3				! v0=1 if v0<3
+>   1c48:	1440ffd4 	bnez	v0,1b9c <DumpRequest+0x5c>	! to 1b9c if v0!=0, silent out
+    1c4c:	8fbf001c 	lw	ra,28(sp)			! restore ra
+    1c50:	8e050014 	lw	a1,20(s0)			! a1=hcd_ctx->uw20
+    1c54:	3c040000 	lui	a0,0x0				! a0=HI(LC6)
+			1c54: R_MIPS_HI16	$LC6
+    1c58:	3c020000 	lui	v0,0x0				! v0=HI(printk)
+			1c58: R_MIPS_HI16	printk
+    1c5c:	24420000 	addiu	v0,v0,0				! v0=printk
+			1c5c: R_MIPS_LO16	printk
+	printk("<1>INTERNAL WRITE data: 0x%4.4X  ",uw20);
+    1c60:	0040f809 	jalr	v0
+    1c64:	24840000 	addiu	a0,a0,0				! a0=LC6
+			1c64: R_MIPS_LO16	$LC6
+>   1c68:	08000703 	j	1c0c <DumpRequest+0xcc>		! to 1c0c , print end header
+			1c68: R_MIPS_26	.text
+=================================================================================================
+    1c6c:	8e220000 	lw	v0,0(s1)			! v0=debuglevel
+			1c6c: R_MIPS_LO16	debuglevel
+1b78 ---->
+>   1c70:	1440001b 	bnez	v0,1ce0 <DumpRequest+0x1a0>	! to 1ce0 if v0!=0 (&0x10) External
+    1c74:	3c020000 	lui	v0,0x0				! v0=HI(LC2)
+			1c74: R_MIPS_HI16	$LC2
+    1c78:	3c020000 	lui	v0,0x0				! v0=HI(LC1)   Internal
+			1c78: R_MIPS_HI16	$LC1
+    1c7c:	24450000 	addiu	a1,v0,0				! a1=LC1
+			1c7c: R_MIPS_LO16	$LC1
+    1c80:	30820080 	andi	v0,a0,0x80			! v0=ub16&0x80  Read
+>   1c84:	1040001b 	beqz	v0,1cf4 <DumpRequest+0x1b4>	! to 1cf4 if v0==0
+    1c88:	3c020000 	lui	v0,0x0				! v0=HI(LC4)  write
+			1c88: R_MIPS_HI16	$LC4
+    1c8c:	3c020000 	lui	v0,0x0				! v0=HI(LC3)  read
+			1c8c: R_MIPS_HI16	$LC3
+1ce8 ---->
+    1c90:	24460000 	addiu	a2,v0,0				! a2=LC3 read
+			1c90: R_MIPS_LO16	$LC3
+1cf4 ---->
+    1c94:	96070018 	lhu	a3,24(s0)			! a3=hcd_ctx->uh24
+    1c98:	3c040000 	lui	a0,0x0				! a0=HI(LC5)
+			1c98: R_MIPS_HI16	$LC5
+    1c9c:	3c020000 	lui	v0,0x0				! v0=HI(printk)
+			1c9c: R_MIPS_HI16	printk
+    1ca0:	24420000 	addiu	v0,v0,0				! v0=printk
+			1ca0: R_MIPS_LO16	printk
+	printk("<1>PIO Request %s , %s , Address : 0x%4.4X", "INTERNAL"/"EXTERNAL", "READ"/"WRITE", uh24);
+    1ca4:	0040f809 	jalr	v0
+    1ca8:	24840000 	addiu	a0,a0,0				! a0=LC5
+			1ca8: R_MIPS_LO16	$LC5
+    1cac:	96040010 	lhu	a0,16(s0)			! a0=hcd_ctx->uh16
+    1cb0:	30820010 	andi	v0,a0,0x10			! v0=a0&0x10
+>   1cb4:	1440ffb4 	bnez	v0,1b88 <DumpRequest+0x48>	! to 1b88 if v0!=0  ! to 1b88 if external
+    1cb8:	30820080 	andi	v0,a0,0x80			! v0=a0&0x80 ! v0 = readflag
+>   1cbc:	0800070f 	j	1c3c <DumpRequest+0xfc>		! to 1c3c
+			1cbc: R_MIPS_26	.text
+    1cc0:	00000000 	nop
+===========================================================================================
+----> 1b60
+    1cc4:	3c040000 	lui	a0,0x0				! a0=HI(LC0)
+			1cc4: R_MIPS_HI16	$LC0
+    1cc8:	3c020000 	lui	v0,0x0				! v0=HI(printk)
+			1cc8: R_MIPS_HI16	printk
+    1ccc:	24420000 	addiu	v0,v0,0				! v0=printk
+			1ccc: R_MIPS_LO16	printk
+	printk("<1>************************REQUEST DUMP*********************** ");
+    1cd0:	0040f809 	jalr	v0
+    1cd4:	24840000 	addiu	a0,a0,0				! a0=LC0
+			1cd4: R_MIPS_LO16	$LC0
+    1cd8:	080006da 	j	1b68 <DumpRequest+0x28>		! to 1b68
+=================================================================================
+			1cd8: R_MIPS_26	.text
+    1cdc:	8e230000 	lw	v1,0(s1)			! v1=debuglevel
+			1cdc: R_MIPS_LO16	debuglevel
+1c70  ---->
+    1ce0:	24450000 	addiu	a1,v0,0				! a1=LC2 external
+			1ce0: R_MIPS_LO16	$LC2
+    1ce4:	30820080 	andi	v0,a0,0x80			! v0=a0&0x80
+>   1ce8:	1440ffe9 	bnez	v0,1c90 <DumpRequest+0x150>	! to 1c90 if v0!=0 , "READ" if 0x80 set
+    1cec:	3c020000 	lui	v0,0x0				! v0=HI(LC3) read  with read
+			1cec: R_MIPS_HI16	$LC3
+    1cf0:	3c020000 	lui	v0,0x0				! v0=HI(LC4) write
+			1cf0: R_MIPS_HI16	$LC4
+1c84 ----->
+>   1cf4:	08000725 	j	1c94 <DumpRequest+0x154>	! to 1c94  with write
+=======================================================================================
+			1cf4: R_MIPS_26	.text
+    1cf8:	24460000 	addiu	a2,v0,0				! a2=LC4
+			1cf8: R_MIPS_LO16	$LC4
+1bbc  ---->
+>   1cfc:	080006f3 	j	1bcc <DumpRequest+0x8c>		! to 1bcc
+=======================================================================================
+			1cfc: R_MIPS_26	.text
+    1d00:	24450000 	addiu	a1,v0,0				! a1=LC4
+			1d00: R_MIPS_LO16	$LC4
+1b90 ---->   print external access
+    1d04:	8e06002c 	lw	a2,44(s0)			! a2=w44
+    1d08:	9605001a 	lhu	a1,26(s0)			! a1=uh26
+    1d0c:	3c040000 	lui	a0,0x0				! a0=HI(LC7)
+			1d0c: R_MIPS_HI16	$LC7
+    1d10:	24420000 	addiu	v0,v0,0				! v0=printk
+			1d10: R_MIPS_LO16	printk
+	printk("<1>EXTERNAL Access : %d  bytes  buffer:0x%X ", uh26, w44);
+    1d14:	0040f809 	jalr	v0
+    1d18:	24840000 	addiu	a0,a0,0				! a0=LC7
+			1d18: R_MIPS_LO16	$LC7
+    1d1c:	08000703 	j	1c0c <DumpRequest+0xcc>		! to 1c0c
+			1d1c: R_MIPS_26	.text
+    1d20:	8e220000 	lw	v0,0(s1)			! v0=debuglevel
+			1d20: R_MIPS_LO16	debuglevel
+=======================================================================================
