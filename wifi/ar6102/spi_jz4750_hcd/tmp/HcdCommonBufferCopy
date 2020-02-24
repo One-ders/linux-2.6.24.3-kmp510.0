@@ -1,0 +1,189 @@
+void HcdCommonBufferCopy(UINT8         DataSize,
+                         PVOID         pDest,
+                         PVOID         pSrc,
+                         INT           Bytes,
+                         BOOL          ByteSwap)
+
+
+0000277c <HcdCommonBufferCopy>:
+    277c:	93a20010 	lbu	v0,16(sp)       ! v0=ByteSwap
+    2780:	00a05821 	move	t3,a1           ! t3=pDest
+    2784:	308800ff 	andi	t0,a0,0xff      ! t0=DataSize&0xff
+    2788:	00c02821 	move	a1,a2           ! a1=pSrc
+// to 27bc if !ByteSwap
+    278c:	1040000b 	beqz	v0,27bc <HcdCommonBufferCopy+0x40>
+    2790:	00e03021 	move	a2,a3           ! a2=Bytes
+// to 27c0 if DataSize==0 , 8 bit copy
+    2794:	1100000a 	beqz	t0,27c0 <HcdCommonBufferCopy+0x44>
+    2798:	3c190000 	lui	t9,0x0          ! t9=HI(memcpy)
+			2798: R_MIPS_HI16	memcpy
+    279c:	24020003 	li	v0,3            ! v0=3
+// to 2864 if DataSize==3 , 32 bit copy
+    27a0:	11020030 	beq	t0,v0,2864 <HcdCommonBufferCopy+0xe8>
+    27a4:	31640003 	andi	a0,t3,0x3       ! a0=pDest&3
+    27a8:	24020001 	li	v0,1            ! v0=1
+// to 27cc if DataSize==1  , 16 bit copy
+----> 2924
+    27ac:	11020007 	beq	t0,v0,27cc <HcdCommonBufferCopy+0x50>
+    27b0:	31620001 	andi	v0,t3,0x1       ! v0=pDest&1
+----> 27e8, 280c, 2914
+    27b4:	03e00008 	jr	ra              ! return
+    27b8:	00000000 	nop
+=============================================================================
+----> 2790  memcopy  !ByteSwap
+    27bc:	3c190000 	lui	t9,0x0          ! t9=HI(memcpy)
+			27bc: R_MIPS_HI16	memcpy
+----> 2798  memcopy DS=1
+    27c0:	27390000 	addiu	t9,t9,0         ! t9=memcpy
+			27c0: R_MIPS_LO16	memcpy
+    27c4:	03200008 	jr	t9              ! call memcpy; return
+    27c8:	01602021 	move	a0,t3           ! a0=pDest
+=============================================================================
+----> 27b0 DataSize == ATH_TRANS_DS_16
+    27cc:	24030002 	li	v1,2            ! v1=2
+    27d0:	0002180a 	movz	v1,zero,v0      ! v1=0 if !v0 clr MISA
+    27d4:	30a40001 	andi	a0,a1,0x1       ! a0=pSrc&1
+    27d8:	00644825 	or	t1,v1,a0        ! alignflags=v1|a0
+// to 28d8 if alignflags==0
+    27dc:	1120003e 	beqz	t1,28d8 <HcdCommonBufferCopy+0x15c>
+    27e0:	01604021 	move	t0,t3           ! t0=pDest
+    27e4:	00063043 	sra	a2,a2,0x1       ! a2=a2>>1
+// to 27b4 (out) if a2<=0
+    27e8:	18c0fff2 	blez	a2,27b4 <HcdCommonBufferCopy+0x38>
+    27ec:	24070001 	li	a3,1            ! a3=1
+    27f0:	00005021 	move	t2,zero         ! t2=0
+// to 281c if t1==1 srcMisalign
+    27f4:	11270009 	beq	t1,a3,281c <HcdCommonBufferCopy+0xa0>
+    27f8:	240b0002 	li	t3,2            ! t3=2
+----> 2814
+// to 2840 if t1==2 dstMisalign
+    27fc:	112b0010 	beq	t1,t3,2840 <HcdCommonBufferCopy+0xc4>
+    2800:	00000000 	nop
+----> 2860 from copy dst miss align
+    2804:	254a0001 	addiu	t2,t2,1         ! t2=t2+1
+    2808:	24a50002 	addiu	a1,a1,2         ! a1=a1+2
+// to 27b4 (out) if t2==a2
+    280c:	1146ffe9 	beq	t2,a2,27b4 <HcdCommonBufferCopy+0x38>
+    2810:	25080002 	addiu	t0,t0,2         ! t0=t0+2
+// to 27fc if t1!=a3 loop
+    2814:	1527fff9 	bne	t1,a3,27fc <HcdCommonBufferCopy+0x80>
+    2818:	00000000 	nop
+----> 27f8  copy 16 bits, srcMisAlign
+    281c:	90a20001 	lbu	v0,1(a1)        ! v0=a1[1]
+    2820:	90a30000 	lbu	v1,0(a1)        ! v1=a1[0]
+    2824:	00021200 	sll	v0,v0,0x8       ! v0=v0<<8
+    2828:	00431025 	or	v0,v0,v1        ! v0=v0|v1
+    282c:	00022202 	srl	a0,v0,0x8       ! a0=v0>>8
+    2830:	00021200 	sll	v0,v0,0x8       ! v0=v0<<8
+    2834:	00441025 	or	v0,v0,a0        ! v0=v0|a0
+// to 2804 loop
+    2838:	08000a01 	j	2804 <HcdCommonBufferCopy+0x88>
+			2838: R_MIPS_26	.text
+    283c:	a5020000 	sh	v0,0(t0)        ! t0[0]=v0
+============================================================================
+----> 27fc copy 16 bit, dst miss align
+    2840:	94a20000 	lhu	v0,0(a1)        ! v0=a1[0]
+    2844:	00021a02 	srl	v1,v0,0x8       ! v1=v0>>8
+    2848:	00021200 	sll	v0,v0,0x8       ! v0=v0<<8
+    284c:	00431025 	or	v0,v0,v1        ! v0=v0|v1
+    2850:	3042ffff 	andi	v0,v0,0xffff    ! v0=v0&0xffff
+    2854:	00021a02 	srl	v1,v0,0x8       ! v1=v0>>8
+    2858:	a1030001 	sb	v1,1(t0)        ! t0[1]=v1
+// to 2804 loop
+    285c:	08000a01 	j	2804 <HcdCommonBufferCopy+0x88>
+			285c: R_MIPS_26	.text
+    2860:	a1020000 	sb	v0,0(t0)        ! t0[0]=v0
+==============================================================================
+----> 27a4  !! COPY ATH_TRANS_DS_32
+    2864:	24030002 	li	v1,2            ! v1=DST_MIS_ALIGN
+    2868:	30a20003 	andi	v0,a1,0x3       ! v0=pSrc&3
+    286c:	0004180a 	movz	v1,zero,a0      ! v1=0 if !a0 clr dst
+    2870:	0002102b 	sltu	v0,zero,v0      ! v0=1 if 0<v0 SRC_MIS_A
+    2874:	00621825 	or	v1,v1,v0        ! v1=v1|v0 aflags
+    2878:	00a05021 	move	t2,a1           ! t2=pSrc
+// to 2910 if v1!=0  alignflags!=GOOD
+    287c:	14600024 	bnez	v1,2910 <HcdCommonBufferCopy+0x194>
+    2880:	01604821 	move	t1,t3           ! t1=pDest
+    2884:	00073083 	sra	a2,a3,0x2       ! a2=a3>>2
+// to 27b4 (out) if a2<=0
+    2888:	18c0ffca 	blez	a2,27b4 <HcdCommonBufferCopy+0x38>
+    288c:	00004021 	move	t0,zero         ! t0=0
+    2890:	3c0700ff 	lui	a3,0xff         ! a3=0xff0000
+----> 28cc
+    2894:	8d420000 	lw	v0,0(t2)        ! v0=t2[0]
+    2898:	25080001 	addiu	t0,t0,1         ! t0=t0+1
+    289c:	00021e00 	sll	v1,v0,0x18      ! v1=v0<<0x18
+    28a0:	00022e02 	srl	a1,v0,0x18      ! a1=v0>>0x18
+    28a4:	3044ff00 	andi	a0,v0,0xff00    ! a0=v0&0xff00
+    28a8:	00651825 	or	v1,v1,a1        ! v1=v1|a1
+    28ac:	00042200 	sll	a0,a0,0x8       ! a0=a0<<0x8
+    28b0:	00471024 	and	v0,v0,a3        ! v0=v0&a3
+    28b4:	00641825 	or	v1,v1,a0        ! v1=v1|a0
+    28b8:	00021202 	srl	v0,v0,0x8       ! v0=v0>>0x8
+    28bc:	00621825 	or	v1,v1,v0        ! v1=v1|v0
+    28c0:	ad230000 	sw	v1,0(t1)        ! t1[0]=v1
+    28c4:	254a0004 	addiu	t2,t2,4         ! t2=t2+4
+// to 2894 if a2!=t0 loop
+    28c8:	14c8fff2 	bne	a2,t0,2894 <HcdCommonBufferCopy+0x118>
+    28cc:	25290004 	addiu	t1,t1,4         ! t1=t1+4
+    28d0:	03e00008 	jr	ra              ! return
+    28d4:	00000000 	nop
+==============================================================================
+----> 27e0 Copy 16 bit aligned
+    28d8:	00063043 	sra	a2,a2,0x1       ! a2=a2>>1
+// to 27b4 (out) if a2<=0
+    28dc:	18c0ffb5 	blez	a2,27b4 <HcdCommonBufferCopy+0x38>
+    28e0:	00002021 	move	a0,zero         ! a0=0
+----> 2904 for loop
+    28e4:	94a20000 	lhu	v0,0(a1)        ! v0=a1[0]
+    28e8:	24840001 	addiu	a0,a0,1         ! a0=a0+1
+    28ec:	00021a02 	srl	v1,v0,0x8       ! v1=v0>>0x8
+    28f0:	00021200 	sll	v0,v0,0x8       ! v0=v0<<0x8
+    28f4:	00431025 	or	v0,v0,v1        ! v0=v0|v1
+    28f8:	a5020000 	sh	v0,0(t0)        ! t0[0]=v0
+    28fc:	24a50002 	addiu	a1,a1,2         ! a1=a1+2
+// to 28e4 a0!=a2
+    2900:	1486fff8 	bne	a0,a2,28e4 <HcdCommonBufferCopy+0x168>
+    2904:	25080002 	addiu	t0,t0,2         ! t0=t0+2
+    2908:	03e00008 	jr	ra              ! return
+    290c:	00000000 	nop
+=============================================================================
+----> 2880     32bit data size miss aligned
+    2910:	00071083 	sra	v0,a3,0x2       ! v0=a3>>2
+// to 27b4 (out) if v0<=0      for loop entry, bytes>>2 <=0
+    2914:	1840ffa7 	blez	v0,27b4 <HcdCommonBufferCopy+0x38>
+    2918:	24020001 	li	v0,1            ! v0=srcMissAlign
+// to 2960 v1==srcMissAlign
+    291c:	10620010 	beq	v1,v0,2960 <HcdCommonBufferCopy+0x1e4>
+    2920:	24020002 	li	v0,2            ! v0=dstMissAlign
+// to 27ac v1!=dstMissAlign jump to 16 bit check
+    2924:	1462ffa1 	bne	v1,v0,27ac <HcdCommonBufferCopy+0x30>
+    2928:	24020001 	li	v0,1            ! v0=1
+    292c:	8ca20000 	lw	v0,0(a1)        ! v0=a1[0]
+    2930:	304500ff 	andi	a1,v0,0xff      ! a1=v0&0xff
+    2934:	00022202 	srl	a0,v0,0x8       ! a0=v0>>0x8
+    2938:	3043ff00 	andi	v1,v0,0xff00    ! v1=v0&0xff00
+    293c:	3084ff00 	andi	a0,a0,0xff00    ! a0=a0&0xff00
+    2940:	00031a02 	srl	v1,v1,0x8       ! v1=v1>>0x8
+    2944:	00052a00 	sll	a1,a1,0x8       ! a1=a1<<0x8
+    2948:	00021602 	srl	v0,v0,0x18      ! v0=v0>>0x18
+    294c:	00822025 	or	a0,a0,v0        ! a0=a0|v0
+    2950:	00651825 	or	v1,v1,a1        ! v1=v1|a1
+    2954:	a5630002 	sh	v1,2(t3)        ! t3[2]=v1
+    2958:	03e00008 	jr	ra              ! return
+    295c:	a5640000 	sh	a0,0(t3)        ! t3[0]=a0
+=============================================================================
+----> 291c 32 bit data copy src miss aligned
+    2960:	94a20000 	lhu	v0,0(a1)        ! v0=a1[0]
+    2964:	94a50002 	lhu	a1,2(a1)        ! a1=a1[2]
+    2968:	3044ff00 	andi	a0,v0,0xff00    ! a0=v0&0xff00
+    296c:	30a300ff 	andi	v1,a1,0xff      ! v1=a1&0xff
+    2970:	00042200 	sll	a0,a0,0x8       ! a0=a0<<0x8
+    2974:	00021600 	sll	v0,v0,0x18      ! v0=v0<<0x18
+    2978:	00441025 	or	v0,v0,a0        ! v0=v0|a0
+    297c:	00031a00 	sll	v1,v1,0x8       ! v1=v1<<0x8
+    2980:	00431025 	or	v0,v0,v1        ! v0=v0|v1
+    2984:	00052a02 	srl	a1,a1,0x8       ! a1=a1>>0x8
+    2988:	00451025 	or	v0,v0,a1        ! v0=v0|a1
+    298c:	03e00008 	jr	ra              ! return
+    2990:	ad620000 	sw	v0,0(t3)        ! t3[0]=v0

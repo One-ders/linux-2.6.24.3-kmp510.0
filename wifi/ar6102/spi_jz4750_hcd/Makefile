@@ -4,6 +4,7 @@ ifneq (${KERNELRELEASE},)
 obj-m := athspi_jz4755_hcd.o
 athspi_jz4755_hcd-objs := jz4755_spi.o ath_spi_hcd.o
 MY_CFLAGS +=
+#CFLAGS_ath_spi_hcd.o := -finline-functions
 #-fdump-ipa-cgraph -fdump-tree-all
 ccflags-y += ${MY_CFLAGS}
 CC += ${MY_CFLAGS}

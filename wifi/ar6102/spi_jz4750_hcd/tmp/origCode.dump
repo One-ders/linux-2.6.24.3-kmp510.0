@@ -2696,321 +2696,366 @@ DoPioWriteInternal():
     1e20:	27bd0020 	addiu	sp,sp,32			! dealloc stack
 
 00001e24 <HcdDeinitialize>:
-HcdDeinitialize():
-    1e24:	27bdffe8 	addiu	sp,sp,-24
-    1e28:	24030001 	li	v1,1
-    1e2c:	3c020000 	lui	v0,0x0
+HcdDeinitialize():			!  struct hcd_context * a0
+    1e24:	27bdffe8 	addiu	sp,sp,-24			! alloc 24 bytes
+    1e28:	24030001 	li	v1,1				! v1=1
+    1e2c:	3c020000 	lui	v0,0x0				! v0=HI(HW_StopTimer)
 			1e2c: R_MIPS_HI16	HW_StopTimer
-    1e30:	afb00010 	sw	s0,16(sp)
-    1e34:	afbf0014 	sw	ra,20(sp)
-    1e38:	00808021 	move	s0,a0
-    1e3c:	24420000 	addiu	v0,v0,0
+    1e30:	afb00010 	sw	s0,16(sp)			! save s0
+    1e34:	afbf0014 	sw	ra,20(sp)			! save ra
+    1e38:	00808021 	move	s0,a0				! s0=a0
+    1e3c:	24420000 	addiu	v0,v0,0				! v0=HW_StopTimer
 			1e3c: R_MIPS_LO16	HW_StopTimer
+		HW_StopTimer(a0)
     1e40:	0040f809 	jalr	v0
-    1e44:	a0830008 	sb	v1,8(a0)
-    1e48:	8e030088 	lw	v1,136(s0)
-    1e4c:	26040044 	addiu	a0,s0,68
-    1e50:	10600007 	beqz	v1,1e70 <HcdDeinitialize+0x4c>
-    1e54:	24050004 	li	a1,4
-    1e58:	2402fff8 	li	v0,-8
-    1e5c:	ac620040 	sw	v0,64(v1)
-    1e60:	3c020000 	lui	v0,0x0
+    1e44:	a0830008 	sb	v1,8(a0)			! hcd_ctx->ub8=1
+    1e48:	8e030088 	lw	v1,136(s0)			! v1=hcd_ctx->pHcd.pCurrentRequest
+    1e4c:	26040044 	addiu	a0,s0,68			! a0=&hcd_ctx->pHcd
+>   1e50:	10600007 	beqz	v1,1e70 <HcdDeinitialize+0x4c>  ! to 1e70 if currentReq==0
+    1e54:	24050004 	li	a1,4				! a1=4 (TRANFER_DONE)
+    1e58:	2402fff8 	li	v0,-8				! v0=-8
+    1e5c:	ac620040 	sw	v0,64(v1)			! currentReq.Status=SDIO_STATUS_CANCELED
+    1e60:	3c020000 	lui	v0,0x0				! v0=HI(SDIO_HandleHcdEvent)
 			1e60: R_MIPS_HI16	SDIO_HandleHcdEvent
-    1e64:	24420000 	addiu	v0,v0,0
+    1e64:	24420000 	addiu	v0,v0,0				! v0=SDIO_HandleHcdEvent
 			1e64: R_MIPS_LO16	SDIO_HandleHcdEvent
+	SDIO_HandleHcdEvent(hcd_ctx, EVENT_HCD_TRANSFER_DONE);
     1e68:	0040f809 	jalr	v0
     1e6c:	00000000 	nop
-    1e70:	920200f9 	lbu	v0,249(s0)
-    1e74:	02002021 	move	a0,s0
-    1e78:	30420002 	andi	v0,v0,0x2
-    1e7c:	24050400 	li	a1,1024
-    1e80:	14400005 	bnez	v0,1e98 <HcdDeinitialize+0x74>
-    1e84:	34068000 	li	a2,0x8000
-    1e88:	8fbf0014 	lw	ra,20(sp)
-    1e8c:	8fb00010 	lw	s0,16(sp)
-    1e90:	03e00008 	jr	ra
-    1e94:	27bd0018 	addiu	sp,sp,24
-    1e98:	3c190000 	lui	t9,0x0
+1e50  --->
+    1e70:	920200f9 	lbu	v0,249(s0)			! v0=hcd_ctx->ub249
+    1e74:	02002021 	move	a0,s0				! a0=s0
+    1e78:	30420002 	andi	v0,v0,0x2			! v0=v0&0x2
+    1e7c:	24050400 	li	a1,1024				! a1=1024
+>   1e80:	14400005 	bnez	v0,1e98 <HcdDeinitialize+0x74>  ! to 1e98 if v0
+    1e84:	34068000 	li	a2,0x8000			! a2=0x8000
+    1e88:	8fbf0014 	lw	ra,20(sp)			! restore ra
+    1e8c:	8fb00010 	lw	s0,16(sp)			! restore s0
+    1e90:	03e00008 	jr	ra				! return
+    1e94:	27bd0018 	addiu	sp,sp,24			! deallocate stack
+1e80  ---->
+    1e98:	3c190000 	lui	t9,0x0				! t9=HI(text)
 			1e98: R_MIPS_HI16	.text
-    1e9c:	8fbf0014 	lw	ra,20(sp)
-    1ea0:	8fb00010 	lw	s0,16(sp)
-    1ea4:	27391da4 	addiu	t9,t9,7588
+    1e9c:	8fbf0014 	lw	ra,20(sp)			! restore ra
+    1ea0:	8fb00010 	lw	s0,16(sp)			! restore s0
+    1ea4:	27391da4 	addiu	t9,t9,7588			! t9=DoPioWriteInternal
 			1ea4: R_MIPS_LO16	.text
-    1ea8:	03200008 	jr	t9
-    1eac:	27bd0018 	addiu	sp,sp,24
+    1ea8:	03200008 	jr	t9				! call DoPioWriteInternal and return
+    1eac:	27bd0018 	addiu	sp,sp,24			! deallocate stack
 
 00001eb0 <ResetWriteBufferWaterMark>:
 ResetWriteBufferWaterMark():
-    1eb0:	27bdffe0 	addiu	sp,sp,-32
-    1eb4:	3c020000 	lui	v0,0x0
+    1eb0:	27bdffe0 	addiu	sp,sp,-32			! allocate 32 bytes
+    1eb4:	3c020000 	lui	v0,0x0				! v0=HI(text)
 			1eb4: R_MIPS_HI16	.text
-    1eb8:	afb10014 	sw	s1,20(sp)
-    1ebc:	afb00010 	sw	s0,16(sp)
-    1ec0:	24051300 	li	a1,4864
-    1ec4:	00003021 	move	a2,zero
-    1ec8:	afbf0018 	sw	ra,24(sp)
-    1ecc:	24511da4 	addiu	s1,v0,7588
+    1eb8:	afb10014 	sw	s1,20(sp)			! save s1
+    1ebc:	afb00010 	sw	s0,16(sp)			! save s0
+    1ec0:	24051300 	li	a1,4864				! a1=4864
+    1ec4:	00003021 	move	a2,zero				! a2=0
+    1ec8:	afbf0018 	sw	ra,24(sp)			! save ra
+    1ecc:	24511da4 	addiu	s1,v0,7588			! s1=DoPioWriteInternal
 			1ecc: R_MIPS_LO16	.text
+		call DoPioWriteInternal(hcd_ctx, 4864,0)
     1ed0:	0220f809 	jalr	s1
-    1ed4:	00808021 	move	s0,a0
-    1ed8:	02002021 	move	a0,s0
-    1edc:	24050c00 	li	a1,3072
-    1ee0:	04400007 	bltz	v0,1f00 <ResetWriteBufferWaterMark+0x50>
-    1ee4:	24060400 	li	a2,1024
-    1ee8:	0220c821 	move	t9,s1
-    1eec:	8fbf0018 	lw	ra,24(sp)
-    1ef0:	8fb10014 	lw	s1,20(sp)
-    1ef4:	8fb00010 	lw	s0,16(sp)
-    1ef8:	03200008 	jr	t9
-    1efc:	27bd0020 	addiu	sp,sp,32
-    1f00:	8fbf0018 	lw	ra,24(sp)
-    1f04:	8fb10014 	lw	s1,20(sp)
-    1f08:	8fb00010 	lw	s0,16(sp)
-    1f0c:	03e00008 	jr	ra
-    1f10:	27bd0020 	addiu	sp,sp,32
+    1ed4:	00808021 	move	s0,a0				! s0=a0
+    1ed8:	02002021 	move	a0,s0				! a0=s0
+    1edc:	24050c00 	li	a1,3072				! a1=3072
+>   1ee0:	04400007 	bltz	v0,1f00 <ResetWriteBufferWaterMark+0x50> ! to 1f00 piowrite return < 0
+    1ee4:	24060400 	li	a2,1024				! a2=1024
+    1ee8:	0220c821 	move	t9,s1				! t9=DoPioWriteInternal
+    1eec:	8fbf0018 	lw	ra,24(sp)			! restore ra
+    1ef0:	8fb10014 	lw	s1,20(sp)			! restore s1
+    1ef4:	8fb00010 	lw	s0,16(sp)			! restore s0
+    1ef8:	03200008 	jr	t9				! call piowrite and return,
+    1efc:	27bd0020 	addiu	sp,sp,32			! dealloc stack
+1ee0  --->
+    1f00:	8fbf0018 	lw	ra,24(sp)			! restore ra
+    1f04:	8fb10014 	lw	s1,20(sp)			! restore s1
+    1f08:	8fb00010 	lw	s0,16(sp)			! restore s0
+    1f0c:	03e00008 	jr	ra				! return
+    1f10:	27bd0020 	addiu	sp,sp,32			! dealloc stack
 
 00001f14 <MaskSPIInterrupts>:
 MaskSPIInterrupts():
-    1f14:	94820012 	lhu	v0,18(a0)
-    1f18:	30a5ffff 	andi	a1,a1,0xffff
-    1f1c:	00052827 	nor	a1,zero,a1
-    1f20:	00a22824 	and	a1,a1,v0
-    1f24:	3c190000 	lui	t9,0x0
+    1f14:	94820012 	lhu	v0,18(a0)			! v0=hcd_ctx->ub18
+    1f18:	30a5ffff 	andi	a1,a1,0xffff			! a1=a1&0xffff
+    1f1c:	00052827 	nor	a1,zero,a1			! a1=~a1
+    1f20:	00a22824 	and	a1,a1,v0			! a1=a1&v0
+    1f24:	3c190000 	lui	t9,0x0				! t9=HI(text)
 			1f24: R_MIPS_HI16	.text
-    1f28:	a4850012 	sh	a1,18(a0)
-    1f2c:	00a03021 	move	a2,a1
-    1f30:	27391da4 	addiu	t9,t9,7588
+    1f28:	a4850012 	sh	a1,18(a0)			! hcd_ctx->ub18=a1
+    1f2c:	00a03021 	move	a2,a1				! a2=a1
+    1f30:	27391da4 	addiu	t9,t9,7588			! t9=DoPioWriteInt
 			1f30: R_MIPS_LO16	.text
-    1f34:	03200008 	jr	t9
-    1f38:	24050d00 	li	a1,3328
+    1f34:	03200008 	jr	t9				! call and return
+    1f38:	24050d00 	li	a1,3328				! a1=3328
 
 00001f3c <UnmaskSPIInterrupts>:
 UnmaskSPIInterrupts():
-    1f3c:	94860012 	lhu	a2,18(a0)
-    1f40:	30a5ffff 	andi	a1,a1,0xffff
-    1f44:	00c53025 	or	a2,a2,a1
-    1f48:	3c190000 	lui	t9,0x0
+    1f3c:	94860012 	lhu	a2,18(a0)			! a2=hcd_ctx->uh18
+    1f40:	30a5ffff 	andi	a1,a1,0xffff			! a1=a1&0xffff
+    1f44:	00c53025 	or	a2,a2,a1			! a2=a2|a1
+    1f48:	3c190000 	lui	t9,0x0				! t9=HI(text)
 			1f48: R_MIPS_HI16	.text
-    1f4c:	a4860012 	sh	a2,18(a0)
-    1f50:	27391da4 	addiu	t9,t9,7588
+    1f4c:	a4860012 	sh	a2,18(a0)			! hcd_ctx->uh18=a2
+    1f50:	27391da4 	addiu	t9,t9,7588			! t9=DoPioWriteInt
 			1f50: R_MIPS_LO16	.text
-    1f54:	03200008 	jr	t9
-    1f58:	24050d00 	li	a1,3328
+    1f54:	03200008 	jr	t9				! call and return
+    1f58:	24050d00 	li	a1,3328				! a1=3328
 
 00001f5c <DoDataFrames>:
 DoDataFrames():
-    1f5c:	27bdffc0 	addiu	sp,sp,-64
-    1f60:	30e700ff 	andi	a3,a3,0xff
-    1f64:	afb1001c 	sw	s1,28(sp)
-    1f68:	24080001 	li	t0,1
-    1f6c:	30f10003 	andi	s1,a3,0x3
-    1f70:	afbe0038 	sw	s8,56(sp)
-    1f74:	afb40028 	sw	s4,40(sp)
-    1f78:	afbf003c 	sw	ra,60(sp)
-    1f7c:	afb70034 	sw	s7,52(sp)
-    1f80:	afb60030 	sw	s6,48(sp)
-    1f84:	afb5002c 	sw	s5,44(sp)
-    1f88:	afb30024 	sw	s3,36(sp)
-    1f8c:	afb20020 	sw	s2,32(sp)
-    1f90:	afb00018 	sw	s0,24(sp)
-    1f94:	0080f021 	move	s8,a0
-    1f98:	12280092 	beq	s1,t0,21e4 <DoDataFrames+0x288>
-    1f9c:	93b40050 	lbu	s4,80(sp)
-    1fa0:	24030003 	li	v1,3
-    1fa4:	1223009e 	beq	s1,v1,2220 <DoDataFrames+0x2c4>
-    1fa8:	3a220002 	xori	v0,s1,0x2
-    1fac:	00609821 	move	s3,v1
-    1fb0:	0102980b 	movn	s3,t0,v0
-    1fb4:	10c000a9 	beqz	a2,225c <DoDataFrames+0x300>
-    1fb8:	0007ae00 	sll	s5,a3,0x18
-    1fbc:	0015ae03 	sra	s5,s5,0x18
-    1fc0:	00a08021 	move	s0,a1
-    1fc4:	00d39023 	subu	s2,a2,s3
-    1fc8:	0013b023 	negu	s6,s3
-    1fcc:	06a00018 	bltz	s5,2030 <DoDataFrames+0xd4>
-    1fd0:	3c170000 	lui	s7,0x0
+    1f5c:	27bdffc0 	addiu	sp,sp,-64			! alloc 64 bytes
+    1f60:	30e700ff 	andi	a3,a3,0xff			! a3=a3&0xff
+    1f64:	afb1001c 	sw	s1,28(sp)			! save s1
+    1f68:	24080001 	li	t0,1				! t0=1
+    1f6c:	30f10003 	andi	s1,a3,0x3			! s1=a3&0x03
+    1f70:	afbe0038 	sw	s8,56(sp)			! save s8
+    1f74:	afb40028 	sw	s4,40(sp)			! save s4
+    1f78:	afbf003c 	sw	ra,60(sp)			! save ra
+    1f7c:	afb70034 	sw	s7,52(sp)			! save s7
+    1f80:	afb60030 	sw	s6,48(sp)			! save s6
+    1f84:	afb5002c 	sw	s5,44(sp)			! save s5
+    1f88:	afb30024 	sw	s3,36(sp)			! save s3
+    1f8c:	afb20020 	sw	s2,32(sp)			! save s2
+    1f90:	afb00018 	sw	s0,24(sp)			! save s0
+    1f94:	0080f021 	move	s8,a0				! s8=a0
+>   1f98:	12280092 	beq	s1,t0,21e4 <DoDataFrames+0x288> ! to 21e4 if s1==t0
+    1f9c:	93b40050 	lbu	s4,80(sp)			! s4=80(sp)
+    1fa0:	24030003 	li	v1,3				! v1=3
+>   1fa4:	1223009e 	beq	s1,v1,2220 <DoDataFrames+0x2c4> ! to 2220 if s1==3
+    1fa8:	3a220002 	xori	v0,s1,0x2			! v0=s1^0x02
+    1fac:	00609821 	move	s3,v1				! s3=v1
+    1fb0:	0102980b 	movn	s3,t0,v0			! s3=t0 if v0
+21e4, 2220 --->
+>   1fb4:	10c000a9 	beqz	a2,225c <DoDataFrames+0x300>	! to 225c if !a2
+    1fb8:	0007ae00 	sll	s5,a3,0x18			! s5=a3<<0x18
+    1fbc:	0015ae03 	sra	s5,s5,0x18			! s5=s5>>0x18
+    1fc0:	00a08021 	move	s0,a1				! s0=a1
+    1fc4:	00d39023 	subu	s2,a2,s3			! s2=a2-s3
+    1fc8:	0013b023 	negu	s6,s3				! s6=-s3
+>   1fcc:	06a00018 	bltz	s5,2030 <DoDataFrames+0xd4>	! to 2030 if s5<0
+    1fd0:	3c170000 	lui	s7,0x0				! s7=HI(HW_InOut_To)
 			1fd0: R_MIPS_HI16	HW_InOut_Token
-    1fd4:	24020001 	li	v0,1
-    1fd8:	12220036 	beq	s1,v0,20b4 <DoDataFrames+0x158>
-    1fdc:	24020003 	li	v0,3
-    1fe0:	1222003c 	beq	s1,v0,20d4 <DoDataFrames+0x178>
-    1fe4:	24020002 	li	v0,2
-    1fe8:	12220048 	beq	s1,v0,210c <DoDataFrames+0x1b0>
+2028 --->
+    1fd4:	24020001 	li	v0,1				! v0=1
+>   1fd8:	12220036 	beq	s1,v0,20b4 <DoDataFrames+0x158> ! to 20b4 if s1==1
+    1fdc:	24020003 	li	v0,3				! v0=3
+>   1fe0:	1222003c 	beq	s1,v0,20d4 <DoDataFrames+0x178>	! to 20d4 if s1==3
+    1fe4:	24020002 	li	v0,2				! v0=2
+>   1fe8:	12220048 	beq	s1,v0,210c <DoDataFrames+0x1b0> ! to 210c if s1==2
     1fec:	00000000 	nop
-    1ff0:	92020000 	lbu	v0,0(s0)
-    1ff4:	afa20010 	sw	v0,16(sp)
-    1ff8:	8fa50010 	lw	a1,16(sp)
-    1ffc:	02203021 	move	a2,s1
-    2000:	03c02021 	move	a0,s8
-    2004:	26e20000 	addiu	v0,s7,0
+    1ff0:	92020000 	lbu	v0,0(s0)			! v0=*s0
+    1ff4:	afa20010 	sw	v0,16(sp)			! 16(sp)=v0
+20cc, 2104, 2130, 2148, 2178, 219c --->
+    1ff8:	8fa50010 	lw	a1,16(sp)			! a1=16(sp)
+    1ffc:	02203021 	move	a2,s1				! a2=s1
+    2000:	03c02021 	move	a0,s8				! a0=s8
+    2004:	26e20000 	addiu	v0,s7,0				! v0=s7+0
 			2004: R_MIPS_LO16	HW_InOut_Token
+	rc=HW_InOut_Token(hcd_ctx, a1, a2, 0);
     2008:	0040f809 	jalr	v0
-    200c:	00003821 	move	a3,zero
-    2010:	0440001b 	bltz	v0,2080 <DoDataFrames+0x124>
-    2014:	00403021 	move	a2,v0
-    2018:	02569021 	addu	s2,s2,s6
-    201c:	02531021 	addu	v0,s2,s3
-    2020:	10400018 	beqz	v0,2084 <DoDataFrames+0x128>
-    2024:	8fbf003c 	lw	ra,60(sp)
-    2028:	06a1ffea 	bgez	s5,1fd4 <DoDataFrames+0x78>
-    202c:	02138021 	addu	s0,s0,s3
-    2030:	02203021 	move	a2,s1
-    2034:	03c02021 	move	a0,s8
-    2038:	2405ffff 	li	a1,-1
-    203c:	26e20000 	addiu	v0,s7,0
+    200c:	00003821 	move	a3,zero				! a3=0
+>   2010:	0440001b 	bltz	v0,2080 <DoDataFrames+0x124>	! to 2080 if v0<0
+    2014:	00403021 	move	a2,v0				! a2=v0
+21b4, 21dc, 2208, 2218, 2240, 2254 --->
+    2018:	02569021 	addu	s2,s2,s6			! s2=s2+s6
+    201c:	02531021 	addu	v0,s2,s3			! v0=s2+s3
+>   2020:	10400018 	beqz	v0,2084 <DoDataFrames+0x128>	! to 2084 if v0==0
+    2024:	8fbf003c 	lw	ra,60(sp)			! restore ra
+2078 ---->
+>   2028:	06a1ffea 	bgez	s5,1fd4 <DoDataFrames+0x78>	! to 1fd4 if s5>=0
+    202c:	02138021 	addu	s0,s0,s3			! s0=s0+s3
+1fcc ----->
+    2030:	02203021 	move	a2,s1				! a2=s1
+    2034:	03c02021 	move	a0,s8				! a0=s8
+    2038:	2405ffff 	li	a1,-1				! a1=-1
+    203c:	26e20000 	addiu	v0,s7,0				! v0=s7+0
 			203c: R_MIPS_LO16	HW_InOut_Token
+		rc=HW_InOut_Token(hcd_ctx,-1,s1,&sp[16]);
     2040:	0040f809 	jalr	v0
     2044:	27a70010 	addiu	a3,sp,16
-    2048:	0440000d 	bltz	v0,2080 <DoDataFrames+0x124>
-    204c:	00403021 	move	a2,v0
-    2050:	24020001 	li	v0,1
-    2054:	12220053 	beq	s1,v0,21a4 <DoDataFrames+0x248>
-    2058:	24020003 	li	v0,3
-    205c:	12220057 	beq	s1,v0,21bc <DoDataFrames+0x260>
-    2060:	24020002 	li	v0,2
-    2064:	12220061 	beq	s1,v0,21ec <DoDataFrames+0x290>
-    2068:	8fa20010 	lw	v0,16(sp)
-    206c:	02569021 	addu	s2,s2,s6
-    2070:	a2020000 	sb	v0,0(s0)
-    2074:	02531021 	addu	v0,s2,s3
-    2078:	1440ffeb 	bnez	v0,2028 <DoDataFrames+0xcc>
+>   2048:	0440000d 	bltz	v0,2080 <DoDataFrames+0x124>	! to 2080 if rc<0
+    204c:	00403021 	move	a2,v0				! a2=rc
+    2050:	24020001 	li	v0,1				! v0=1
+>   2054:	12220053 	beq	s1,v0,21a4 <DoDataFrames+0x248> ! to 21a4 if s1==1
+    2058:	24020003 	li	v0,3				! v0=3
+>   205c:	12220057 	beq	s1,v0,21bc <DoDataFrames+0x260>	! to 21bc if s1==3
+    2060:	24020002 	li	v0,2				! v0=2
+>   2064:	12220061 	beq	s1,v0,21ec <DoDataFrames+0x290> ! to 21ec if s1==2
+    2068:	8fa20010 	lw	v0,16(sp)			! v0=16(sp)
+    206c:	02569021 	addu	s2,s2,s6			! s2=s2+s6
+    2070:	a2020000 	sb	v0,0(s0)			! *s0=v0
+    2074:	02531021 	addu	v0,s2,s3			! v0=s2+s3
+>   2078:	1440ffeb 	bnez	v0,2028 <DoDataFrames+0xcc>	! to 2028 if v0!=0
     207c:	00000000 	nop
-    2080:	8fbf003c 	lw	ra,60(sp)
-    2084:	8fbe0038 	lw	s8,56(sp)
-    2088:	8fb70034 	lw	s7,52(sp)
-    208c:	8fb60030 	lw	s6,48(sp)
-    2090:	8fb5002c 	lw	s5,44(sp)
-    2094:	8fb40028 	lw	s4,40(sp)
-    2098:	8fb30024 	lw	s3,36(sp)
-    209c:	8fb20020 	lw	s2,32(sp)
-    20a0:	8fb1001c 	lw	s1,28(sp)
-    20a4:	8fb00018 	lw	s0,24(sp)
-    20a8:	00c01021 	move	v0,a2
-    20ac:	03e00008 	jr	ra
-    20b0:	27bd0040 	addiu	sp,sp,64
-    20b4:	12800020 	beqz	s4,2138 <DoDataFrames+0x1dc>
+2010, 2048, 225c --->
+    2080:	8fbf003c 	lw	ra,60(sp)			! restore ra
+2020 --->
+    2084:	8fbe0038 	lw	s8,56(sp)			! restore s8
+    2088:	8fb70034 	lw	s7,52(sp)			! restore s7
+    208c:	8fb60030 	lw	s6,48(sp)			! restore s6
+    2090:	8fb5002c 	lw	s5,44(sp)			! restore s5
+    2094:	8fb40028 	lw	s4,40(sp)			! restore s4
+    2098:	8fb30024 	lw	s3,36(sp)			! restore s3
+    209c:	8fb20020 	lw	s2,32(sp)			! restore s2
+    20a0:	8fb1001c 	lw	s1,28(sp)			! restore s1
+    20a4:	8fb00018 	lw	s0,24(sp)			! restore s0
+    20a8:	00c01021 	move	v0,a2				! v0=a2
+    20ac:	03e00008 	jr	ra				! return
+    20b0:	27bd0040 	addiu	sp,sp,64			! dealloc stack
+===================================================================================================
+1fd8  --->
+>   20b4:	12800020 	beqz	s4,2138 <DoDataFrames+0x1dc>	! to 2138 if s4==0
     20b8:	00000000 	nop
-    20bc:	92020000 	lbu	v0,0(s0)
-    20c0:	92030001 	lbu	v1,1(s0)
-    20c4:	00021200 	sll	v0,v0,0x8
-    20c8:	00431025 	or	v0,v0,v1
-    20cc:	080007fe 	j	1ff8 <DoDataFrames+0x9c>
+    20bc:	92020000 	lbu	v0,0(s0)			! v0=*s0+0
+    20c0:	92030001 	lbu	v1,1(s0)			! v1=*s0+1
+    20c4:	00021200 	sll	v0,v0,0x8			! v0=v0<<8
+    20c8:	00431025 	or	v0,v0,v1			! v0=v0|v1
+>   20cc:	080007fe 	j	1ff8 <DoDataFrames+0x9c>	! to 1ff8
 			20cc: R_MIPS_26	.text
-    20d0:	afa20010 	sw	v0,16(sp)
-    20d4:	1280001e 	beqz	s4,2150 <DoDataFrames+0x1f4>
+    20d0:	afa20010 	sw	v0,16(sp)			! 16(sp)=v0
+============================================================================================
+1fe0  --->
+>   20d4:	1280001e 	beqz	s4,2150 <DoDataFrames+0x1f4>	! to 2150 if s4==0
     20d8:	00000000 	nop
-    20dc:	92020000 	lbu	v0,0(s0)
-    20e0:	92030001 	lbu	v1,1(s0)
-    20e4:	92040002 	lbu	a0,2(s0)
-    20e8:	00031c00 	sll	v1,v1,0x10
-    20ec:	00021600 	sll	v0,v0,0x18
-    20f0:	00431025 	or	v0,v0,v1
-    20f4:	00042200 	sll	a0,a0,0x8
-    20f8:	92030003 	lbu	v1,3(s0)
-    20fc:	00441025 	or	v0,v0,a0
-    2100:	00431025 	or	v0,v0,v1
-    2104:	080007fe 	j	1ff8 <DoDataFrames+0x9c>
+    20dc:	92020000 	lbu	v0,0(s0)			! v0=*s0+0
+    20e0:	92030001 	lbu	v1,1(s0)			! v1=*s0+1
+    20e4:	92040002 	lbu	a0,2(s0)			! a0=*s0+2
+    20e8:	00031c00 	sll	v1,v1,0x10			! v1=v1<<0x10
+    20ec:	00021600 	sll	v0,v0,0x18			! v0=v0<<0x18
+    20f0:	00431025 	or	v0,v0,v1			! v0=v0|v1
+    20f4:	00042200 	sll	a0,a0,0x8			! a0=a0<<0x8
+    20f8:	92030003 	lbu	v1,3(s0)			! v1=*s0+3
+    20fc:	00441025 	or	v0,v0,a0			! v0=v0|a0
+    2100:	00431025 	or	v0,v0,v1			! v0=v0|v1
+>   2104:	080007fe 	j	1ff8 <DoDataFrames+0x9c>	! to 1ff8
 			2104: R_MIPS_26	.text
-    2108:	afa20010 	sw	v0,16(sp)
-    210c:	1280001c 	beqz	s4,2180 <DoDataFrames+0x224>
+    2108:	afa20010 	sw	v0,16(sp)			! 16(sp)=v0
+===========================================================================
+1fe8 ---->
+>   210c:	1280001c 	beqz	s4,2180 <DoDataFrames+0x224>	! to 2180 if s4==0
     2110:	00000000 	nop
-    2114:	92020000 	lbu	v0,0(s0)
-    2118:	92030001 	lbu	v1,1(s0)
-    211c:	92040002 	lbu	a0,2(s0)
-    2120:	00021400 	sll	v0,v0,0x10
-    2124:	00031a00 	sll	v1,v1,0x8
-    2128:	00431025 	or	v0,v0,v1
-    212c:	00441025 	or	v0,v0,a0
-    2130:	080007fe 	j	1ff8 <DoDataFrames+0x9c>
+    2114:	92020000 	lbu	v0,0(s0)			! v0=*s0+0
+    2118:	92030001 	lbu	v1,1(s0)			! v1=*s0+1
+    211c:	92040002 	lbu	a0,2(s0)			! a0=*s0+2
+    2120:	00021400 	sll	v0,v0,0x10			! v0=v0<<0x10
+    2124:	00031a00 	sll	v1,v1,0x8			! v1=v1<<0x08
+    2128:	00431025 	or	v0,v0,v1			! v0=v0|v1
+    212c:	00441025 	or	v0,v0,a0			! v0=v0|a0
+>   2130:	080007fe 	j	1ff8 <DoDataFrames+0x9c>	! to 1ff8
 			2130: R_MIPS_26	.text
-    2134:	afa20010 	sw	v0,16(sp)
-    2138:	92020001 	lbu	v0,1(s0)
-    213c:	92030000 	lbu	v1,0(s0)
-    2140:	00021200 	sll	v0,v0,0x8
-    2144:	00431025 	or	v0,v0,v1
-    2148:	080007fe 	j	1ff8 <DoDataFrames+0x9c>
+    2134:	afa20010 	sw	v0,16(sp)			! v0=*sp+16
+=========================================================================================
+20b4 ---->
+    2138:	92020001 	lbu	v0,1(s0)			! v0=*s0+1
+    213c:	92030000 	lbu	v1,0(s0)			! v1=*s0+0
+    2140:	00021200 	sll	v0,v0,0x8			! v0=v0<<0x08
+    2144:	00431025 	or	v0,v0,v1			! v0=v0|v1
+>   2148:	080007fe 	j	1ff8 <DoDataFrames+0x9c>	! to 1ff8
 			2148: R_MIPS_26	.text
-    214c:	afa20010 	sw	v0,16(sp)
-    2150:	92020003 	lbu	v0,3(s0)
-    2154:	92030002 	lbu	v1,2(s0)
-    2158:	92040001 	lbu	a0,1(s0)
-    215c:	00031c00 	sll	v1,v1,0x10
-    2160:	00021600 	sll	v0,v0,0x18
-    2164:	00431025 	or	v0,v0,v1
-    2168:	00042200 	sll	a0,a0,0x8
-    216c:	92030000 	lbu	v1,0(s0)
-    2170:	00441025 	or	v0,v0,a0
-    2174:	00431025 	or	v0,v0,v1
-    2178:	080007fe 	j	1ff8 <DoDataFrames+0x9c>
+    214c:	afa20010 	sw	v0,16(sp)			! v0=16(sp)
+==============================================================================================
+20d4 ---->
+    2150:	92020003 	lbu	v0,3(s0)			! v0=*s0+3
+    2154:	92030002 	lbu	v1,2(s0)			! v1=*s0+2
+    2158:	92040001 	lbu	a0,1(s0)			! a0=*s0+1
+    215c:	00031c00 	sll	v1,v1,0x10			! v1=v1<<0x10
+    2160:	00021600 	sll	v0,v0,0x18			! v0=v0<<0x18
+    2164:	00431025 	or	v0,v0,v1			! v0=v0|v1
+    2168:	00042200 	sll	a0,a0,0x8			! a0=a0<<0x08
+    216c:	92030000 	lbu	v1,0(s0)			! v1=*s0+0
+    2170:	00441025 	or	v0,v0,a0			! v0=v0|a0
+    2174:	00431025 	or	v0,v0,v1			! v0=v0|v1
+>   2178:	080007fe 	j	1ff8 <DoDataFrames+0x9c>	! goto 1ff8
 			2178: R_MIPS_26	.text
-    217c:	afa20010 	sw	v0,16(sp)
-    2180:	92020002 	lbu	v0,2(s0)
-    2184:	92030001 	lbu	v1,1(s0)
-    2188:	92040000 	lbu	a0,0(s0)
-    218c:	00021400 	sll	v0,v0,0x10
-    2190:	00031a00 	sll	v1,v1,0x8
-    2194:	00431025 	or	v0,v0,v1
-    2198:	00441025 	or	v0,v0,a0
-    219c:	080007fe 	j	1ff8 <DoDataFrames+0x9c>
+    217c:	afa20010 	sw	v0,16(sp)			! 16(sp)=v0
+=============================================================================================
+210c ---->
+    2180:	92020002 	lbu	v0,2(s0)			! v0=*s0+2
+    2184:	92030001 	lbu	v1,1(s0)			! v1=*s0+1
+    2188:	92040000 	lbu	a0,0(s0)			! a0=*s0+0
+    218c:	00021400 	sll	v0,v0,0x10			! v0=v0<<0x10
+    2190:	00031a00 	sll	v1,v1,0x8			! v1=v1<<0x08
+    2194:	00431025 	or	v0,v0,v1			! v0=v0|v1
+    2198:	00441025 	or	v0,v0,a0			! v0=v0|a0
+>   219c:	080007fe 	j	1ff8 <DoDataFrames+0x9c>	! to 1ff8
 			219c: R_MIPS_26	.text
-    21a0:	afa20010 	sw	v0,16(sp)
-    21a4:	1280001a 	beqz	s4,2210 <DoDataFrames+0x2b4>
-    21a8:	8fa30010 	lw	v1,16(sp)
-    21ac:	00031202 	srl	v0,v1,0x8
-    21b0:	a2020000 	sb	v0,0(s0)
-    21b4:	08000806 	j	2018 <DoDataFrames+0xbc>
+    21a0:	afa20010 	sw	v0,16(sp)			! v0=16(sp)
+2054 ---->
+>   21a4:	1280001a 	beqz	s4,2210 <DoDataFrames+0x2b4>	! to 2210 if s4==0
+    21a8:	8fa30010 	lw	v1,16(sp)			! v1=16(sp)
+    21ac:	00031202 	srl	v0,v1,0x8			! v0=v1>>8
+    21b0:	a2020000 	sb	v0,0(s0)			! s0[0]=v0
+>   21b4:	08000806 	j	2018 <DoDataFrames+0xbc>	! to 2018
 			21b4: R_MIPS_26	.text
-    21b8:	a2030001 	sb	v1,1(s0)
-    21bc:	1680001a 	bnez	s4,2228 <DoDataFrames+0x2cc>
-    21c0:	8fa20010 	lw	v0,16(sp)
-    21c4:	00021e02 	srl	v1,v0,0x18
-    21c8:	00022402 	srl	a0,v0,0x10
-    21cc:	00022a02 	srl	a1,v0,0x8
-    21d0:	a2030003 	sb	v1,3(s0)
-    21d4:	a2040002 	sb	a0,2(s0)
-    21d8:	a2050001 	sb	a1,1(s0)
-    21dc:	08000806 	j	2018 <DoDataFrames+0xbc>
+    21b8:	a2030001 	sb	v1,1(s0)			! v1=*s0+1
+205c --->
+>   21bc:	1680001a 	bnez	s4,2228 <DoDataFrames+0x2cc>	! to 2228 if s4!=0
+    21c0:	8fa20010 	lw	v0,16(sp)			! v0=sp[16]
+    21c4:	00021e02 	srl	v1,v0,0x18			! v1=v0>>0x18
+    21c8:	00022402 	srl	a0,v0,0x10			! a0=v0>>0x10
+    21cc:	00022a02 	srl	a1,v0,0x8			! a1=v0>>0x08
+    21d0:	a2030003 	sb	v1,3(s0)			! v1=*s0+3
+    21d4:	a2040002 	sb	a0,2(s0)			! a0=*s0+2
+    21d8:	a2050001 	sb	a1,1(s0)			! a1=*s0+1
+>   21dc:	08000806 	j	2018 <DoDataFrames+0xbc>	! to 2018
 			21dc: R_MIPS_26	.text
-    21e0:	a2020000 	sb	v0,0(s0)
-    21e4:	080007ed 	j	1fb4 <DoDataFrames+0x58>
+    21e0:	a2020000 	sb	v0,0(s0)			! 0(s0)=v0
+=============================================================================================
+1f98 ---->
+>   21e4:	080007ed 	j	1fb4 <DoDataFrames+0x58>	! to 1fb4
 			21e4: R_MIPS_26	.text
-    21e8:	24130002 	li	s3,2
-    21ec:	16800016 	bnez	s4,2248 <DoDataFrames+0x2ec>
-    21f0:	00021c02 	srl	v1,v0,0x10
-    21f4:	8fa20010 	lw	v0,16(sp)
-    21f8:	00021c02 	srl	v1,v0,0x10
-    21fc:	00022202 	srl	a0,v0,0x8
-    2200:	a2030002 	sb	v1,2(s0)
-    2204:	a2040001 	sb	a0,1(s0)
-    2208:	08000806 	j	2018 <DoDataFrames+0xbc>
+    21e8:	24130002 	li	s3,2				! s3=2
+=============================================================================================
+2064 ---->
+>   21ec:	16800016 	bnez	s4,2248 <DoDataFrames+0x2ec>	! to 2248 if s4!=0
+    21f0:	00021c02 	srl	v1,v0,0x10			! v1=v0<<0x10
+    21f4:	8fa20010 	lw	v0,16(sp)			! v0=16(sp)
+    21f8:	00021c02 	srl	v1,v0,0x10			! v1=v0>>0x10
+    21fc:	00022202 	srl	a0,v0,0x8			! a0=v0>>0x08
+1fa4 --->
+    2200:	a2030002 	sb	v1,2(s0)			! *s0+2=v1
+    2204:	a2040001 	sb	a0,1(s0)			! *s0+1=a0
+>   2208:	08000806 	j	2018 <DoDataFrames+0xbc>	! to 2018
 			2208: R_MIPS_26	.text
-    220c:	a2020000 	sb	v0,0(s0)
-    2210:	00031202 	srl	v0,v1,0x8
-    2214:	a2020001 	sb	v0,1(s0)
-    2218:	08000806 	j	2018 <DoDataFrames+0xbc>
+    220c:	a2020000 	sb	v0,0(s0)			! *0+s0=v0
+======================================================================================
+21a4 ---->
+    2210:	00031202 	srl	v0,v1,0x8			! v0=v1>>0x8
+    2214:	a2020001 	sb	v0,1(s0)			! *s0+1=v0
+>   2218:	08000806 	j	2018 <DoDataFrames+0xbc>	! to 2018
 			2218: R_MIPS_26	.text
-    221c:	a2030000 	sb	v1,0(s0)
-    2220:	080007ed 	j	1fb4 <DoDataFrames+0x58>
+    221c:	a2030000 	sb	v1,0(s0)			! *s0+0=v1
+====================================================================
+>   2220:	080007ed 	j	1fb4 <DoDataFrames+0x58>	! to 1fb4
 			2220: R_MIPS_26	.text
-    2224:	24130004 	li	s3,4
-    2228:	00021e02 	srl	v1,v0,0x18
-    222c:	00022402 	srl	a0,v0,0x10
-    2230:	00022a02 	srl	a1,v0,0x8
-    2234:	a2030000 	sb	v1,0(s0)
-    2238:	a2040001 	sb	a0,1(s0)
-    223c:	a2050002 	sb	a1,2(s0)
-    2240:	08000806 	j	2018 <DoDataFrames+0xbc>
+    2224:	24130004 	li	s3,4				! s3=4
+====================================================================
+21bc --->
+    2228:	00021e02 	srl	v1,v0,0x18			! v1=v0>>0x18
+    222c:	00022402 	srl	a0,v0,0x10			! a0=v0>>0x10
+    2230:	00022a02 	srl	a1,v0,0x8			! a1=v0>>0x08
+    2234:	a2030000 	sb	v1,0(s0)			! *s0+0=v1
+    2238:	a2040001 	sb	a0,1(s0)			! *s0+1=a0
+    223c:	a2050002 	sb	a1,2(s0)			! *s0+2=a1
+>   2240:	08000806 	j	2018 <DoDataFrames+0xbc>	! to 2018
 			2240: R_MIPS_26	.text
-    2244:	a2020003 	sb	v0,3(s0)
-    2248:	00022202 	srl	a0,v0,0x8
-    224c:	a2030000 	sb	v1,0(s0)
-    2250:	a2040001 	sb	a0,1(s0)
-    2254:	08000806 	j	2018 <DoDataFrames+0xbc>
+    2244:	a2020003 	sb	v0,3(s0)			! *s0+3=v0
+=====================================================================
+21ec	--->
+    2248:	00022202 	srl	a0,v0,0x8			! a0=v0>>0x08
+    224c:	a2030000 	sb	v1,0(s0)			! *s0+0=v1
+    2250:	a2040001 	sb	a0,1(s0)			! *s0+1=a0
+>   2254:	08000806 	j	2018 <DoDataFrames+0xbc>	! to 2018
 			2254: R_MIPS_26	.text
-    2258:	a2020002 	sb	v0,2(s0)
-    225c:	08000820 	j	2080 <DoDataFrames+0x124>
+    2258:	a2020002 	sb	v0,2(s0)			! *s0+2=v0
+===================================================================
+1fb4 ---->
+>   225c:	08000820 	j	2080 <DoDataFrames+0x124>	! to 2080
 			225c: R_MIPS_26	.text
-    2260:	00003021 	move	a2,zero
+    2260:	00003021 	move	a2,zero				! a2=0
+=======================================================================
 
 // static SDIO_STATUS HcdTransferData(struct hcd_context *hcd_ctx,
 //                                    SDREQUEST *pRequest);
@@ -3165,7 +3210,7 @@ HcdTransferData():
     2448:	02402021 	move	a0,s2
     244c:	02a02821 	move	a1,s5
     2450:	02803021 	move	a2,s4
-    2454:	24421f5c 	addiu	v0,v0,8028
+    2454:	24421f5c 	addiu	v0,v0,8028			! DoDataFrames
 			2454: R_MIPS_LO16	.text
     2458:	0040f809 	jalr	v0
     245c:	02203821 	move	a3,s1
@@ -3947,128 +3992,136 @@ HcdDmaCompletion():
 
 00002e24 <HcdRequest>:
 HcdRequest():
-    2e24:	27bdffc0 	addiu	sp,sp,-64
-    2e28:	3c020000 	lui	v0,0x0
+    2e24:	27bdffc0 	addiu	sp,sp,-64		! alloc 64 bytes
+    2e28:	3c020000 	lui	v0,0x0			! v0=HI(local_bh_disable)
 			2e28: R_MIPS_HI16	local_bh_disable
-    2e2c:	afbf003c 	sw	ra,60(sp)
-    2e30:	afb60038 	sw	s6,56(sp)
-    2e34:	afb50034 	sw	s5,52(sp)
-    2e38:	afb40030 	sw	s4,48(sp)
-    2e3c:	afb3002c 	sw	s3,44(sp)
-    2e40:	afb20028 	sw	s2,40(sp)
-    2e44:	afb10024 	sw	s1,36(sp)
-    2e48:	afb00020 	sw	s0,32(sp)
-    2e4c:	24420000 	addiu	v0,v0,0
+    2e2c:	afbf003c 	sw	ra,60(sp)	! save ra
+    2e30:	afb60038 	sw	s6,56(sp)	! save s6
+    2e34:	afb50034 	sw	s5,52(sp)	! save s5
+    2e38:	afb40030 	sw	s4,48(sp)	! save s4
+    2e3c:	afb3002c 	sw	s3,44(sp)	! save s3
+    2e40:	afb20028 	sw	s2,40(sp)	! save s2
+    2e44:	afb10024 	sw	s1,36(sp)	! save s1
+    2e48:	afb00020 	sw	s0,32(sp)	! save s0
+    2e4c:	24420000 	addiu	v0,v0,0		! v0=local_bh_disable
 			2e4c: R_MIPS_LO16	local_bh_disable
-    2e50:	8c920044 	lw	s2,68(a0)
-    2e54:	0040f809 	jalr	v0
-    2e58:	8c910020 	lw	s1,32(a0)
-    2e5c:	8f820014 	lw	v0,20(gp)
-    2e60:	24420001 	addiu	v0,v0,1
-    2e64:	af820014 	sw	v0,20(gp)
-    2e68:	40026000 	mfc0	v0,c0_status
-    2e6c:	30420001 	andi	v0,v0,0x1
-    2e70:	10400075 	beqz	v0,3048 <HcdRequest+0x224>
+    2e50:	8c920044 	lw	s2,68(a0)	! s2=pCurrentReq
+    2e54:	0040f809 	jalr	v0		! call local_bh_disable
+    2e58:	8c910020 	lw	s1,32(a0)	! s1=pContext
+    2e5c:	8f820014 	lw	v0,20(gp)	! v0=preemptCount
+    2e60:	24420001 	addiu	v0,v0,1		! v0=v0+1
+    2e64:	af820014 	sw	v0,20(gp)	! preemptCount=v0
+    2e68:	40026000 	mfc0	v0,c0_status	! v0=c0_status
+    2e6c:	30420001 	andi	v0,v0,0x1	! v0=v0&1
+    2e70:	10400075 	beqz	v0,3048 <HcdRequest+0x224> ! to 3048 if 0
     2e74:	3c040000 	lui	a0,0x0
 			2e74: R_MIPS_HI16	$LC12
-    2e78:	922200fa 	lbu	v0,250(s1)
-    2e7c:	1040001e 	beqz	v0,2ef8 <HcdRequest+0xd4>
-    2e80:	2410fffb 	li	s0,-5
-    2e84:	8f820014 	lw	v0,20(gp)
-    2e88:	3c030000 	lui	v1,0x0
+    2e78:	922200fa 	lbu	v0,250(s1)      ! v0=pDevice->FatalError
+----->  3078
+>   2e7c:	1040001e 	beqz	v0,2ef8 <HcdRequest+0xd4> !to 2ef8 if not error
+    2e80:	2410fffb 	li	s0,-5		! s0=-5 DEVICE_ERROR
+----> 2f70, 3188
+    2e84:	8f820014 	lw	v0,20(gp)	! v0=preemptcnt
+    2e88:	3c030000 	lui	v1,0x0		! v1=HI(local_bh_enable)
 			2e88: R_MIPS_HI16	local_bh_enable
-    2e8c:	2442ffff 	addiu	v0,v0,-1
-    2e90:	24630000 	addiu	v1,v1,0
+    2e8c:	2442ffff 	addiu	v0,v0,-1	! v0=v0-1
+    2e90:	24630000 	addiu	v1,v1,0		! v1=local_bh_enable
 			2e90: R_MIPS_LO16	local_bh_enable
-    2e94:	0060f809 	jalr	v1
-    2e98:	af820014 	sw	v0,20(gp)
-    2e9c:	24020003 	li	v0,3
-    2ea0:	1202000b 	beq	s0,v0,2ed0 <HcdRequest+0xac>
-    2ea4:	02001021 	move	v0,s0
-    2ea8:	8e420008 	lw	v0,8(s2)
-    2eac:	30420100 	andi	v0,v0,0x100
-    2eb0:	10400006 	beqz	v0,2ecc <HcdRequest+0xa8>
-    2eb4:	ae500040 	sw	s0,64(s2)
-    2eb8:	3c020000 	lui	v0,0x0
+    2e94:	0060f809 	jalr	v1		! call local_bh_enable
+    2e98:	af820014 	sw	v0,20(gp)	! preemptcnt=v0
+    2e9c:	24020003 	li	v0,3		! v0=3 (PENDING)
+>   2ea0:	1202000b 	beq	s0,v0,2ed0 <HcdRequest+0xac> ! to 2ed0 out if status==3
+    2ea4:	02001021 	move	v0,s0		! v0=s0
+    2ea8:	8e420008 	lw	v0,8(s2)	! v0=pReq->Flags
+    2eac:	30420100 	andi	v0,v0,0x100	! v0=v0&0x100
+    2eb0:	10400006 	beqz	v0,2ecc <HcdRequest+0xa8> ! to 2ecc if v0=0
+    2eb4:	ae500040 	sw	s0,64(s2)	! pReq->Status=s0
+    2eb8:	3c020000 	lui	v0,0x0		! v0=HI(HW_QueueDeferr...)
 			2eb8: R_MIPS_HI16	HW_QueueDeferredCompletion
-    2ebc:	24420000 	addiu	v0,v0,0
+    2ebc:	24420000 	addiu	v0,v0,0		! v0=HW_QueueDeferr
 			2ebc: R_MIPS_LO16	HW_QueueDeferredCompletion
-    2ec0:	0040f809 	jalr	v0
-    2ec4:	02202021 	move	a0,s1
-    2ec8:	24100003 	li	s0,3
-    2ecc:	02001021 	move	v0,s0
-    2ed0:	8fbf003c 	lw	ra,60(sp)
-    2ed4:	8fb60038 	lw	s6,56(sp)
-    2ed8:	8fb50034 	lw	s5,52(sp)
-    2edc:	8fb40030 	lw	s4,48(sp)
-    2ee0:	8fb3002c 	lw	s3,44(sp)
-    2ee4:	8fb20028 	lw	s2,40(sp)
-    2ee8:	8fb10024 	lw	s1,36(sp)
-    2eec:	8fb00020 	lw	s0,32(sp)
-    2ef0:	03e00008 	jr	ra
-    2ef4:	27bd0040 	addiu	sp,sp,64
-    2ef8:	92220008 	lbu	v0,8(s1)
-    2efc:	1440ffe1 	bnez	v0,2e84 <HcdRequest+0x60>
-    2f00:	2410fff8 	li	s0,-8
-    2f04:	96430010 	lhu	v1,16(s2)
-    2f08:	30620004 	andi	v0,v1,0x4
-    2f0c:	1040005c 	beqz	v0,3080 <HcdRequest+0x25c>
-    2f10:	30620010 	andi	v0,v1,0x10
-    2f14:	8e42002c 	lw	v0,44(s2)
-    2f18:	9646001a 	lhu	a2,26(s2)
-    2f1c:	ae420034 	sw	v0,52(s2)
-    2f20:	ae460030 	sw	a2,48(s2)
-    2f24:	92240018 	lbu	a0,24(s1)
-    2f28:	24020003 	li	v0,3
-    2f2c:	108200f9 	beq	a0,v0,3314 <HcdRequest+0x4f0>
-    2f30:	96250014 	lhu	a1,20(s1)
-    2f34:	24020001 	li	v0,1
-    2f38:	108200f9 	beq	a0,v0,3320 <HcdRequest+0x4fc>
+    2ec0:	0040f809 	jalr	v0		! call hw_queueDef..(pDevice)
+    2ec4:	02202021 	move	a0,s1		! a0=s1
+    2ec8:	24100003 	li	s0,3		! s0=3
+----> out 2eb0
+    2ecc:	02001021 	move	v0,s0		! v0=s0
+----> out 2ea0
+    2ed0:	8fbf003c 	lw	ra,60(sp)	! restore ra
+    2ed4:	8fb60038 	lw	s6,56(sp)	! restore s6
+    2ed8:	8fb50034 	lw	s5,52(sp)	! restore s5
+    2edc:	8fb40030 	lw	s4,48(sp)	! restore s4
+    2ee0:	8fb3002c 	lw	s3,44(sp)	! restore s3
+    2ee4:	8fb20028 	lw	s2,40(sp)	! restore s2
+    2ee8:	8fb10024 	lw	s1,36(sp)	! restore s1
+    2eec:	8fb00020 	lw	s0,32(sp)	! restore s0
+    2ef0:	03e00008 	jr	ra		! return
+    2ef4:	27bd0040 	addiu	sp,sp,64	! restore stack
+==================================================================================
+----> (in do{ } while(0) from  2e80
+    2ef8:	92220008 	lbu	v0,8(s1)	! v0=pDevice->ShuttingDown
+    2efc:	1440ffe1 	bnez	v0,2e84 <HcdRequest+0x60> ! to 2e84 (break) if shutting down
+    2f00:	2410fff8 	li	s0,-8		! s0=CANCELED
+    2f04:	96430010 	lhu	v1,16(s2)       ! v1=GET_IO_CMD(pReq)
+    2f08:	30620004 	andi	v0,v1,0x4	! v0=IO_CMD&ATH_TRANS_DMA
+    2f0c:	1040005c 	beqz	v0,3080 <HcdRequest+0x25c> ! to 3080 if v0==0
+    2f10:	30620010 	andi	v0,v1,0x10      ! v0=v1&0x10
+    2f14:	8e42002c 	lw	v0,44(s2)	! v0=databuffer
+    2f18:	9646001a 	lhu	a2,26(s2)	! a2=param10
+    2f1c:	ae420034 	sw	v0,52(s2)	! pHcdContext=v0
+    2f20:	ae460030 	sw	a2,48(s2)	! Dataremain=a2
+    2f24:	92240018 	lbu	a0,24(s1)	! a0=CDmaMode
+    2f28:	24020003 	li	v0,3		! v0=3
+    2f2c:	108200f9 	beq	a0,v0,3314 <HcdRequest+0x4f0> ! to 3314 if dmamode==3
+    2f30:	96250014 	lhu	a1,20(s1)	! currentDdmamode
+    2f34:	24020001 	li	v0,1		! v0=1
+    2f38:	108200f9 	beq	a0,v0,3320 <HcdRequest+0x4fc> ! to 3320 if a0==1
     2f3c:	00000000 	nop
     2f40:	108000da 	beqz	a0,32ac <HcdRequest+0x488>
     2f44:	30a6fff9 	andi	a2,a1,0xfff9
     2f48:	30620080 	andi	v0,v1,0x80
     2f4c:	1440008a 	bnez	v0,3178 <HcdRequest+0x354>
-    2f50:	3c020000 	lui	v0,0x0
+    2f50:	3c020000 	lui	v0,0x0		! v0=HI(text)
 			2f50: R_MIPS_HI16	.text
-    2f54:	2634001c 	addiu	s4,s1,28
-    2f58:	3c130000 	lui	s3,0x0
+    2f54:	2634001c 	addiu	s4,s1,28	! s4=s1+28
+    2f58:	3c130000 	lui	s3,0x0		! s3=HI(text)
 			2f58: R_MIPS_HI16	.text
-    2f5c:	02202021 	move	a0,s1
-    2f60:	24050200 	li	a1,512
-    2f64:	26621d24 	addiu	v0,s3,7460
+    2f5c:	02202021 	move	a0,s1		! a0=s1, pDevice
+    2f60:	24050200 	li	a1,512		! a1=512, ATH_SPI_WRBUF_SPC_AVA_REG
+    2f64:	26621d24 	addiu	v0,s3,7460	! v0=DoPioReadInternal
 			2f64: R_MIPS_LO16	.text
-    2f68:	0040f809 	jalr	v0
-    2f6c:	02803021 	move	a2,s4
-    2f70:	0440ffc4 	bltz	v0,2e84 <HcdRequest+0x60>
-    2f74:	00408021 	move	s0,v0
-    2f78:	922500f9 	lbu	a1,249(s1)
-    2f7c:	30a20004 	andi	v0,a1,0x4
-    2f80:	104000e9 	beqz	v0,3328 <HcdRequest+0x504>
+    2f68:	0040f809 	jalr	v0	! call DoPioReadInternal(
+    2f6c:	02803021 	move	a2,s4   ! a2=s4
+>   2f70:	0440ffc4 	bltz	v0,2e84 <HcdRequest+0x60> ! to 2e84 if v0<0
+    2f74:	00408021 	move	s0,v0   ! s0=v0
+    2f78:	922500f9 	lbu	a1,249(s1) ! a1=pdevice->miscflags
+    2f7c:	30a20004 	andi	v0,a1,0x4  ! v0=a1&SLEEP_WAR
+    2f80:	104000e9 	beqz	v0,3328 <HcdRequest+0x504> ! to 3328 if v0==0
     2f84:	00000000 	nop
-    2f88:	8e23001c 	lw	v1,28(s1)
-    2f8c:	8e240020 	lw	a0,32(s1)
-    2f90:	0064102b 	sltu	v0,v1,a0
+    2f88:	8e23001c 	lw	v1,28(s1)	! v1=WriteBufferSpace
+    2f8c:	8e240020 	lw	a0,32(s1)	! a0=MaxWriteBufferSpace
+    2f90:	0064102b 	sltu	v0,v1,a0	! v0=1 if v1<a1
     2f94:	144000d9 	bnez	v0,32fc <HcdRequest+0x4d8>
     2f98:	00000000 	nop
-    2f9c:	ae200024 	sw	zero,36(s1)
-    2fa0:	8e460030 	lw	a2,48(s2)
-    2fa4:	0066102b 	sltu	v0,v1,a2
-    2fa8:	10400070 	beqz	v0,316c <HcdRequest+0x348>
-    2fac:	00661023 	subu	v0,v1,a2
-    2fb0:	30a20004 	andi	v0,a1,0x4
-    2fb4:	144000d5 	bnez	v0,330c <HcdRequest+0x4e8>
+    2f9c:	ae200024 	sw	zero,36(s1)	! pkstInWriteBuffer=0
+    2fa0:	8e460030 	lw	a2,48(s2)	! a2=pReq->dataremain
+    2fa4:	0066102b 	sltu	v0,v1,a2        ! v0=1 if v1<a2
+    2fa8:	10400070 	beqz	v0,316c <HcdRequest+0x348> !to 316c if !v0
+    2fac:	00661023 	subu	v0,v1,a2	! v0=v1-a2
+    2fb0:	30a20004 	andi	v0,a1,0x4	! v0=a1&0x4
+    2fb4:	144000d5 	bnez	v0,330c <HcdRequest+0x4e8> ! to 330c if v0
     2fb8:	00000000 	nop
-    2fbc:	00863023 	subu	a2,a0,a2
-    2fc0:	00c4102b 	sltu	v0,a2,a0
-    2fc4:	104000cb 	beqz	v0,32f4 <HcdRequest+0x4d0>
+    2fbc:	00863023 	subu	a2,a0,a2	! a2=a0-a2
+----> 330c
+    2fc0:	00c4102b 	sltu	v0,a2,a0	! v0=1 if a2<a0
+    2fc4:	104000cb 	beqz	v0,32f4 <HcdRequest+0x4d0> ! to 32f4 if !v0
     2fc8:	00000000 	nop
-    2fcc:	10c000c9 	beqz	a2,32f4 <HcdRequest+0x4d0>
+    2fcc:	10c000c9 	beqz	a2,32f4 <HcdRequest+0x4d0> ! to 32f4 if !a2
     2fd0:	00000000 	nop
+----> 32f4
     2fd4:	3c020000 	lui	v0,0x0
 			2fd4: R_MIPS_HI16	.text
     2fd8:	02202021 	move	a0,s1
-    2fdc:	24421da4 	addiu	v0,v0,7588
+    2fdc:	24421da4 	addiu	v0,v0,7588 ! v0=DoPioWriteInternal
 			2fdc: R_MIPS_LO16	.text
     2fe0:	0040f809 	jalr	v0
     2fe4:	24051300 	li	a1,4864
@@ -4101,13 +4154,15 @@ HcdRequest():
     3040:	08000ba1 	j	2e84 <HcdRequest+0x60>
 			3040: R_MIPS_26	.text
     3044:	24100003 	li	s0,3
-    3048:	3c020000 	lui	v0,0x0
+---->  2e70
+    3048:	3c020000 	lui	v0,0x0	! v0=HI(printk)
 			3048: R_MIPS_HI16	printk
-    304c:	24420000 	addiu	v0,v0,0
+    304c:	24420000 	addiu	v0,v0,0 ! v0=printk
 			304c: R_MIPS_LO16	printk
-    3050:	0040f809 	jalr	v0
+    3050:	0040f809 	jalr	v0	! call printk(LC12)
     3054:	24840000 	addiu	a0,a0,0
 			3054: R_MIPS_LO16	$LC12
+ // enable interrupts
     3058:	40016000 	mfc0	at,c0_status
     305c:	3421001f 	ori	at,at,0x1f
     3060:	3821001e 	xori	at,at,0x1e
@@ -4116,11 +4171,13 @@ HcdRequest():
     306c:	00000040 	ssnop
     3070:	00000040 	ssnop
     3074:	000000c0 	sll	zero,zero,0x3
-    3078:	08000b9f 	j	2e7c <HcdRequest+0x58>
+    3078:	08000b9f 	j	2e7c <HcdRequest+0x58> to 2e7c
 			3078: R_MIPS_26	.text
     307c:	922200fa 	lbu	v0,250(s1)
-    3080:	14400043 	bnez	v0,3190 <HcdRequest+0x36c>
-    3084:	24020040 	li	v0,64
+====================================================================================
+----> PIO 2f0c
+    3080:	14400043 	bnez	v0,3190 <HcdRequest+0x36c> ! to 3190 if v0
+    3084:	24020040 	li	v0,64	! v0=64
     3088:	30620080 	andi	v0,v1,0x80
     308c:	10400092 	beqz	v0,32d8 <HcdRequest+0x4b4>
     3090:	3c020000 	lui	v0,0x0
@@ -4180,24 +4237,27 @@ HcdRequest():
     314c:	24020003 	li	v0,3
     3150:	1202ff4c 	beq	s0,v0,2e84 <HcdRequest+0x60>
     3154:	00000000 	nop
-    3158:	1600ff4a 	bnez	s0,2e84 <HcdRequest+0x60>
+    3158:	1600ff4a 	bnez	s0,2e84 <HcdRequest+0x60> ! to 2e84 if s0
     315c:	00000000 	nop
     3160:	8e460030 	lw	a2,48(s2)
     3164:	8e23001c 	lw	v1,28(s1)
     3168:	00661023 	subu	v0,v1,a2
-    316c:	2442fffb 	addiu	v0,v0,-5
-    3170:	ae22001c 	sw	v0,28(s1)
-    3174:	3c020000 	lui	v0,0x0
+----> 2fa8
+    316c:	2442fffb 	addiu	v0,v0,-5	! v0=v0-5
+    3170:	ae22001c 	sw	v0,28(s1)	! WriteBufferSpace=v0
+    3174:	3c020000 	lui	v0,0x0		! v0=HI(text)
 			3174: R_MIPS_HI16	.text
-    3178:	02202021 	move	a0,s1
-    317c:	2442256c 	addiu	v0,v0,9580
+    3178:	02202021 	move	a0,s1		! a0=s1
+    317c:	2442256c 	addiu	v0,v0,9580	! v0=DoDMAOp
 			317c: R_MIPS_LO16	.text
-    3180:	0040f809 	jalr	v0
-    3184:	02402821 	move	a1,s2
-    3188:	08000ba1 	j	2e84 <HcdRequest+0x60>
+    3180:	0040f809 	jalr	v0		! call DoDMAOp
+    3184:	02402821 	move	a1,s2		! a1=s2
+    3188:	08000ba1 	j	2e84 <HcdRequest+0x60> ! to 2e84
 			3188: R_MIPS_26	.text
     318c:	00408021 	move	s0,v0
-    3190:	8e44002c 	lw	a0,44(s2)
+===============================================================================
+----> 3080
+    3190:	8e44002c 	lw	a0,44(s2)	! a0=
     3194:	9646001a 	lhu	a2,26(s2)
     3198:	30630020 	andi	v1,v1,0x20
     319c:	0003100a 	movz	v0,zero,v1
@@ -4205,30 +4265,31 @@ HcdRequest():
     31a4:	ae440034 	sw	a0,52(s2)
     31a8:	afa20018 	sw	v0,24(sp)
     31ac:	8e430030 	lw	v1,48(s2)
-    31b0:	3c150000 	lui	s5,0x0
+    31b0:	3c150000 	lui	s5,0x0		! s5=HI(text)
 			31b0: R_MIPS_HI16	.text
     31b4:	00431025 	or	v0,v0,v1
-    31b8:	00403021 	move	a2,v0
-    31bc:	02202021 	move	a0,s1
-    31c0:	24050600 	li	a1,1536
-    31c4:	26b31da4 	addiu	s3,s5,7588
+    31b8:	00403021 	move	a2,v0		! a2=v0
+    31bc:	02202021 	move	a0,s1		! a0=s1
+    31c0:	24050600 	li	a1,1536		! a1=1536
+    31c4:	26b31da4 	addiu	s3,s5,7588	! s3=DoPioWriteInternal
 			31c4: R_MIPS_LO16	.text
-    31c8:	0260f809 	jalr	s3
+    31c8:	0260f809 	jalr	s3		! call DoPioWriteInternal
     31cc:	afa20018 	sw	v0,24(sp)
-    31d0:	0440ff2c 	bltz	v0,2e84 <HcdRequest+0x60>
+    31d0:	0440ff2c 	bltz	v0,2e84 <HcdRequest+0x60> !
     31d4:	00408021 	move	s0,v0
     31d8:	96420010 	lhu	v0,16(s2)
     31dc:	30420080 	andi	v0,v0,0x80
-    31e0:	10400058 	beqz	v0,3344 <HcdRequest+0x520>
+    31e0:	10400058 	beqz	v0,3344 <HcdRequest+0x520> !to 3344 if TRANS_WRITE
     31e4:	3c020000 	lui	v0,0x0
 			31e4: R_MIPS_HI16	HW_InOut_Token
-    31e8:	34048000 	li	a0,0x8000
-    31ec:	afa40018 	sw	a0,24(sp)
-    31f0:	96420010 	lhu	v0,16(s2)
-    31f4:	3403c000 	li	v1,0xc000
+----> 3378 back from trans_write
+    31e8:	34048000 	li	a0,0x8000	! a0=ATH_SPI_HOST_CTRL_CONFIG_ENABLE
+    31ec:	afa40018 	sw	a0,24(sp)	! 24(sp)=a0
+    31f0:	96420010 	lhu	v0,16(s2)	! v0=TRANS_READ(pReq)
+    31f4:	3403c000 	li	v1,0xc000	! v1=
     31f8:	30420080 	andi	v0,v0,0x80
     31fc:	0082180b 	movn	v1,a0,v0
-    3200:	afa30018 	sw	v1,24(sp)
+    3200:	afa30018 	sw	v1,24(sp)	! 24(sp)=v1
     3204:	96420018 	lhu	v0,24(s2)
     3208:	02202021 	move	a0,s1
     320c:	00431025 	or	v0,v0,v1
@@ -4301,16 +4362,20 @@ HcdRequest():
     32ec:	08000ba1 	j	2e84 <HcdRequest+0x60>
 			32ec: R_MIPS_26	.text
     32f0:	00408021 	move	s0,v0
-    32f4:	08000bf5 	j	2fd4 <HcdRequest+0x1b0>
+----> 2fc4, 2fcc
+    32f4:	08000bf5 	j	2fd4 <HcdRequest+0x1b0> ! to 2fd4
 			32f4: R_MIPS_26	.text
-    32f8:	24060001 	li	a2,1
+    32f8:	24060001 	li	a2,1	! a2=1
+=====================================================================================================
     32fc:	8e220024 	lw	v0,36(s1)
     3300:	2c420002 	sltiu	v0,v0,2
     3304:	1440ff26 	bnez	v0,2fa0 <HcdRequest+0x17c>
     3308:	00000000 	nop
-    330c:	08000bf0 	j	2fc0 <HcdRequest+0x19c>
+----> 2fb4
+    330c:	08000bf0 	j	2fc0 <HcdRequest+0x19c> ! to 2fc0
 			330c: R_MIPS_26	.text
-    3310:	24060001 	li	a2,1
+    3310:	24060001 	li	a2,1	! a2=1
+================================================================================================
     3314:	34a20004 	ori	v0,a1,0x4
     3318:	08000cab 	j	32ac <HcdRequest+0x488>
 			3318: R_MIPS_26	.text
@@ -4326,6 +4391,8 @@ HcdRequest():
     333c:	08000bef 	j	2fbc <HcdRequest+0x198>
 			333c: R_MIPS_26	.text
     3340:	8e240020 	lw	a0,32(s1)
+==============================================================================
+----> 31e0
     3344:	02202021 	move	a0,s1
     3348:	24054a00 	li	a1,18944
     334c:	24060001 	li	a2,1
@@ -4333,19 +4400,20 @@ HcdRequest():
 			3350: R_MIPS_LO16	HW_InOut_Token
     3354:	0040f809 	jalr	v0
     3358:	00003821 	move	a3,zero
-    335c:	0440fec9 	bltz	v0,2e84 <HcdRequest+0x60>
+    335c:	0440fec9 	bltz	v0,2e84 <HcdRequest+0x60> ! break
     3360:	00408021 	move	s0,v0
     3364:	3c020000 	lui	v0,0x0
 			3364: R_MIPS_HI16	.text
     3368:	02202021 	move	a0,s1
-    336c:	24422264 	addiu	v0,v0,8804
+    336c:	24422264 	addiu	v0,v0,8804 ! HcdTransferData
 			336c: R_MIPS_LO16	.text
-    3370:	0040f809 	jalr	v0
+    3370:	0040f809 	jalr	v0 ! HcdTransferData
     3374:	02402821 	move	a1,s2
-    3378:	0441ff9b 	bgez	v0,31e8 <HcdRequest+0x3c4>
+    3378:	0441ff9b 	bgez	v0,31e8 <HcdRequest+0x3c4> ! to 31e8 if v0 >=0
     337c:	00408021 	move	s0,v0
-    3380:	08000ba1 	j	2e84 <HcdRequest+0x60>
+    3380:	08000ba1 	j	2e84 <HcdRequest+0x60> ! 2e84 break
 			3380: R_MIPS_26	.text
+============================================================================================================
     3384:	00000000 	nop
     3388:	02202021 	move	a0,s1
     338c:	24421f3c 	addiu	v0,v0,7996

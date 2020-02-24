@@ -1,0 +1,248 @@
+00003444 <HcdConfig>:
+// SDIO_STATUS HcdConfig(PSDHCD pHcd, PSDCONFIG pConfig)
+HcdConfig():
+    3444:	27bdffd8 	addiu	sp,sp,-40 ! alloc 40 bytes
+    3448:	afb20020 	sw	s2,32(sp) ! save s2
+    344c:	afbf0024 	sw	ra,36(sp) ! save ra
+    3450:	afb1001c 	sw	s1,28(sp) ! save s1
+    3454:	afb00018 	sw	s0,24(sp) ! save s0
+    3458:	94b00000 	lhu	s0,0(a1)  ! s0=uint16 pConfig[0]
+    345c:	24026133 	li	v0,24883  ! v0=24883
+    3460:	00a09021 	move	s2,a1     ! s2=pConfig
+// to 3528 if config cmd is SDCONFIG_PUT_HOST_307
+    3464:	12020030 	beq	s0,v0,3528 <HcdConfig+0xe4>
+    3468:	8c910020 	lw	s1,32(a0)    ! s1=pContext
+    346c:	92220008 	lbu	v0,8(s1)     ! v0=pContext[8].b
+// to 3494 if v0==0
+    3470:	10400008 	beqz	v0,3494 <HcdConfig+0x50>
+    3474:	8fbf0024 	lw	ra,36(sp)  ! restore ra
+    3478:	2410fff8 	li	s0,-8      ! s0=-8
+    347c:	02001021 	move	v0,s0      ! v0=-8
+    3480:	8fb20020 	lw	s2,32(sp)  ! restore s2
+    3484:	8fb1001c 	lw	s1,28(sp)  ! restore s1
+    3488:	8fb00018 	lw	s0,24(sp)  ! restore s0
+// return SDIO_STATUS_CANCELED
+    348c:	03e00008 	jr	ra         !
+    3490:	27bd0028 	addiu	sp,sp,40   ! restore stack
+3470 -->
+    3494:	3c020000 	lui	v0,0x0
+			3494: R_MIPS_HI16	local_bh_disable
+    3498:	24420000 	addiu	v0,v0,0
+			3498: R_MIPS_LO16	local_bh_disable
+    349c:	0040f809 	jalr	v0     ! local_bh_disable
+    34a0:	00000000 	nop
+    34a4:	8f820014 	lw	v0,20(gp) ! v0=gp[20]
+    34a8:	24420001 	addiu	v0,v0,1   ! v0=v0+1
+    34ac:	af820014 	sw	v0,20(gp) ! gp[20]=v0
+    34b0:	40026000 	mfc0	v0,c0_status
+    34b4:	30420001 	andi	v0,v0,0x1
+    34b8:	10400043 	beqz	v0,35c8 <HcdConfig+0x184>
+    34bc:	3c040000 	lui	a0,0x0
+			34bc: R_MIPS_HI16	$LC12
+35f8 --->
+    34c0:	24026130 	li	v0,24880  ! v0=HOST_CUSTOM_304
+// to 3600 if cmd is CUSTOM_304
+    34c4:	1202004e 	beq	s0,v0,3600 <HcdConfig+0x1bc>
+    34c8:	2e026131 	sltiu	v0,s0,24881 ! v0=1 if cmd < CUSTOM_305
+// to 358c if cmd is CUSTOM 305 or 306 with v0 306
+    34cc:	1040002f 	beqz	v0,358c <HcdConfig+0x148>
+    34d0:	24026132 	li	v0,24882
+
+    34d4:	24026002 	li	v0,24578 ! v0=SDCONFIG_SDIO_INT_CTRL
+// to 361c if v0=SDCONFIG_SDIO_INT_CTRL
+    34d8:	12020050 	beq	s0,v0,361c <HcdConfig+0x1d8>
+
+    34dc:	2402612f 	li	v0,24879 ! v0=CUSTOM_303
+// to 367c if v0=CUSTOM_303
+    34e0:	12020066 	beq	s0,v0,367c <HcdConfig+0x238>
+
+    34e4:	24022003 	li	v0,8195 ! v0=0x2000 (DATA_GET)
+// to 3664 if v0=SDCONFIG_FLAGS_DATA_GET
+    34e8:	1202005e 	beq	s0,v0,3664 <HcdConfig+0x220>
+    34ec:	3c020000 	lui	v0,0x0
+			34ec: R_MIPS_HI16	.text
+//
+    34f0:	2410fffe 	li	s0,-2     ! s0=-2
+    34f4:	8f830014 	lw	v1,20(gp)
+    34f8:	3c040000 	lui	a0,0x0
+			34f8: R_MIPS_HI16	local_bh_enable
+    34fc:	2463ffff 	addiu	v1,v1,-1
+    3500:	24840000 	addiu	a0,a0,0
+			3500: R_MIPS_LO16	local_bh_enable
+    3504:	0080f809 	jalr	a0
+    3508:	af830014 	sw	v1,20(gp)
+    350c:	02001021 	move	v0,s0     ! v0=s0
+    3510:	8fbf0024 	lw	ra,36(sp) ! restore ra
+    3514:	8fb20020 	lw	s2,32(sp) ! restore s2
+    3518:	8fb1001c 	lw	s1,28(sp) ! restore s1
+    351c:	8fb00018 	lw	s0,24(sp) ! restore s0
+    3520:	03e00008 	jr	ra         ! return  SDIO_STATUS_INVALID_PARAMETER
+    3524:	27bd0028 	addiu	sp,sp,40   ! dealloc stack
+3464 HOST_CUSTOM_307 -->
+>   3528:	8ca20008 	lw	v0,8(a1) ! v0=pConfig.datalen
+    352c:	2c420004 	sltiu	v0,v0,4  ! v0=1 if v0 < 4
+// to 3554 if v0<4
+    3530:	10400008 	beqz	v0,3554 <HcdConfig+0x110>
+
+    3534:	2410fffe 	li	s0,-2    ! s0=SDIO_STATUS_INVALID_PARAMETER
+    3538:	02001021 	move	v0,s0    ! v0=s0
+    353c:	8fbf0024 	lw	ra,36(sp) ! restore ra
+    3540:	8fb20020 	lw	s2,32(sp) ! restore s2
+    3544:	8fb1001c 	lw	s1,28(sp) ! restore s1
+    3548:	8fb00018 	lw	s0,24(sp) ! restore s0
+// return SDIO_STATUS_INVALID_PARAMETER
+    354c:	03e00008 	jr	ra        ! return
+    3550:	27bd0028 	addiu	sp,sp,40  ! dealloc stack
+3530 pConfig[8].w >= 4 --->
+    3554:	8ca30004 	lw	v1,4(a1)  ! v1=pConfig.data
+    3558:	8e240040 	lw	a0,64(s1) ! a0=pContext[64].w
+    355c:	90650000 	lbu	a1,0(v1)  ! a1=pConfig.data[0].b
+    3560:	3c020000 	lui	v0,0x0
+			3560: R_MIPS_HI16	HW_PowerUpDown
+    3564:	24420000 	addiu	v0,v0,0
+			3564: R_MIPS_LO16	HW_PowerUpDown
+// HW_PowerUpDown(pContext[64].w, pConfig.data[0])
+    3568:	0040f809 	jalr	v0
+    356c:	00008021 	move	s0,zero   ! s0=0
+    3570:	02001021 	move	v0,s0     ! v0=s0
+    3574:	8fbf0024 	lw	ra,36(sp) ! restore ra
+    3578:	8fb20020 	lw	s2,32(sp) ! restore s2
+    357c:	8fb1001c 	lw	s1,28(sp) ! restore s1
+    3580:	8fb00018 	lw	s0,24(sp) ! restore s0
+// return OK
+    3584:	03e00008 	jr	ra        ! return
+    3588:	27bd0028 	addiu	sp,sp,40  ! dealloc stack
+34cc Custom 305 or 306, v0=306 ---->
+// to 3640 if cmd == Custom 306
+    358c:	1202002c 	beq	s0,v0,3640 <HcdConfig+0x1fc>
+    3590:	2e026132 	sltiu	v0,s0,24882 ! v0=1 if cmd < 306
+// to 3648 if cmd == Custom 305
+    3594:	1440002c 	bnez	v0,3648 <HcdConfig+0x204>
+    3598:	3402a12e 	li	v0,0xa12e ! v0=41262
+// to 34f4 if cmd is not 41262
+    359c:	1602ffd5 	bne	s0,v0,34f4 <HcdConfig+0xb0>
+    35a0:	2410fffe 	li	s0,-2     ! s0 = -2
+
+    35a4:	8e420008 	lw	v0,8(s2) ! pConfig.datalen
+    35a8:	2c420004 	sltiu	v0,v0,4  ! v0=1 if datalen<4
+// to 34f4 (out) if datalen<4
+    35ac:	1440ffd1 	bnez	v0,34f4 <HcdConfig+0xb0>
+    35b0:	00000000 	nop
+//
+    35b4:	8e430004 	lw	v1,4(s2)  ! v1=pConfig.data
+    35b8:	8e22003c 	lw	v0,60(s1) ! v0=pContext[60].w
+    35bc:	00008021 	move	s0,zero   ! s0=0
+    35c0:	08000d3d 	j	34f4 <HcdConfig+0xb0>
+			35c0: R_MIPS_26	.text
+    35c4:	ac620000 	sw	v0,0(v1)  ! pconfig.data[0].w=v0
+
+    35c8:	3c020000 	lui	v0,0x0
+			35c8: R_MIPS_HI16	printk
+    35cc:	24420000 	addiu	v0,v0,0
+			35cc: R_MIPS_LO16	printk
+// printk("Colman: Re-enable IRQ\n");
+    35d0:	0040f809 	jalr	v0
+    35d4:	24840000 	addiu	a0,a0,0
+			35d4: R_MIPS_LO16	$LC12
+    35d8:	40016000 	mfc0	at,c0_status
+    35dc:	3421001f 	ori	at,at,0x1f
+    35e0:	3821001e 	xori	at,at,0x1e
+    35e4:	40816000 	mtc0	at,c0_status
+    35e8:	00000040 	ssnop
+    35ec:	00000040 	ssnop
+    35f0:	00000040 	ssnop
+    35f4:	000000c0 	sll	zero,zero,0x3
+// to 34c4 with cmd == custom 304
+    35f8:	08000d31 	j	34c4 <HcdConfig+0x80>
+			35f8: R_MIPS_26	.text
+    35fc:	24026130 	li	v0,24880 // v0=304
+
+34c4 custom 304 --->
+    3600:	8e420008 	lw	v0,8(s2)  ! pConfig.datalen
+// to 34f0 (out) if zero
+    3604:	1040ffba 	beqz	v0,34f0 <HcdConfig+0xac>
+    3608:	00008021 	move	s0,zero   ! s0=0
+    360c:	8e430004 	lw	v1,4(s2)  ! v1=pConfig.data
+    3610:	90620000 	lbu	v0,0(v1)  ! v0 data[0].b
+// to 34f4 (out with OK)
+    3614:	08000d3d 	j	34f4 <HcdConfig+0xb0>
+			3614: R_MIPS_26	.text
+    3618:	a2220018 	sb	v0,24(s1) ! pContext[24].b=v0
+
+34d8 v0=SDCONFIG_SDIO_INT_CTRL --->
+    361c:	8e420004 	lw	v0,4(s2)  ! v0=pConfig.data
+    3620:	90430000 	lbu	v1,0(v0)  ! v1=data[0].b
+// to 36b8 if v1==0
+    3624:	10600024 	beqz	v1,36b8 <HcdConfig+0x274>
+    3628:	3c020000 	lui	v0,0x0    ! v0=textsegment
+			3628: R_MIPS_HI16	.text
+    362c:	3c020000 	lui	v0,0x0    ! v0=textsegment
+			362c: R_MIPS_HI16	.text
+    3630:	02202021 	move	a0,s1     ! a0=pContext
+    3634:	24421f3c 	addiu	v0,v0,7996!
+			3634: R_MIPS_LO16	.text
+// UnmaskSPIInterrupts(pContext, 129)
+    3638:	0040f809 	jalr	v0
+    363c:	24050081 	li	a1,129
+358c custom command 306 ---->
+// to 34f4 (out OK)
+    3640:	08000d3d 	j	34f4 <HcdConfig+0xb0>
+			3640: R_MIPS_26	.text
+    3644:	00008021 	move	s0,zero
+3594 custom command 305 ---->
+    3648:	8e420008 	lw	v0,8(s2) v0=pConfig.datalen
+// to 34f0 (out -2) if v0=0
+    364c:	1040ffa8 	beqz	v0,34f0 <HcdConfig+0xac>
+
+    3650:	00008021 	move	s0,zero
+    3654:	8e430004 	lw	v1,4(s2) ! v1=pConfig.data
+    3658:	90620000 	lbu	v0,0(v1) ! v0=pConfig.data[0].b
+// to 34f4 (out ok)
+    365c:	08000d3d 	j	34f4 <HcdConfig+0xb0>
+			365c: R_MIPS_26	.text
+    3660:	a2220017 	sb	v0,23(s1)! pContext[23]=v0.b
+34e8 v0=SDCONFIG_FLAGS_DATA_GET --->
+    3664:	02202021 	move	a0,s1   ! a0=pContext
+    3668:	24421f3c 	addiu	v0,v0,7996
+			3668: R_MIPS_LO16	.text
+// UnmaskSPIInterrupts(pContext, 129)
+    366c:	0040f809 	jalr	v0
+    3670:	24050081 	li	a1,129
+// to 34f4 (out ok)
+    3674:	08000d3d 	j	34f4 <HcdConfig+0xb0>
+			3674: R_MIPS_26	.text
+    3678:	00008021 	move	s0,zero
+34e0 v0=CUSTOM_303 ---->
+    367c:	8e420008 	lw	v0,8(s2) ! pConfig.datalen
+    3680:	2c420004 	sltiu	v0,v0,4  ! v0=1 if datalen<4
+// to 34f0 (out error) if datalen<4
+    3684:	1440ff9a 	bnez	v0,34f0 <HcdConfig+0xac>
+    3688:	02202021 	move	a0,s1    !  a0=pContext
+    368c:	8e420004 	lw	v0,4(s2) !  v0=pConfig.data
+    3690:	8c430000 	lw	v1,0(v0) !  v1=pConfig.data[0].w
+    3694:	3c020000 	lui	v0,0x0
+			3694: R_MIPS_HI16	HW_SetClock
+    3698:	24420000 	addiu	v0,v0,0
+			3698: R_MIPS_LO16	HW_SetClock
+    369c:	27a50010 	addiu	a1,sp,16
+// HW_SetClock(pContext, stackvar)
+    36a0:	0040f809 	jalr	v0
+    36a4:	afa30010 	sw	v1,16(sp) ! stackvar=pConfig.data[0].w
+    36a8:	8fa20010 	lw	v0,16(sp) ! v0=stackvar=
+    36ac:	00008021 	move	s0,zero   ! s0=0
+// to 34f4 (out OK)
+    36b0:	08000d3d 	j	34f4 <HcdConfig+0xb0>
+			36b0: R_MIPS_26	.text
+    36b4:	ae22003c 	sw	v0,60(s1) ! pContext[60].w=v0
+
+3624 v0=SDCONFIG_SDIO_INT_CTRL data=0
+    36b8:	02202021 	move	a0,s1 ! a0=pContext
+    36bc:	24421f14 	addiu	v0,v0,7956
+			36bc: R_MIPS_LO16	.text
+// MaskSPIInterrupts(pContext,129)
+    36c0:	0040f809 	jalr	v0
+    36c4:	24050081 	li	a1,129
+// to 34f4 (out OK)
+    36c8:	08000d3d 	j	34f4 <HcdConfig+0xb0>
+			36c8: R_MIPS_26	.text
+    36cc:	00008021 	move	s0,zero

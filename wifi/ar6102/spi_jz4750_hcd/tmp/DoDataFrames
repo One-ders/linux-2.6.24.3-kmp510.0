@@ -1,0 +1,253 @@
+00001f5c <DoDataFrames>:
+DoDataFrames():
+    1f5c:	27bdffc0 	addiu	sp,sp,-64			! alloc 64 bytes
+    1f60:	30e700ff 	andi	a3,a3,0xff			! a3=a3&0xff
+    1f64:	afb1001c 	sw	s1,28(sp)			! save s1
+    1f68:	24080001 	li	t0,1				! t0=1
+    1f6c:	30f10003 	andi	s1,a3,0x3			! s1=a3&0x03
+    1f70:	afbe0038 	sw	s8,56(sp)			! save s8
+    1f74:	afb40028 	sw	s4,40(sp)			! save s4
+    1f78:	afbf003c 	sw	ra,60(sp)			! save ra
+    1f7c:	afb70034 	sw	s7,52(sp)			! save s7
+    1f80:	afb60030 	sw	s6,48(sp)			! save s6
+    1f84:	afb5002c 	sw	s5,44(sp)			! save s5
+    1f88:	afb30024 	sw	s3,36(sp)			! save s3
+    1f8c:	afb20020 	sw	s2,32(sp)			! save s2
+    1f90:	afb00018 	sw	s0,24(sp)			! save s0
+    1f94:	0080f021 	move	s8,a0				! s8=a0
+>   1f98:	12280092 	beq	s1,t0,21e4 <DoDataFrames+0x288> ! to 21e4 if s1==t0 back to 1fb4
+    1f9c:	93b40050 	lbu	s4,80(sp)			! s4=80(sp)
+    1fa0:	24030003 	li	v1,3				! v1=3
+>   1fa4:	1223009e 	beq	s1,v1,2220 <DoDataFrames+0x2c4> ! to 2220 if s1==3 back to 1fb4
+    1fa8:	3a220002 	xori	v0,s1,0x2			! v0=s1^0x02
+    1fac:	00609821 	move	s3,v1				! s3=v1
+    1fb0:	0102980b 	movn	s3,t0,v0			! s3=t0 if v0
+21e4, 2220 --->
+>   1fb4:	10c000a9 	beqz	a2,225c <DoDataFrames+0x300>	! to 225c if !a2, set rc and out
+    1fb8:	0007ae00 	sll	s5,a3,0x18			! s5=a3<<0x18
+    1fbc:	0015ae03 	sra	s5,s5,0x18			! s5=s5>>0x18
+    1fc0:	00a08021 	move	s0,a1				! s0=a1
+    1fc4:	00d39023 	subu	s2,a2,s3			! s2=a2-s3
+    1fc8:	0013b023 	negu	s6,s3				! s6=-s3
+>   1fcc:	06a00018 	bltz	s5,2030 <DoDataFrames+0xd4>	! to 2030 if s5<0
+    1fd0:	3c170000 	lui	s7,0x0				! s7=HI(HW_InOut_To)
+			1fd0: R_MIPS_HI16	HW_InOut_Token
+2028 --->
+    1fd4:	24020001 	li	v0,1				! v0=1
+>   1fd8:	12220036 	beq	s1,v0,20b4 <DoDataFrames+0x158> ! to 20b4 if s1==1
+    1fdc:	24020003 	li	v0,3				! v0=3
+>   1fe0:	1222003c 	beq	s1,v0,20d4 <DoDataFrames+0x178>	! to 20d4 if s1==3
+    1fe4:	24020002 	li	v0,2				! v0=2
+>   1fe8:	12220048 	beq	s1,v0,210c <DoDataFrames+0x1b0> ! to 210c if s1==2
+    1fec:	00000000 	nop
+    1ff0:	92020000 	lbu	v0,0(s0)			! v0=*s0
+    1ff4:	afa20010 	sw	v0,16(sp)			! 16(sp)=v0
+20cc, 2104, 2130, 2148, 2178, 219c --->
+    1ff8:	8fa50010 	lw	a1,16(sp)			! a1=16(sp)
+    1ffc:	02203021 	move	a2,s1				! a2=s1
+    2000:	03c02021 	move	a0,s8				! a0=s8
+    2004:	26e20000 	addiu	v0,s7,0				! v0=s7+0
+			2004: R_MIPS_LO16	HW_InOut_Token
+	rc=HW_InOut_Token(hcd_ctx, a1, a2, 0);
+    2008:	0040f809 	jalr	v0
+    200c:	00003821 	move	a3,zero				! a3=0
+>   2010:	0440001b 	bltz	v0,2080 <DoDataFrames+0x124>	! to 2080 if v0<0
+    2014:	00403021 	move	a2,v0				! a2=v0
+21b4, 21dc, 2208, 2218, 2240, 2254 --->
+    2018:	02569021 	addu	s2,s2,s6			! s2=s2+s6
+    201c:	02531021 	addu	v0,s2,s3			! v0=s2+s3
+>   2020:	10400018 	beqz	v0,2084 <DoDataFrames+0x128>	! to 2084 if v0==0
+    2024:	8fbf003c 	lw	ra,60(sp)			! restore ra
+2078 ---->
+>   2028:	06a1ffea 	bgez	s5,1fd4 <DoDataFrames+0x78>	! to 1fd4 if s5>=0
+    202c:	02138021 	addu	s0,s0,s3			! s0=s0+s3
+1fcc ----->
+    2030:	02203021 	move	a2,s1				! a2=s1
+    2034:	03c02021 	move	a0,s8				! a0=s8
+    2038:	2405ffff 	li	a1,-1				! a1=-1
+    203c:	26e20000 	addiu	v0,s7,0				! v0=s7+0
+			203c: R_MIPS_LO16	HW_InOut_Token
+		rc=HW_InOut_Token(hcd_ctx,-1,s1,&sp[16]);
+    2040:	0040f809 	jalr	v0
+    2044:	27a70010 	addiu	a3,sp,16
+>   2048:	0440000d 	bltz	v0,2080 <DoDataFrames+0x124>	! to 2080 if rc<0
+    204c:	00403021 	move	a2,v0				! a2=rc
+    2050:	24020001 	li	v0,1				! v0=1
+>   2054:	12220053 	beq	s1,v0,21a4 <DoDataFrames+0x248> ! to 21a4 if s1==1
+    2058:	24020003 	li	v0,3				! v0=3
+>   205c:	12220057 	beq	s1,v0,21bc <DoDataFrames+0x260>	! to 21bc if s1==3
+    2060:	24020002 	li	v0,2				! v0=2
+>   2064:	12220061 	beq	s1,v0,21ec <DoDataFrames+0x290> ! to 21ec if s1==2
+    2068:	8fa20010 	lw	v0,16(sp)			! v0=16(sp)
+    206c:	02569021 	addu	s2,s2,s6			! s2=s2+s6
+    2070:	a2020000 	sb	v0,0(s0)			! *s0=v0
+    2074:	02531021 	addu	v0,s2,s3			! v0=s2+s3
+>   2078:	1440ffeb 	bnez	v0,2028 <DoDataFrames+0xcc>	! to 2028 if v0!=0
+    207c:	00000000 	nop
+2010, 2048, 225c --->
+    2080:	8fbf003c 	lw	ra,60(sp)			! restore ra
+2020 --->
+    2084:	8fbe0038 	lw	s8,56(sp)			! restore s8
+    2088:	8fb70034 	lw	s7,52(sp)			! restore s7
+    208c:	8fb60030 	lw	s6,48(sp)			! restore s6
+    2090:	8fb5002c 	lw	s5,44(sp)			! restore s5
+    2094:	8fb40028 	lw	s4,40(sp)			! restore s4
+    2098:	8fb30024 	lw	s3,36(sp)			! restore s3
+    209c:	8fb20020 	lw	s2,32(sp)			! restore s2
+    20a0:	8fb1001c 	lw	s1,28(sp)			! restore s1
+    20a4:	8fb00018 	lw	s0,24(sp)			! restore s0
+    20a8:	00c01021 	move	v0,a2				! v0=a2
+    20ac:	03e00008 	jr	ra				! return
+    20b0:	27bd0040 	addiu	sp,sp,64			! dealloc stack
+===================================================================================================
+1fd8  --->
+>   20b4:	12800020 	beqz	s4,2138 <DoDataFrames+0x1dc>	! to 2138 if s4==0
+    20b8:	00000000 	nop
+    20bc:	92020000 	lbu	v0,0(s0)			! v0=*s0+0
+    20c0:	92030001 	lbu	v1,1(s0)			! v1=*s0+1
+    20c4:	00021200 	sll	v0,v0,0x8			! v0=v0<<8
+    20c8:	00431025 	or	v0,v0,v1			! v0=v0|v1
+>   20cc:	080007fe 	j	1ff8 <DoDataFrames+0x9c>	! to 1ff8
+			20cc: R_MIPS_26	.text
+    20d0:	afa20010 	sw	v0,16(sp)			! 16(sp)=v0
+============================================================================================
+1fe0  --->
+>   20d4:	1280001e 	beqz	s4,2150 <DoDataFrames+0x1f4>	! to 2150 if s4==0
+    20d8:	00000000 	nop
+    20dc:	92020000 	lbu	v0,0(s0)			! v0=*s0+0
+    20e0:	92030001 	lbu	v1,1(s0)			! v1=*s0+1
+    20e4:	92040002 	lbu	a0,2(s0)			! a0=*s0+2
+    20e8:	00031c00 	sll	v1,v1,0x10			! v1=v1<<0x10
+    20ec:	00021600 	sll	v0,v0,0x18			! v0=v0<<0x18
+    20f0:	00431025 	or	v0,v0,v1			! v0=v0|v1
+    20f4:	00042200 	sll	a0,a0,0x8			! a0=a0<<0x8
+    20f8:	92030003 	lbu	v1,3(s0)			! v1=*s0+3
+    20fc:	00441025 	or	v0,v0,a0			! v0=v0|a0
+    2100:	00431025 	or	v0,v0,v1			! v0=v0|v1
+>   2104:	080007fe 	j	1ff8 <DoDataFrames+0x9c>	! to 1ff8
+			2104: R_MIPS_26	.text
+    2108:	afa20010 	sw	v0,16(sp)			! 16(sp)=v0
+===========================================================================
+1fe8 ---->
+>   210c:	1280001c 	beqz	s4,2180 <DoDataFrames+0x224>	! to 2180 if s4==0
+    2110:	00000000 	nop
+    2114:	92020000 	lbu	v0,0(s0)			! v0=*s0+0
+    2118:	92030001 	lbu	v1,1(s0)			! v1=*s0+1
+    211c:	92040002 	lbu	a0,2(s0)			! a0=*s0+2
+    2120:	00021400 	sll	v0,v0,0x10			! v0=v0<<0x10
+    2124:	00031a00 	sll	v1,v1,0x8			! v1=v1<<0x08
+    2128:	00431025 	or	v0,v0,v1			! v0=v0|v1
+    212c:	00441025 	or	v0,v0,a0			! v0=v0|a0
+>   2130:	080007fe 	j	1ff8 <DoDataFrames+0x9c>	! to 1ff8
+			2130: R_MIPS_26	.text
+    2134:	afa20010 	sw	v0,16(sp)			! v0=*sp+16
+=========================================================================================
+20b4 ---->
+    2138:	92020001 	lbu	v0,1(s0)			! v0=*s0+1
+    213c:	92030000 	lbu	v1,0(s0)			! v1=*s0+0
+    2140:	00021200 	sll	v0,v0,0x8			! v0=v0<<0x08
+    2144:	00431025 	or	v0,v0,v1			! v0=v0|v1
+>   2148:	080007fe 	j	1ff8 <DoDataFrames+0x9c>	! to 1ff8
+			2148: R_MIPS_26	.text
+    214c:	afa20010 	sw	v0,16(sp)			! v0=16(sp)
+==============================================================================================
+20d4 ---->
+    2150:	92020003 	lbu	v0,3(s0)			! v0=*s0+3
+    2154:	92030002 	lbu	v1,2(s0)			! v1=*s0+2
+    2158:	92040001 	lbu	a0,1(s0)			! a0=*s0+1
+    215c:	00031c00 	sll	v1,v1,0x10			! v1=v1<<0x10
+    2160:	00021600 	sll	v0,v0,0x18			! v0=v0<<0x18
+    2164:	00431025 	or	v0,v0,v1			! v0=v0|v1
+    2168:	00042200 	sll	a0,a0,0x8			! a0=a0<<0x08
+    216c:	92030000 	lbu	v1,0(s0)			! v1=*s0+0
+    2170:	00441025 	or	v0,v0,a0			! v0=v0|a0
+    2174:	00431025 	or	v0,v0,v1			! v0=v0|v1
+>   2178:	080007fe 	j	1ff8 <DoDataFrames+0x9c>	! goto 1ff8
+			2178: R_MIPS_26	.text
+    217c:	afa20010 	sw	v0,16(sp)			! 16(sp)=v0
+=============================================================================================
+210c ---->
+    2180:	92020002 	lbu	v0,2(s0)			! v0=*s0+2
+    2184:	92030001 	lbu	v1,1(s0)			! v1=*s0+1
+    2188:	92040000 	lbu	a0,0(s0)			! a0=*s0+0
+    218c:	00021400 	sll	v0,v0,0x10			! v0=v0<<0x10
+    2190:	00031a00 	sll	v1,v1,0x8			! v1=v1<<0x08
+    2194:	00431025 	or	v0,v0,v1			! v0=v0|v1
+    2198:	00441025 	or	v0,v0,a0			! v0=v0|a0
+>   219c:	080007fe 	j	1ff8 <DoDataFrames+0x9c>	! to 1ff8
+			219c: R_MIPS_26	.text
+    21a0:	afa20010 	sw	v0,16(sp)			! v0=16(sp)
+2054 ---->
+>   21a4:	1280001a 	beqz	s4,2210 <DoDataFrames+0x2b4>	! to 2210 if s4==0
+    21a8:	8fa30010 	lw	v1,16(sp)			! v1=16(sp)
+    21ac:	00031202 	srl	v0,v1,0x8			! v0=v1>>8
+    21b0:	a2020000 	sb	v0,0(s0)			! s0[0]=v0
+>   21b4:	08000806 	j	2018 <DoDataFrames+0xbc>	! to 2018
+			21b4: R_MIPS_26	.text
+    21b8:	a2030001 	sb	v1,1(s0)			! v1=*s0+1
+205c --->
+>   21bc:	1680001a 	bnez	s4,2228 <DoDataFrames+0x2cc>	! to 2228 if s4!=0
+    21c0:	8fa20010 	lw	v0,16(sp)			! v0=sp[16]
+    21c4:	00021e02 	srl	v1,v0,0x18			! v1=v0>>0x18
+    21c8:	00022402 	srl	a0,v0,0x10			! a0=v0>>0x10
+    21cc:	00022a02 	srl	a1,v0,0x8			! a1=v0>>0x08
+    21d0:	a2030003 	sb	v1,3(s0)			! v1=*s0+3
+    21d4:	a2040002 	sb	a0,2(s0)			! a0=*s0+2
+    21d8:	a2050001 	sb	a1,1(s0)			! a1=*s0+1
+>   21dc:	08000806 	j	2018 <DoDataFrames+0xbc>	! to 2018
+			21dc: R_MIPS_26	.text
+    21e0:	a2020000 	sb	v0,0(s0)			! 0(s0)=v0
+=============================================================================================
+1f98 ---->
+>   21e4:	080007ed 	j	1fb4 <DoDataFrames+0x58>	! to 1fb4
+			21e4: R_MIPS_26	.text
+    21e8:	24130002 	li	s3,2				! s3=2
+=============================================================================================
+2064 ---->
+>   21ec:	16800016 	bnez	s4,2248 <DoDataFrames+0x2ec>	! to 2248 if s4!=0
+    21f0:	00021c02 	srl	v1,v0,0x10			! v1=v0<<0x10
+    21f4:	8fa20010 	lw	v0,16(sp)			! v0=16(sp)
+    21f8:	00021c02 	srl	v1,v0,0x10			! v1=v0>>0x10
+    21fc:	00022202 	srl	a0,v0,0x8			! a0=v0>>0x08
+1fa4 --->
+    2200:	a2030002 	sb	v1,2(s0)			! *s0+2=v1
+    2204:	a2040001 	sb	a0,1(s0)			! *s0+1=a0
+>   2208:	08000806 	j	2018 <DoDataFrames+0xbc>	! to 2018
+			2208: R_MIPS_26	.text
+    220c:	a2020000 	sb	v0,0(s0)			! *0+s0=v0
+======================================================================================
+21a4 ---->
+    2210:	00031202 	srl	v0,v1,0x8			! v0=v1>>0x8
+    2214:	a2020001 	sb	v0,1(s0)			! *s0+1=v0
+>   2218:	08000806 	j	2018 <DoDataFrames+0xbc>	! to 2018
+			2218: R_MIPS_26	.text
+    221c:	a2030000 	sb	v1,0(s0)			! *s0+0=v1
+====================================================================
+>   2220:	080007ed 	j	1fb4 <DoDataFrames+0x58>	! to 1fb4
+			2220: R_MIPS_26	.text
+    2224:	24130004 	li	s3,4				! s3=4
+====================================================================
+21bc --->
+    2228:	00021e02 	srl	v1,v0,0x18			! v1=v0>>0x18
+    222c:	00022402 	srl	a0,v0,0x10			! a0=v0>>0x10
+    2230:	00022a02 	srl	a1,v0,0x8			! a1=v0>>0x08
+    2234:	a2030000 	sb	v1,0(s0)			! *s0+0=v1
+    2238:	a2040001 	sb	a0,1(s0)			! *s0+1=a0
+    223c:	a2050002 	sb	a1,2(s0)			! *s0+2=a1
+>   2240:	08000806 	j	2018 <DoDataFrames+0xbc>	! to 2018
+			2240: R_MIPS_26	.text
+    2244:	a2020003 	sb	v0,3(s0)			! *s0+3=v0
+=====================================================================
+21ec	--->
+    2248:	00022202 	srl	a0,v0,0x8			! a0=v0>>0x08
+    224c:	a2030000 	sb	v1,0(s0)			! *s0+0=v1
+    2250:	a2040001 	sb	a0,1(s0)			! *s0+1=a0
+>   2254:	08000806 	j	2018 <DoDataFrames+0xbc>	! to 2018
+			2254: R_MIPS_26	.text
+    2258:	a2020002 	sb	v0,2(s0)			! *s0+2=v0
+===================================================================
+1fb4 ---->
+>   225c:	08000820 	j	2080 <DoDataFrames+0x124>	! to 2080
+			225c: R_MIPS_26	.text
+    2260:	00003021 	move	a2,zero				! a2=0
+=======================================================================

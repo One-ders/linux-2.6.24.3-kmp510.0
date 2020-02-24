@@ -1,0 +1,183 @@
+
+void HcdCommonBufferCopy(UINT8         DataSize,
+                         PVOID         pDest,
+                         PVOID         pSrc,
+                         INT           Bytes,
+                         BOOL          ByteSwap)
+000037dc <HcdCommonBufferCopy>:
+    37dc:	93a20010 	lbu	v0,16(sp)       ! v0=ByteSwap
+    37e0:	00a05821 	move	t3,a1           ! t3=pDest
+    37e4:	308800ff 	andi	t0,a0,0xff      ! t0=DataSize&0xff
+    37e8:	00c02821 	move	a1,a2           ! a1=pSrc
+// to 381c if !ByteSwap
+    37ec:	1040000b 	beqz	v0,381c <HcdCommonBufferCopy+0x40>
+    37f0:	00e03021 	move	a2,a3           ! a2=Bytes
+// to 3820 if DataSize==0
+    37f4:	1100000a 	beqz	t0,3820 <HcdCommonBufferCopy+0x44>
+    37f8:	3c190000 	lui	t9,0x0          ! t9=HI(memcpy)
+			37f8: R_MIPS_HI16	memcpy
+    37fc:	24020003 	li	v0,3            ! v0=3
+// to 38cc if DataSize==3
+    3800:	11020032 	beq	t0,v0,38cc <HcdCommonBufferCopy+0xf0>
+    3804:	31640003 	andi	a0,t3,0x3       ! a0=pDest&3
+    3808:	24020001 	li	v0,1            ! v0=1
+// to 382c if DataSize==1
+    380c:	11020007 	beq	t0,v0,382c <HcdCommonBufferCopy+0x50>
+    3810:	00000000 	nop
+----> 3874
+    3814:	03e00008 	jr	ra              ! return
+    3818:	00000000 	nop                     !
+===========================================================================
+----> 37f0
+    381c:	3c190000 	lui	t9,0x0          ! t9=HI(memcpy)
+			381c: R_MIPS_HI16	memcpy
+----> 37f8
+    3820:	27390000 	addiu	t9,t9,0         ! t9=memcpy
+			3820: R_MIPS_LO16	memcpy
+    3824:	03200008 	jr	t9              ! call memcpy; return
+    3828:	01602021 	move	a0,t3           ! a0=pDest
+===========================================================================
+----> 380c
+    382c:	31620001 	andi	v0,t3,0x1       ! v0=pDest&1
+    3830:	24030002 	li	v1,2            ! v1=2
+    3834:	0002180a 	movz	v1,zero,v0      ! v1=0 if not v0
+    3838:	30a40001 	andi	a0,a1,0x1       ! a0=pSrc&1
+    383c:	00644825 	or	t1,v1,a0        ! t1=v1|a0
+// to 3944 if t1==0
+    3840:	11200040 	beqz	t1,3944 <HcdCommonBufferCopy+0x168>
+    3844:	01604021 	move	t0,t3           ! t0=pDest
+    3848:	00063043 	sra	a2,a2,0x1       ! a2=a2>>1
+// to 3a08 if a2<=0
+    384c:	18c0006e 	blez	a2,3a08 <HcdCommonBufferCopy+0x22c>
+    3850:	00000000 	nop
+    3854:	24070001 	li	a3,1            ! a3=1
+    3858:	00005021 	move	t2,zero         ! t2=0
+// to 3884 if t1==1
+    385c:	11270009 	beq	t1,a3,3884 <HcdCommonBufferCopy+0xa8>
+    3860:	240b0002 	li	t3,2            ! t3=2
+// to 38a8 if t1==2
+----> 387c
+    3864:	112b0010 	beq	t1,t3,38a8 <HcdCommonBufferCopy+0xcc>
+    3868:	00000000 	nop
+----> 38a4, 38c8
+    386c:	254a0001 	addiu	t2,t2,1         ! t2=t2+1
+    3870:	24a50002 	addiu	a1,a1,2         ! a1=a1+2
+// to 3814 if t2=a2
+    3874:	1146ffe7 	beq	t2,a2,3814 <HcdCommonBufferCopy+0x38>
+    3878:	25080002 	addiu	t0,t0,2         ! t0=t0+2
+// to 3864 if t1!=a3
+    387c:	1527fff9 	bne	t1,a3,3864 <HcdCommonBufferCopy+0x88>
+    3880:	00000000 	nop
+----> 385c
+    3884:	90a20001 	lbu	v0,1(a1)        ! v0=a1[1]
+    3888:	90a30000 	lbu	v1,0(a1)        ! v1=a1[0]
+    388c:	00021200 	sll	v0,v0,0x8       ! v0=v0<<8
+    3890:	00431025 	or	v0,v0,v1        ! v0=v0|v1
+    3894:	00022202 	srl	a0,v0,0x8       ! a0=v0>>8
+    3898:	00021200 	sll	v0,v0,0x8       ! v0=v0<<8
+    389c:	00441025 	or	v0,v0,a0        ! v0=v0|a0
+// to 386c
+    38a0:	08000e1b 	j	386c <HcdCommonBufferCopy+0x90>
+			38a0: R_MIPS_26	.text
+    38a4:	a5020000 	sh	v0,0(t0)        ! t0[0]=v0
+============================================================================
+----> 3864
+    38a8:	94a20000 	lhu	v0,0(a1)        ! v0=a1[0]
+    38ac:	00021a02 	srl	v1,v0,0x8       ! v1=v0>>8
+    38b0:	00021200 	sll	v0,v0,0x8       ! v0=v0<<8
+    38b4:	00431025 	or	v0,v0,v1        ! v0=v0|v1
+    38b8:	3042ffff 	andi	v0,v0,0xffff    ! v0=v0&0xffff
+    38bc:	00021a02 	srl	v1,v0,0x8       ! v1=v0>>8
+    38c0:	a1030001 	sb	v1,1(t0)        ! t0[1]=v1
+// to 386c
+    38c4:	08000e1b 	j	386c <HcdCommonBufferCopy+0x90>
+			38c4: R_MIPS_26	.text
+    38c8:	a1020000 	sb	v0,0(t0)        ! t0[0]=v0
+========================================================================
+-----> 3804
+    38cc:	24030002 	li	v1,2            ! v1=2
+    38d0:	30a20003 	andi	v0,a1,0x3       ! v0=a1&3
+    38d4:	0004180a 	movz	v1,zero,a0      ! v1=0 if !a0
+    38d8:	0002102b 	sltu	v0,zero,v0      ! v0=0 if v0<0
+    38dc:	00621825 	or	v1,v1,v0        ! v1=v1|v0
+    38e0:	00a05021 	move	t2,a1           ! t2=a1
+// to 3980 if v1!=0
+    38e4:	14600026 	bnez	v1,3980 <HcdCommonBufferCopy+0x1a4>
+    38e8:	01604821 	move	t1,t3           ! t1=t3
+    38ec:	00073083 	sra	a2,a3,0x2       ! a2=a3>>2
+// to 3a08 if a2 <= 0
+    38f0:	18c00045 	blez	a2,3a08 <HcdCommonBufferCopy+0x22c>
+    38f4:	00000000 	nop
+    38f8:	00004021 	move	t0,zero
+    38fc:	3c0700ff 	lui	a3,0xff
+    3900:	8d420000 	lw	v0,0(t2)
+    3904:	25080001 	addiu	t0,t0,1
+    3908:	00021e00 	sll	v1,v0,0x18
+    390c:	00022e02 	srl	a1,v0,0x18
+    3910:	3044ff00 	andi	a0,v0,0xff00
+    3914:	00651825 	or	v1,v1,a1
+    3918:	00042200 	sll	a0,a0,0x8
+    391c:	00471024 	and	v0,v0,a3
+    3920:	00641825 	or	v1,v1,a0
+    3924:	00021202 	srl	v0,v0,0x8
+    3928:	00621825 	or	v1,v1,v0
+    392c:	ad230000 	sw	v1,0(t1)
+    3930:	254a0004 	addiu	t2,t2,4
+    3934:	14c8fff2 	bne	a2,t0,3900 <HcdCommonBufferCopy+0x124>
+    3938:	25290004 	addiu	t1,t1,4
+    393c:	03e00008 	jr	ra
+    3940:	00000000 	nop
+    3944:	00063043 	sra	a2,a2,0x1
+    3948:	18c0002f 	blez	a2,3a08 <HcdCommonBufferCopy+0x22c>
+    394c:	00000000 	nop
+    3950:	00002021 	move	a0,zero
+    3954:	94a20000 	lhu	v0,0(a1)
+    3958:	24840001 	addiu	a0,a0,1
+    395c:	00021a02 	srl	v1,v0,0x8
+    3960:	00021200 	sll	v0,v0,0x8
+    3964:	00431025 	or	v0,v0,v1
+    3968:	a5020000 	sh	v0,0(t0)
+    396c:	24a50002 	addiu	a1,a1,2
+    3970:	1486fff8 	bne	a0,a2,3954 <HcdCommonBufferCopy+0x178>
+    3974:	25080002 	addiu	t0,t0,2
+    3978:	03e00008 	jr	ra
+    397c:	00000000 	nop
+=============================================================================
+----> 38e8
+    3980:	00071083 	sra	v0,a3,0x2
+    3984:	18400020 	blez	v0,3a08 <HcdCommonBufferCopy+0x22c>
+    3988:	00000000 	nop
+    398c:	24020001 	li	v0,1
+    3990:	10620010 	beq	v1,v0,39d4 <HcdCommonBufferCopy+0x1f8>
+    3994:	24020002 	li	v0,2
+    3998:	1462ff9c 	bne	v1,v0,380c <HcdCommonBufferCopy+0x30>
+    399c:	24020001 	li	v0,1
+    39a0:	8ca20000 	lw	v0,0(a1)
+    39a4:	304500ff 	andi	a1,v0,0xff
+    39a8:	00022202 	srl	a0,v0,0x8
+    39ac:	3043ff00 	andi	v1,v0,0xff00
+    39b0:	3084ff00 	andi	a0,a0,0xff00
+    39b4:	00031a02 	srl	v1,v1,0x8
+    39b8:	00052a00 	sll	a1,a1,0x8
+    39bc:	00021602 	srl	v0,v0,0x18
+    39c0:	00822025 	or	a0,a0,v0
+    39c4:	00651825 	or	v1,v1,a1
+    39c8:	a5630002 	sh	v1,2(t3)
+    39cc:	03e00008 	jr	ra
+    39d0:	a5640000 	sh	a0,0(t3)
+    39d4:	94a20000 	lhu	v0,0(a1)
+    39d8:	94a50002 	lhu	a1,2(a1)
+    39dc:	3044ff00 	andi	a0,v0,0xff00
+    39e0:	30a300ff 	andi	v1,a1,0xff
+    39e4:	00042200 	sll	a0,a0,0x8
+    39e8:	00021600 	sll	v0,v0,0x18
+    39ec:	00441025 	or	v0,v0,a0
+    39f0:	00031a00 	sll	v1,v1,0x8
+    39f4:	00431025 	or	v0,v0,v1
+    39f8:	00052a02 	srl	a1,a1,0x8
+    39fc:	00451025 	or	v0,v0,a1
+    3a00:	03e00008 	jr	ra
+    3a04:	ad620000 	sw	v0,0(t3)
+----> 384c, 38f0
+    3a08:	03e00008 	jr	ra
+    3a0c:	00000000 	nop

@@ -8,7 +8,7 @@ DoPioReadInternal():
     1d34:	afb10014 	sw	s1,20(sp)			! save s1
     1d38:	afb00010 	sw	s0,16(sp)			! save s0
     1d3c:	00c08821 	move	s1,a2				! s1=a2
-    1d40:	34a5c000 	ori	a1,a1,0xc000			! a1=a1&0xc000
+    1d40:	34a5c000 	ori	a1,a1,0xc000			! a1=a1|0xc000
     1d44:	24060001 	li	a2,1				! a2=1
     1d48:	00003821 	move	a3,zero				! a3=0
     1d4c:	afbf001c 	sw	ra,28(sp)			! save ra

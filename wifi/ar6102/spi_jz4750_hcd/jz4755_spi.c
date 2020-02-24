@@ -172,6 +172,8 @@ static irqreturn_t spi_dma_irq(int irq, void *dev_id);
 static int QueueWork(struct spi_dev *dev, struct work_struct *w);
 #endif
 
+SDIO_STATUS SDIO_RegisterHostController(PSDHCD pHcd);
+//static const char *bub="sdiobd_spi_raw";
 
 #define __gpio_as_spi()                 \
 do {                                            \
@@ -215,13 +217,18 @@ MODULE_PARM_DESC(dma_mode, "0 = PIO, 1 = DMA");
 static struct spi_dev dev_spi;
 
 unsigned int g_isforce;
-
+#if 0
 //extern struct spi_data ar6k_spi;
 static struct hcd_context ar6k_spi = {
-  .pad0 = {0,0,0,0},
+  .pad0 = 0,
+  .pad4 = 0,
+  .ub8 = 0,
+  .ub9 = 0,
+  .ub10 = 0,
+  .ub11 = 0,
+  .pad12 = 0,
   .uh16 = 0,
-  .ub18 = 0,
-  .ub19 = 0,
+  .uh18 = 0,
   .uw20= 0,
   .uh24= 0,
   .uh26= 0,
@@ -230,8 +237,8 @@ static struct hcd_context ar6k_spi = {
   .w44=0,
   .ub48=0,
   .ub49=0,
-  .pad3=0x1000,
-  .pad4={1,0},
+  .pad50=0x1000,
+  .pad52={1,0},
   .op_clock = 0x1f78a40,                     // 60,    33MHz
   .pDev = &dev_spi,                          // 64
   .pHcd.Version = 0x27,                      // 68
@@ -242,6 +249,38 @@ static struct hcd_context ar6k_spi = {
   .pHcd.MaxClockRate=0x02dc6c00,             // 96,    48MHz
   .pHcd.pContext = &ar6k_spi,                // 100
   .b248 = 2,
+};
+#endif
+
+static SDHCD_DEVICE ar6k_spi = {
+  .List = {0,0},		// 0-7
+  .ShuttingDown = 0,		// 8
+  .PollWait = 0,		// 12-15
+  .CurrentDMADataMode = 0,	// 16
+  .SpiIntEnableShadow = 0,	// 18
+  .SpiConfigShadow    = 0,	// 20
+//  .CritSection= 0,		// 24
+  .ExternalIOPending=0,		// 24
+//  .uh26= 0,
+  .MaxWriteBufferSpace=0,       // 32
+  .PktsInSPIWriteBuffer=0,	// 36
+  .pCurrentBuffer=0,		// w40
+  .CurrentTransferLength=0,	// w44
+  .CurrentTransferDirRx=0,	// ub48
+  .CurrentDmaWidth=0,		// ub49
+  .MaxBytesPerDMARequest=0x1000, // ul52
+//  .PowerUpDelay = 0,			//56
+  .OperationalClock = 0x1f78a40,             // 60,    33MHz
+  .pHWDevice = &dev_spi,                     // 64
+  .Hcd.Version = 0x27,                      // 68
+//  .Hcd.pName = (char *)0x1f4,               // 80
+  .Hcd.pName = "sdiobd_spi_raw",               // 80
+  .Hcd.Attributes = SDHCD_ATTRIB_RAW_MODE,  // 84
+  .Hcd.MaxBytesPerBlock=0x800,              // 88,    2048
+  .Hcd.MaxBlocksPerTrans=0x1,               // 90
+  .Hcd.MaxClockRate=0x02dc6c00,             // 96,    48MHz
+  .Hcd.pContext = &ar6k_spi,                // 100
+  .SpiHWCapabilitiesFlags = HW_SPI_FRAME_WIDTH_16,
 };
 
 #if 0
@@ -318,10 +357,10 @@ static inline void program_dma(unsigned int dma_ch, unsigned int pbuf, int cnt) 
 	set_dma_count(dma_ch, cnt+15);
 }
 
-SDIO_STATUS HW_SpiSetUpDMA(struct hcd_context *h_ctx) {
-	struct spi_dev *spi_dev=h_ctx->pDev;
-	unsigned short int *bufp=h_ctx->w40;
-	unsigned int len=h_ctx->w44;
+SDIO_STATUS HW_SpiSetUpDMA(PSDHCD_DEVICE h_ctx) {
+	struct spi_dev *spi_dev=h_ctx->pHWDevice;
+	unsigned short int *bufp=(unsigned short int *)h_ctx->pCurrentBuffer;
+	unsigned int len=h_ctx->CurrentTransferLength;
 	unsigned int cnt=get_dma_count(len);
 
 	spi_dev->w124=len-cnt;
@@ -329,7 +368,7 @@ SDIO_STATUS HW_SpiSetUpDMA(struct hcd_context *h_ctx) {
 	spi_dev->w132=0;
 	spi_dev->w128=0;
 
-	if (h_ctx->ub49!=1) {
+	if (h_ctx->CurrentDmaWidth!=1) {
 //1808
 		printk("AR6k only support 16-bit spi transfer\n");
 		return SDIO_STATUS_INVALID_PARAMETER;
@@ -353,7 +392,7 @@ SDIO_STATUS HW_SpiSetUpDMA(struct hcd_context *h_ctx) {
 		return SDIO_STATUS_PENDING;
 	}
 //186c
-	if (h_ctx->ub48) {
+	if (h_ctx->CurrentTransferDirRx) {
 		int txch,rxch;
 		unsigned int physbuf;
 //1878
@@ -418,16 +457,17 @@ SDIO_STATUS HW_SpiSetUpDMA(struct hcd_context *h_ctx) {
 	}
 	return SDIO_STATUS_PENDING;
 }
-int HW_QueueDeferredCompletion(struct hcd_context *hc) {
-	struct spi_dev *spi_dev=hc->pDev;
+
+int HW_QueueDeferredCompletion(PSDHCD_DEVICE hc) {
+	struct spi_dev *spi_dev=hc->pHWDevice;
 
 	QueueWork(spi_dev,&spi_dev->iocomplete_work);
 	return 0;
 }
 
-void HW_EnableDisableSPIIRQ(struct hcd_context *hcd_ctx, unsigned char spiirq_enable, unsigned char irqs_enabled) {
+void HW_EnableDisableSPIIRQ(PSDHCD_DEVICE hcd_ctx, unsigned char spiirq_enable, unsigned char irqs_enabled) {
 	unsigned long int flags=0;
-	struct spi_dev *spi_dev=hcd_ctx->pDev;
+	struct spi_dev *spi_dev=hcd_ctx->pHWDevice;
 
 	if (!irqs_enabled) {
 		local_irq_save(flags);
@@ -452,12 +492,12 @@ void HW_EnableDisableSPIIRQ(struct hcd_context *hcd_ctx, unsigned char spiirq_en
 	}
 }
 
-void HW_StartDMA(struct hcd_context *hcd_ctx) {
+void HW_StartDMA(PSDHCD_DEVICE hcd_ctx) {
 //1160
 //	volatile int stackData;
-	struct spi_dev *spi_dev=hcd_ctx->pDev;
-	unsigned short int *w40=hcd_ctx->w40;
-	int w44=hcd_ctx->w44;
+	struct spi_dev *spi_dev=hcd_ctx->pHWDevice;
+	unsigned short int *buf=(unsigned short int *)hcd_ctx->pCurrentBuffer;
+	int len=hcd_ctx->CurrentTransferLength;
 
 //11a0
 	while (__ssi_is_busy(0)) {
@@ -476,7 +516,7 @@ void HW_StartDMA(struct hcd_context *hcd_ctx) {
 
 //1230
 	REG_SSI_CR0(0);
-	if (hcd_ctx->ub48) {
+	if (hcd_ctx->CurrentTransferDirRx) {
 		volatile int stackData;
 //1234
 //		REG_SSI_CR0(0);
@@ -494,7 +534,7 @@ void HW_StartDMA(struct hcd_context *hcd_ctx) {
 //125c
 		stackData=0;
 //1260
-		while (w44>0) {
+		while (len>0) {
 //1278
 //1280
 			if (stackData<16) {
@@ -502,15 +542,15 @@ void HW_StartDMA(struct hcd_context *hcd_ctx) {
 				while(REG_SSI_SR(0)&SSI_SR_TFF);
 //129c
 				REG_SSI_DR(0)=0xffff;
-				w44-=2;
+				len-=2;
 				stackData++;
 			}
 //12b0
 //12b8
 			if ((REG_SSI_SR(0) & SSI_SR_RFIFONUM_MASK)) {
 //12c0
-				*w40=REG_SSI_DR(0);
-				w40++;
+				*buf=REG_SSI_DR(0);
+				buf++;
 				stackData--;
 //12d4
 			}
@@ -532,8 +572,8 @@ void HW_StartDMA(struct hcd_context *hcd_ctx) {
 			} while (!(REG_SSI_SR(0) & SSI_SR_RFIFONUM_MASK));
 
 //133c
-			*w40=REG_SSI_DR(0);
-			w40++;
+			*buf=REG_SSI_DR(0);
+			buf++;
 			stackData--;
 
 //1360
@@ -562,15 +602,15 @@ void HW_StartDMA(struct hcd_context *hcd_ctx) {
 		}
 
 // 138c
-		while (w44>0) {
+		while (len>0) {
 //1390
 			while(__ssi_txfifo_full(0));
 //13b0
-			w44-=2;
+			len-=2;
 //13b4
-			REG_SSI_DR(0)=*w40;
+			REG_SSI_DR(0)=*buf;
 //13bc
-			w40++;
+			buf++;
 		}
 // 1480
 		while(!__ssi_transfer_end(0));
@@ -603,13 +643,13 @@ void HW_StartDMA(struct hcd_context *hcd_ctx) {
 }
 
 
-void HW_PowerUpDown(void) {
+void HW_PowerUpDown(PVOID pHWDevice, BOOL powerUp) {
 	printk("Enter %s,  to be done\n", __FUNCTION__);
 }
 
 
-void HW_StopDMATransfer(struct hcd_context *hcd_ctx) {
-	struct spi_dev *spi_dev=hcd_ctx->pDev;
+void HW_StopDMATransfer(PSDHCD_DEVICE hcd_ctx) {
+	struct spi_dev *spi_dev=hcd_ctx->pHWDevice;
 
 	printk("Enter %s,  to be done\n", __FUNCTION__);
 
@@ -625,11 +665,11 @@ void HW_SetDebugSignal(void) {
 	printk("Enter %s, to be done\n", __FUNCTION__);
 }
 
-SDIO_STATUS HW_InOut_Token(struct hcd_context *hcd_ctx,
+SDIO_STATUS HW_InOut_Token(PSDHCD_DEVICE hcd_ctx,
 		unsigned int out_token,
 		unsigned char datasize,
-		unsigned int *in_token,
-		BOOL stat_check) {
+		unsigned int *in_token) {
+//		BOOL stat_check) {
 
 	unsigned short int itok;
 	if (datasize!=ATH_TRANS_DS_16) {
@@ -667,13 +707,14 @@ SDIO_STATUS HW_InOut_Token(struct hcd_context *hcd_ctx,
 
 	return SDIO_STATUS_SUCCESS;
 }
+
 void HW_UsecDelay(void *a0, unsigned int usec) {
 	udelay(usec);
 }
 
 
-void HW_StartTimer(struct hcd_context *hcd_ctx, int ms, int w28) {
-	struct spi_dev *spi_dev=hcd_ctx->pDev;
+void HW_StartTimer(PSDHCD_DEVICE hcd_ctx, int ms, int w28) {
+	struct spi_dev *spi_dev=hcd_ctx->pHWDevice;
 	unsigned int jiffies_to_tout;
 
 	if (spi_dev->ub24) {
@@ -687,8 +728,8 @@ void HW_StartTimer(struct hcd_context *hcd_ctx, int ms, int w28) {
 	spi_dev->ub25=0;
 	add_timer(&spi_dev->spi_timer);
 }
-void HW_SetClock(struct hcd_context *hc, unsigned int *op_clock_ptr ) {
-	struct spi_dev *spi_dev=hc->pDev;
+void HW_SetClock(PSDHCD_DEVICE hc, unsigned int *op_clock_ptr ) {
+	struct spi_dev *spi_dev=hc->pHWDevice;
 	unsigned int op_clock_in=*op_clock_ptr;
 	unsigned int op_clock_out;
 
@@ -702,8 +743,8 @@ void HW_SetClock(struct hcd_context *hc, unsigned int *op_clock_ptr ) {
 static void hcd_iocomplete_wqueue_handler(struct work_struct *ioc_data) {
 	struct spi_dev *sdev =
 		container_of(ioc_data, struct spi_dev, iocomplete_work);
-	struct hcd_context *pHcdc=sdev->pHcd_ctx;
-	PSDHCD pHcd=&pHcdc->pHcd;
+	PSDHCD_DEVICE pHcdc=sdev->pHcd_ctx;
+	PSDHCD pHcd=&pHcdc->Hcd;
 	SDIO_HandleHcdEvent(pHcd, EVENT_HCD_TRANSFER_DONE);
 }
 
@@ -722,10 +763,10 @@ static void hcd_dmacomplete_wqueue_handler(struct work_struct *p) {
 static void hcd_ssicomplete_wqueue_handler(struct work_struct *p) {
 	struct spi_dev *spi_dev=
 		container_of(p, struct spi_dev, ssicomplete_work);
-	struct hcd_context *hcd_ctx=spi_dev->pHcd_ctx;
+	PSDHCD_DEVICE hcd_ctx=spi_dev->pHcd_ctx;
 //9fc
 	if (spi_dev->w124) {
-		if (hcd_ctx->ub48) {
+		if (hcd_ctx->CurrentTransferDirRx) {
 // b1c
 			short int *p=(short int *)
 				(spi_dev->pDmaCommonBuffer+
@@ -789,8 +830,8 @@ static void hcd_ssicomplete_wqueue_handler(struct work_struct *p) {
 		udelay(10);
 	}
 // ad8-af4
-	if (hcd_ctx->ub48) {
-		memcpy(hcd_ctx->w40, spi_dev->pDmaCommonBuffer,hcd_ctx->w44);
+	if (hcd_ctx->CurrentTransferDirRx) {
+		memcpy(hcd_ctx->pCurrentBuffer, spi_dev->pDmaCommonBuffer,hcd_ctx->CurrentTransferLength);
 	}
 // af8-b18
 
@@ -835,7 +876,7 @@ static void TimerTimeout(unsigned long arg) {
 
 static irqreturn_t spi_dma_irq(int irq, void *dev_id) {
 	struct spi_dev *spi_dev=(struct spi_dev *)dev_id;
-	struct hcd_context *hcd_ctx=spi_dev->pHcd_ctx;
+	PSDHCD_DEVICE hcd_ctx=spi_dev->pHcd_ctx;
 	int dma_chan=irq-IRQ_DMA_0;
 
 	if (__dmac_channel_transmit_halt_detected(dma_chan)) {
@@ -873,7 +914,7 @@ static irqreturn_t spi_dma_irq(int irq, void *dev_id) {
 	}
 
 	if (!spi_dev->w132) {
-		if (hcd_ctx->ub48) {
+		if (hcd_ctx->CurrentTransferDirRx) {
 			return 1;
 		}
 	}
@@ -915,8 +956,8 @@ int stack_force_interrupt(void) {
 	int rc;
 	g_isforce=1;
 
-	ar6k_spi.pHcd.IrqProcState=0;
-	rc=SDIO_HandleHcdEvent(&ar6k_spi.pHcd, EVENT_HCD_SDIO_IRQ_PENDING);
+	ar6k_spi.Hcd.IrqProcState=0;
+	rc=SDIO_HandleHcdEvent(&ar6k_spi.Hcd, EVENT_HCD_SDIO_IRQ_PENDING);
 	return rc;
 }
 
@@ -954,7 +995,7 @@ void deinit_hardware(struct spi_dev *spi_dev) {
 int init_hardware(struct spi_dev *spi_dev) {
 	int rc;
 
-	ar6k_spi.op_clock=op_clock;
+	ar6k_spi.OperationalClock=op_clock;
 	printk("Colman: op_clock= %d\n", op_clock);
 
 	spi_dev->pHcd_ctx=&ar6k_spi;
@@ -985,7 +1026,7 @@ int init_hardware(struct spi_dev *spi_dev) {
 
 
 
-	rc=request_irq(194, hcd_spi_irq, 0, spi_dev->pHcd_ctx->pHcd.pName, spi_dev);
+	rc=request_irq(194, hcd_spi_irq, 0, spi_dev->pHcd_ctx->Hcd.pName, spi_dev);
 	if (rc<0) {
 		return -1;
 	}
@@ -1040,16 +1081,16 @@ void remove_driver(void) {
 	struct spi_dev *spi_dev=&dev_spi;
 
 	if (spi_dev->ub104&0x20) {
-		SDIO_HandleHcdEvent(&ar6k_spi.pHcd, EVENT_HCD_DETACH);
+		SDIO_HandleHcdEvent(&ar6k_spi.Hcd, EVENT_HCD_DETACH);
 		flush_scheduled_work();
-		SDIO_UnregisterHostController(&ar6k_spi.pHcd);
+		SDIO_UnregisterHostController(&ar6k_spi.Hcd);
 	}
 
 	if (spi_dev->ub104&0x40) {
 		HcdDeinitialize(&ar6k_spi);
 	}
 
-	deinit_hardware(ar6k_spi.pDev);
+	deinit_hardware(ar6k_spi.pHWDevice);
 	module_power_off();
 }
 
@@ -1060,18 +1101,18 @@ void remove_driver(void) {
 int __init spi_jz4750_init(void) {
 	char *dmode;
 	SDIO_STATUS rc;
-	if (dma_mode==0) {
-		dmode="PIO_MODE";
+	if (dma_mode) {
+		dmode="DMA MODE";
 	} else {
-		dmode="DMA_MODE";
+		dmode="PIO MODE";
 	}
 
 	printk("athspi_jz4755_hcd version: %s, %s\n", VERSION, dmode);
 
-	SDLIST_INIT(&ar6k_spi.pHcd.SDList);
+	SDLIST_INIT(&ar6k_spi.Hcd.SDList);
 
 	do {
-		rc=init_hardware(ar6k_spi.pDev);
+		rc=init_hardware(ar6k_spi.pHWDevice);
 		if (rc<0) break;
 
 		rc=HcdInitialize(&ar6k_spi);
@@ -1079,12 +1120,12 @@ int __init spi_jz4750_init(void) {
 
 		dev_spi.ub104|=0x40;
 
-		rc=SDIO_RegisterHostController(&ar6k_spi.pHcd);
+		rc=SDIO_RegisterHostController(&ar6k_spi.Hcd);
 		if (rc<0) break;
 
 		dev_spi.ub104|=0x20;
 
-		SDIO_HandleHcdEvent(&ar6k_spi.pHcd, 1);
+		SDIO_HandleHcdEvent(&ar6k_spi.Hcd, 1);
 
 		return SDIO_STATUS_SUCCESS;
 	} while (0);
@@ -1103,8 +1144,8 @@ void __exit spi_jz4750_cleanup(void) {
 }
 
 
-void HW_StopTimer(struct hcd_context *hcd_ctx) {
-	struct spi_dev *spi_dev=hcd_ctx->pDev;
+void HW_StopTimer(PSDHCD_DEVICE hcd_ctx) {
+	struct spi_dev *spi_dev=hcd_ctx->pHWDevice;
 	unsigned long int flags;
 
 	local_irq_save(flags);

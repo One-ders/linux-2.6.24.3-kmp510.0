@@ -106,6 +106,104 @@
 // (16*15)+0 (240) = ??         = 0         @ c00294fc
 // (16*15)+4 (244) = ??         = 0         @ c0029500
 // (16*15)+8 (248) = ??         = 2         @ c0029504
+#if 0
+struct hcd_context  { // size 252 bytes
+	unsigned int pad0;	  // 0-3
+	unsigned int pad4;	  // 4-7
+	unsigned char ub8;	  // 8
+	unsigned char ub9;	  // 9
+	unsigned char ub10;	  // 10
+	unsigned char ub11;	  // 11
+        unsigned int pad12;       // 12-15
+	unsigned short int uh16;  // 16-17
+	unsigned short int uh18;  // 18-19
+	unsigned int    uw20;	  // 20-23
+	unsigned short int uh24;  // 24-25
+	unsigned short int uh26;  // 26-27
+	unsigned int pad28[3];	  // 28-39
+	unsigned short int *w40;  // 40-43
+	int w44;  	          // 44-47
+	unsigned char ub48;	  // 48
+	unsigned char ub49;	  // 49
+	unsigned short pad50;	  // 50-51
+        unsigned int pad52[2];    // 52-59
+	unsigned int op_clock;    // 60-63
+	struct spi_dev *pDev;     // 64-67
+        SDHCD pHcd;               // 68-247
+	char		b248;	  // 248
+	unsigned char	ub249;	  // 249
+	char		b250;	  // 250
+	char		b251;	  // 251
+};
+#endif
+
+typedef enum {
+    ATH_SPI_AR6002 = 0,
+    ATH_SPI_AR6003 = 1,
+} ATH_SPI_CHIP_TYPE;
+
+#define AR6003_WRITE_BUFFER_SIZE   3163
+
+
+typedef struct _SDHCD_DEVICE {
+    SDLIST        List;                   /* linked list */
+    BOOL          ShuttingDown;           /* indicates shut down of HCD) */
+    UINT32        PollWait;               /* poll timeout for an operation */
+    UINT8         CurrentDMADataMode;     /* current data mode */
+    UINT16        SpiIntEnableShadow;     /* shadow copy of interrupt enables */
+    UINT16        SpiConfigShadow;        /* shadow copy of configuration register */
+//    OS_CRITICALSECTION CritSection;
+    BOOL          ExternalIOPending;      /* flag indicating that external host I/O access is pending */
+    UINT8         HostAccessDataWidth;    /* data width to use for host access */
+    UINT8         DMADataWidth;           /* data width to use for DMA access */
+    BOOL          DMAWriteWaitingForBuffer; /* DMA operation is waiting for buffer space */
+    BOOL          DMAHWTransferInProgress;  /* DMA hardware transfer is running */
+    UINT32        WriteBufferSpace;         /* 28, cached copy of space remaining in the SPI
+                                               write buffer */
+    UINT32        MaxWriteBufferSpace;      /* 32, max write buffer space that the SPI interface supports */
+    UINT32        PktsInSPIWriteBuffer;     /* 36, number of packets in SPI write buffer so far */
+//    ATH_SPI_CHIP_TYPE ChipType;             /* chip type */
+    /********************************************
+     *  the following fields are filled in by the common layer and used by the HW layer
+     * to process a DMA request
+     *
+     ********************************************/
+    PUINT8        pCurrentBuffer;         /* current buffer position for DMA */
+    UINT32        CurrentTransferLength;  /* current transfer length for common buffer DMA */
+    BOOL          CurrentTransferDirRx;   /* current transfer is RX direction */
+    UINT8         CurrentDmaWidth;        /* current DMA transfer width */
+    BOOL          HostDMABufferCopyMode;  /* DMA transfer copy mode, passed to hardware layer for
+                                             common buffer copies */
+    BOOL          HostAccessCopyMode;     /* host access copy mode */
+#define BYTE_SWAP    TRUE
+#define NO_BYTE_SWAP FALSE
+
+    /*******************************************
+     *
+     * the following fields must be filled in by the hardware specific layer
+     *
+     ********************************************/
+    UINT32        MaxBytesPerDMARequest;  /* maximum number of bytes per DMA request */
+    UINT32        PowerUpDelay;           /* delay before the common layer should initialize over spi */
+    UINT32        OperationalClock;       /* spi module operational clock */
+    PVOID         pHWDevice;              /* hardware device portion*/
+    SDHCD         Hcd;                    /* HCD description for bus driver */
+    UINT8         SpiHWCapabilitiesFlags; /* SPI hardware capabilities flags */
+    #define       HW_SPI_FRAME_WIDTH_8    0x01
+    #define       HW_SPI_FRAME_WIDTH_16   0x02
+    #define       HW_SPI_FRAME_WIDTH_24   0x04
+    #define       HW_SPI_FRAME_WIDTH_32   0x08
+    #define       HW_SPI_INT_EDGE_DETECT  0x80
+    #define       HW_SPI_NO_DMA           0x40
+    UINT8         MiscFlags;
+    #define       MISC_FLAG_SPI_SLEEP_WAR          0x04
+    #define       MISC_FLAG_RESET_SPI_IF_SHUTDOWN  0x02
+    #define       MISC_FLAG_DUMP_STATE_ON_SHUTDOWN 0x01
+    BOOL          FatalError;
+} SDHCD_DEVICE, *PSDHCD_DEVICE;
+
+typedef void (*PSDHC_IRQ_SYNC_CALLBACK)(PSDHCD_DEVICE, UINT32 Param1, UINT32 Param2);
+
 
 struct spi_dev { // size 152 bytes
 	struct timer_list	spi_timer;   // 0-11
@@ -117,7 +215,7 @@ struct spi_dev { // size 152 bytes
 	unsigned char ub25;		     // 25
 	unsigned short int uh26;	     // 26-27
 	unsigned int w28;		     // 28-31
-	struct hcd_context *pHcd_ctx;        // 32-35
+	PSDHCD_DEVICE      pHcd_ctx;         // 32-35
 	struct work_struct ssicomplete_work; // 36-51
 	struct work_struct iocomplete_work;  // 52-67
 	struct work_struct procirq_work;     // 68-83
@@ -139,31 +237,21 @@ struct spi_dev { // size 152 bytes
 	unsigned int DmaCommonBufferPhys;    // 148-151
 };
 
-struct hcd_context  { // size 252 bytes
-        unsigned int pad0[4];     // 0-15
-	unsigned short int uh16;  // 16-17
-	unsigned char	ub18;     // 18
-	unsigned char	ub19;     // 19
-	unsigned int    uw20;	  // 20-23
-	unsigned short int uh24;  // 24-25
-	unsigned short int uh26;  // 26-27
-	unsigned int pad28[3];	  // 28-39
-	unsigned short int *w40;  // 40-43
-	int w44;  	          // 44-47
-	unsigned char ub48;	  // 48
-	unsigned char ub49;	  // 49
-	unsigned short pad3;	  // 50-51
-        unsigned int pad4[2];    // 52-59
-	unsigned int op_clock;    // 60-63
-	struct spi_dev *pDev;     // 64-67
-        SDHCD pHcd;               // 68-247
-	char		b248;	  // 248
-	char		b249;	  // 249
-	char		b250;	  // 250
-	char		b251;	  // 251
-};
 
-void HcdDmaCompletion(struct hcd_context *hcd_ctx, SDIO_STATUS status);
+
+void HW_StartTimer(PSDHCD_DEVICE pDevice, int ms, int Context);
+void HW_StopTimer(PSDHCD_DEVICE hcd_ctx);
+void HW_UsecDelay(void *a0, unsigned int usec);
+void HW_StartDMA(PSDHCD_DEVICE hcd_ctx);
+void HcdDmaCompletion(PSDHCD_DEVICE hcd_ctx, SDIO_STATUS status);
+SDIO_STATUS HW_QueueDeferredCompletion(PSDHCD_DEVICE pDevice);
+SDIO_STATUS HW_SpiSetUpDMA(PSDHCD_DEVICE h_ctx);
+SDIO_STATUS HW_InOut_Token(PSDHCD_DEVICE hcd_ctx,
+                unsigned int out_token,
+                unsigned char datasize,
+                unsigned int *in_token);
+//                BOOL stat_check);
+
 
 extern int debuglevel;
 

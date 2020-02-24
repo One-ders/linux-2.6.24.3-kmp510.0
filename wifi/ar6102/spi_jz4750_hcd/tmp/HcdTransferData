@@ -1,0 +1,209 @@
+// static SDIO_STATUS HcdTransferData(struct hcd_context *hcd_ctx,
+//                                    SDREQUEST *pRequest);
+
+00002264 <HcdTransferData>:
+HcdTransferData():
+    2264:	27bdffc8 	addiu	sp,sp,-56 ! alloc 56 bytes
+    2268:	afb30024 	sw	s3,36(sp) ! save s3
+    226c:	afb20020 	sw	s2,32(sp) ! save s2
+    2270:	afbf0030 	sw	ra,48(sp) ! save ra
+    2274:	afb5002c 	sw	s5,44(sp) ! save s5
+    2278:	afb40028 	sw	s4,40(sp) ! save s4
+    227c:	afb1001c 	sw	s1,28(sp) ! save s1
+    2280:	afb00018 	sw	s0,24(sp) ! save s0
+    2284:	90a20010 	lbu	v0,16(a1) ! v0.b=pRequest->Parameter[0]
+    2288:	00809021 	move	s2,a0     ! s2=hcd_ctx
+    228c:	30430004 	andi	v1,v0,0x4 ! v1=v0&4 : CMD DMA
+    2290:	00a09821 	move	s3,a1     ! s3=pReq
+!>   2294:	1060002a 	beqz	v1,2340 <HcdTransferData+0xdc> ! to 2340 if not DMA
+!    2298:	304400fc 	andi	a0,v0,0xfc! a0=cmd&0xfc  ! mask away bottom 2 bits
+
+!    229c:	92420018 	lbu	v0,24(s2) ! v0=hcd_ctx->DMADataWidth
+!    22a0:	00823825 	or	a3,a0,v0  ! a3=cmd|DMADataWith
+2344 ---->
+    22a4:	8e700030 	lw	s0,48(s3) ! s0=pReq->DataRemaining
+    22a8:	2e020030 	sltiu	v0,s0,48  ! v0=1 if dataremaing<48
+    22ac:	14400004 	bnez	v0,22c0 <HcdTransferData+0x5c> ! to 22c0 if v0
+    22b0:	30f100ff 	andi	s1,a3,0xff ! s1=a3&0xff
+!    22b4:	30e20010 	andi	v0,a3,0x10 ! v0=a3&0x10
+!    22b8:	10400024 	beqz	v0,234c <HcdTransferData+0xe8>
+!    22bc:	00000000 	nop
+22ac, 2358 ---->  // no dma
+    22c0:	32230003 	andi	v1,s1,0x3 ! v1=s1&3 v1=datawith
+    22c4:	24020001 	li	v0,1      ! v0=1
+    22c8:	10620069 	beq	v1,v0,2470 <HcdTransferData+0x20c> to 2470 if v1=1 16bit
+    22cc:	8e750034 	lw	s5,52(s3) ! s5=pReq->HcdContext
+
+    22d0:	24020003 	li	v0,3      ! v0=3
+    22d4:	1062006b 	beq	v1,v0,2484 <HcdTransferData+0x220> ! to 2484 if v1=3 32bit
+    22d8:	2402fffc 	li	v0,-4     ! v0=-4
+    22dc:	0200a021 	move	s4,s0     ! s4=s0 (dataremaining)
+2478, 2488 --->
+    22e0:	16800054 	bnez	s4,2434 <HcdTransferData+0x1d0> ! to 2434 if s4 dataremain
+    22e4:	32220004 	andi	v0,s1,0x4 ! v0=s1&4       cmd=DMA
+    22e8:	00001021 	move	v0,zero   ! v0=0
+    22ec:	02143023 	subu	a2,s0,s4  ! a2=s0-s4     a2=dataremain-datadone
+    22f0:	10c0004c 	beqz	a2,2424 <HcdTransferData+0x1c0> ! to 2424 if !a2  done
+    22f4:	322300ff 	andi	v1,s1,0xff! v1=s1&0xff   v1=cmd
+    22f8:	30640003 	andi	a0,v1,0x3 ! a0=v1&0x3    a0=
+    22fc:	24020001 	li	v0,1      ! v0=1
+    2300:	10820062 	beq	a0,v0,248c <HcdTransferData+0x228>
+    2304:	306700fc 	andi	a3,v1,0xfc ! a3=v1&0xfc
+    2308:	24020003 	li	v0,3       ! v0=3
+    230c:	10820035 	beq	a0,v0,23e4 <HcdTransferData+0x180> ! to 23e4 if a0==v0
+    2310:	28c20005 	slti	v0,a2,5    ! v0=1 a2<5
+=============
+    2314:	24020003 	li	v0,3        ! Pending
+2428, 23e8 ---> Out
+    2318:	ae600030 	sw	zero,48(s3) ! pReq->dataRemaining=0
+    231c:	8fbf0030 	lw	ra,48(sp)   ! restore ra
+    2320:	8fb5002c 	lw	s5,44(sp)   ! restore s5
+242c ---> Out2
+    2324:	8fb40028 	lw	s4,40(sp)   ! restore s4
+    2328:	8fb30024 	lw	s3,36(sp)   ! restore s3
+    232c:	8fb20020 	lw	s2,32(sp)   ! restore s2
+    2330:	8fb1001c 	lw	s1,28(sp)   ! restore s1
+    2334:	8fb00018 	lw	s0,24(sp)   ! restore s0
+    2338:	03e00008 	jr	ra          ! return
+    233c:	27bd0038 	addiu	sp,sp,56    ! dealloc stack
+=========================================================================
+2294 --->
+    2340:	92420017 	lbu	v0,23(s2) v0=hcd_context->HostAccessDataWidth
+>   2344:	080008a9 	j	22a4 <HcdTransferData+0x40>
+			2344: R_MIPS_26	.text
+    2348:	00823825 	or	a3,a0,v0  ! a3=cmd|HostAccess
+=============================
+22b8 --->
+    234c:	924200f8 	lbu	v0,248(s2) ! v0=hcd_ctx->ub248
+    2350:	30420040 	andi	v0,v0,0x40 ! v0=v0&0x40  , No_DMA
+    2354:	1440ffda 	bnez	v0,22c0 <HcdTransferData+0x5c> ! to 22c0 if v0
+    2358:	30f100ff 	andi	s1,a3,0xff ! s1=a3&0xff
+    235c:	8e420034 	lw	v0,52(s2)  ! v0=hcd_ctx->w52
+    2360:	30e50003 	andi	a1,a3,0x3  ! a1=a3&3
+    2364:	0050182b 	sltu	v1,v0,s0   ! v1=1 if v0<s0
+    2368:	00403021 	move	a2,v0      ! a2=v0
+    236c:	24040001 	li	a0,1       ! a0=1
+    2370:	10a4004a 	beq	a1,a0,249c <HcdTransferData+0x238> ! to 249c if a1==a0
+    2374:	0203300a 	movz	a2,s0,v1   ! a2=s0 if ! v1
+    2378:	24020003 	li	v0,3       ! v0=3
+    237c:	10a2004a 	beq	a1,v0,24a8 <HcdTransferData+0x244> ! to 24a8 if a1==v0
+    2380:	00000000 	nop
+    2384:	8e620034 	lw	v0,52(s3) ! v0=pReq->pHcdContext
+    2388:	000719c2 	srl	v1,a3,0x7 ! v1=a3>>7
+    238c:	ae420028 	sw	v0,40(s2) ! hcd_ctx->w40=v0
+    2390:	a2430030 	sb	v1,48(s2) ! hcd_ctx->b48=v1
+    2394:	a2450031 	sb	a1,49(s2) ! hcd_ctx->b49=a1
+    2398:	ae46002c 	sw	a2,44(s2) ! hcd_ctx->w44=a2
+    239c:	8e630030 	lw	v1,48(s3) ! v1=pReq->dataRemaing
+    23a0:	8e620034 	lw	v0,52(s3) ! v0=pReq->pHcdContext
+    23a4:	00661823 	subu	v1,v1,a2  ! v1=v1-a2
+    23a8:	00461021 	addu	v0,v0,a2  ! v0=v0+a2
+    23ac:	ae620034 	sw	v0,52(s3) ! pReq->pHcdContext=v0
+    23b0:	ae630030 	sw	v1,48(s3) ! pReq->DataRemaining=v1
+    23b4:	3c190000 	lui	t9,0x0    ! t9=.text
+			23b4: R_MIPS_HI16	HW_SpiSetUpDMA
+    23b8:	02402021 	move	a0,s2     ! a0=hcd_ctx
+    23bc:	8fbf0030 	lw	ra,48(sp) ! restore ra
+    23c0:	8fb5002c 	lw	s5,44(sp) ! restore s5
+    23c4:	8fb40028 	lw	s4,40(sp) ! restore s4
+    23c8:	8fb30024 	lw	s3,36(sp) ! restore s3
+    23cc:	8fb20020 	lw	s2,32(sp) ! restore s2
+    23d0:	8fb1001c 	lw	s1,28(sp) ! restore s1
+    23d4:	8fb00018 	lw	s0,24(sp) ! restore s0
+    23d8:	27390000 	addiu	t9,t9,0   ! t9=HW_SpiSetUpDMA
+			23d8: R_MIPS_LO16	HW_SpiSetUpDMA
+    23dc:	03200008 	jr	t9        ! SD_STATUS HW_SpiSetUpDMA(struct hcd_context *)
+    23e0:	27bd0038 	addiu	sp,sp,56  ! dealloc stack
+===========================================================
+2310 ---->
+    23e4:	1040ffcc 	beqz	v0,2318 <HcdTransferData+0xb4> ! to 2318 if !v0
+    23e8:	24020003 	li	v0,3			       ! v0=3  --> out pending
+    23ec:	10c40031 	beq	a2,a0,24b4 <HcdTransferData+0x250> ! to 24b4 if a2==a0
+    23f0:	24020004 	li	v0,4				   ! v0=4
+    23f4:	10c20035 	beq	a2,v0,24cc <HcdTransferData+0x268> ! to 24cc if a2==v0
+    23f8:	24020002 	li	v0,2
+    23fc:	14c20002 	bne	a2,v0,2408 <HcdTransferData+0x1a4> ! to 2408 if a2!=v0
+    2400:	00000000 	nop
+    2404:	34e70001 	ori	a3,a3,0x1			   ! cmd=a3|1
+2400, 2490, 24c0, 24c8, 24d0 --->
+    2408:	92420033 	lbu	v0,51(s2)			   ! v0.b=hcd_ctx->ub51
+    240c:	02b42821 	addu	a1,s5,s4                           ! buffer=s5+s4
+    2410:	afa20010 	sw	v0,16(sp)			   ! sp[16]=v0
+    2414:	3c020000 	lui	v0,0x0				   ! v0=.text
+			2414: R_MIPS_HI16	.text
+    2418:	24421f5c 	addiu	v0,v0,8028 ! DoDataFrames
+			2418: R_MIPS_LO16	.text
+	DoDataFrames(hcd_ctx, a1,a2,a3,sp);
+    241c:	0040f809 	jalr	v0
+    2420:	02402021 	move	a0,s2
+22f4 --->
+>   2424:	0441ffbc 	bgez	v0,2318 <HcdTransferData+0xb4> ! to 2318 if v0>=0
+    2428:	8fbf0030 	lw	ra,48(sp) ! restore ra
+>   242c:	080008c9 	j	2324 <HcdTransferData+0xc0>
+			242c: R_MIPS_26	.text
+    2430:	8fb5002c 	lw	s5,44(sp) !restore s5   --> to out2
+=======================================================================
+22e4 --->
+>   2434:	10400011 	beqz	v0,247c <HcdTransferData+0x218>
+    2438:	00000000 	nop
+    243c:	92420032 	lbu	v0,50(s2)
+    2440:	afa20010 	sw	v0,16(sp)
+    2444:	3c020000 	lui	v0,0x0				! v0=HI(text)
+			2444: R_MIPS_HI16	.text
+    2448:	02402021 	move	a0,s2				! a0=s2
+    244c:	02a02821 	move	a1,s5				! a1=s5
+    2450:	02803021 	move	a2,s4				! a2=s4
+    2454:	24421f5c 	addiu	v0,v0,8028			! DoDataFrames
+			2454: R_MIPS_LO16	.text
+	status=DoDataFrames(pDevice,pBuffer,len,cmd,pDevice->0x50);
+    2458:	0040f809 	jalr	v0
+    245c:	02203821 	move	a3,s1				! a3=s1
+    2460:	0441ffa2 	bgez	v0,22ec <HcdTransferData+0x88>
+    2464:	8fbf0030 	lw	ra,48(sp)
+    2468:	080008c9 	j	2324 <HcdTransferData+0xc0>
+			2468: R_MIPS_26	.text
+    246c:	8fb5002c 	lw	s5,44(sp)
+===========================================================================
+22cc --->
+    2470:	2402fffe 	li	v0,-2    ! v0=-2
+    2474:	080008b8 	j	22e0 <HcdTransferData+0x7c> ! to 22e0
+			2474: R_MIPS_26	.text
+    2478:	0202a024 	and	s4,s0,v0 ! s4=s0&v0
+===============================================================================
+2438 --->
+    247c:	08000910 	j	2440 <HcdTransferData+0x1dc>
+			247c: R_MIPS_26	.text
+    2480:	92420033 	lbu	v0,51(s2) ! v0=ub51
+===============================================================================
+22d8 --->
+    2484:	080008b8 	j	22e0 <HcdTransferData+0x7c>
+			2484: R_MIPS_26	.text
+    2488:	0202a024 	and	s4,s0,v0 ! s4=s0&v0
+
+    248c:	10c4ffde 	beq	a2,a0,2408 <HcdTransferData+0x1a4>
+    2490:	24020003 	li	v0,3
+    2494:	080008c7 	j	231c <HcdTransferData+0xb8>
+			2494: R_MIPS_26	.text
+    2498:	ae600030 	sw	zero,48(s3)
+    249c:	2402fffe 	li	v0,-2
+    24a0:	080008e1 	j	2384 <HcdTransferData+0x120>
+			24a0: R_MIPS_26	.text
+    24a4:	00c23024 	and	a2,a2,v0
+2380 --->
+    24a8:	2402fffc 	li	v0,-4   ! v0=-4
+    24ac:	080008e1 	j	2384 <HcdTransferData+0x120>
+			24ac: R_MIPS_26	.text
+    24b0:	00c23024 	and	a2,a2,v0 ! a2=a2&-4
+23f0 --->
+    24b4:	924200f8 	lbu	v0,248(s2) ! v0=hcd_ctx->ub248
+    24b8:	30420004 	andi	v0,v0,0x4  ! v0=v0&0x4
+    24bc:	1040ffd2 	beqz	v0,2408 <HcdTransferData+0x1a4> ! to 2408 if !v0
+    24c0:	00000000 	nop
+==================================
+    24c4:	08000902 	j	2408 <HcdTransferData+0x1a4>
+			24c4: R_MIPS_26	.text
+    24c8:	34e70002 	ori	a3,a3,0x2 ! a3=a3|2
+23f8 --->
+    24cc:	08000902 	j	2408 <HcdTransferData+0x1a4>
+			24cc: R_MIPS_26	.text
+    24d0:	34e70003 	ori	a3,a3,0x3 ! a3=a3|3

@@ -3016,902 +3016,1348 @@ Disassembly of section .text:
 			2700: R_MIPS_26	.text
     2704:	aea20024 	sw	v0,36(s5)
 
-00002708 <HcdTimerCallback>:
-    2708:	27bdffe0 	addiu	sp,sp,-32
-    270c:	24020001 	li	v0,1
-    2710:	afb10014 	sw	s1,20(sp)
-    2714:	afbf0018 	sw	ra,24(sp)
-    2718:	afb00010 	sw	s0,16(sp)
-    271c:	10a20006 	beq	a1,v0,2738 <HcdTimerCallback+0x30>
-    2720:	00808821 	move	s1,a0
-    2724:	8fbf0018 	lw	ra,24(sp)
-    2728:	8fb10014 	lw	s1,20(sp)
-    272c:	8fb00010 	lw	s0,16(sp)
-    2730:	03e00008 	jr	ra
-    2734:	27bd0020 	addiu	sp,sp,32
-    2738:	8c900088 	lw	s0,136(a0)
-    273c:	1200fff9 	beqz	s0,2724 <HcdTimerCallback+0x1c>
-    2740:	02002021 	move	a0,s0
-    2744:	3c020000 	lui	v0,0x0
-			2744: R_MIPS_HI16	.text
-    2748:	24421b40 	addiu	v0,v0,6976
-			2748: R_MIPS_LO16	.text
-    274c:	0040f809 	jalr	v0
-    2750:	00000000 	nop
-    2754:	2403fff5 	li	v1,-11
-    2758:	ae030040 	sw	v1,64(s0)
-    275c:	3c190000 	lui	t9,0x0
-			275c: R_MIPS_HI16	HW_QueueDeferredCompletion
-    2760:	02202021 	move	a0,s1
-    2764:	8fbf0018 	lw	ra,24(sp)
-    2768:	8fb10014 	lw	s1,20(sp)
-    276c:	8fb00010 	lw	s0,16(sp)
-    2770:	27390000 	addiu	t9,t9,0
-			2770: R_MIPS_LO16	HW_QueueDeferredCompletion
-    2774:	03200008 	jr	t9
-    2778:	27bd0020 	addiu	sp,sp,32
-
-0000277c <HcdRequest>:
-    277c:	27bdffc0 	addiu	sp,sp,-64
-    2780:	3c020000 	lui	v0,0x0
-			2780: R_MIPS_HI16	local_bh_disable
-    2784:	afbf003c 	sw	ra,60(sp)
-    2788:	afb60038 	sw	s6,56(sp)
-    278c:	afb50034 	sw	s5,52(sp)
-    2790:	afb40030 	sw	s4,48(sp)
-    2794:	afb3002c 	sw	s3,44(sp)
-    2798:	afb20028 	sw	s2,40(sp)
-    279c:	afb10024 	sw	s1,36(sp)
-    27a0:	afb00020 	sw	s0,32(sp)
-    27a4:	24420000 	addiu	v0,v0,0
-			27a4: R_MIPS_LO16	local_bh_disable
-    27a8:	8c920044 	lw	s2,68(a0)
-    27ac:	0040f809 	jalr	v0
-    27b0:	8c910020 	lw	s1,32(a0)
-    27b4:	8f820014 	lw	v0,20(gp)
-    27b8:	24420001 	addiu	v0,v0,1
-    27bc:	af820014 	sw	v0,20(gp)
-    27c0:	40036000 	mfc0	v1,c0_status
-    27c4:	30630001 	andi	v1,v1,0x1
-    27c8:	106000d2 	beqz	v1,2b14 <HcdRequest+0x398>
-    27cc:	3c040000 	lui	a0,0x0
-			27cc: R_MIPS_HI16	$LC11
-    27d0:	922200fa 	lbu	v0,250(s1)
-    27d4:	144000b5 	bnez	v0,2aac <HcdRequest+0x330>
-    27d8:	2410fffb 	li	s0,-5
-    27dc:	96430010 	lhu	v1,16(s2)
-    27e0:	30620004 	andi	v0,v1,0x4
-    27e4:	1040005f 	beqz	v0,2964 <HcdRequest+0x1e8>
-    27e8:	30620010 	andi	v0,v1,0x10
-    27ec:	8e42002c 	lw	v0,44(s2)
-    27f0:	9646001a 	lhu	a2,26(s2)
-    27f4:	ae420034 	sw	v0,52(s2)
-    27f8:	ae460030 	sw	a2,48(s2)
-    27fc:	92240018 	lbu	a0,24(s1)
-    2800:	24020003 	li	v0,3
-    2804:	1082011c 	beq	a0,v0,2c78 <HcdRequest+0x4fc>
-    2808:	96250014 	lhu	a1,20(s1)
-    280c:	24020001 	li	v0,1
-    2810:	10820004 	beq	a0,v0,2824 <HcdRequest+0xa8>
-    2814:	34a60006 	ori	a2,a1,0x6
-    2818:	1480000d 	bnez	a0,2850 <HcdRequest+0xd4>
-    281c:	30620080 	andi	v0,v1,0x80
-    2820:	30a6fff9 	andi	a2,a1,0xfff9
-    2824:	10c50009 	beq	a2,a1,284c <HcdRequest+0xd0>
-    2828:	3c020000 	lui	v0,0x0
-			2828: R_MIPS_HI16	.text
-    282c:	a6260014 	sh	a2,20(s1)
-    2830:	02202021 	move	a0,s1
-    2834:	24421da4 	addiu	v0,v0,7588
-			2834: R_MIPS_LO16	.text
-    2838:	0040f809 	jalr	v0
-    283c:	24050400 	li	a1,1024
-    2840:	044000ce 	bltz	v0,2b7c <HcdRequest+0x400>
-    2844:	00408021 	move	s0,v0
-    2848:	96430010 	lhu	v1,16(s2)
-    284c:	30620080 	andi	v0,v1,0x80
-    2850:	14400103 	bnez	v0,2c60 <HcdRequest+0x4e4>
-    2854:	3c020000 	lui	v0,0x0
-			2854: R_MIPS_HI16	.text
-    2858:	2634001c 	addiu	s4,s1,28
-    285c:	3c130000 	lui	s3,0x0
-			285c: R_MIPS_HI16	.text
-    2860:	02202021 	move	a0,s1
-    2864:	24050200 	li	a1,512
-    2868:	26621d24 	addiu	v0,s3,7460
-			2868: R_MIPS_LO16	.text
-    286c:	0040f809 	jalr	v0
-    2870:	02803021 	move	a2,s4
-    2874:	044000c1 	bltz	v0,2b7c <HcdRequest+0x400>
-    2878:	00408021 	move	s0,v0
-    287c:	922500f9 	lbu	a1,249(s1)
-    2880:	30a20004 	andi	v0,a1,0x4
-    2884:	10400106 	beqz	v0,2ca0 <HcdRequest+0x524>
-    2888:	00000000 	nop
-    288c:	8e23001c 	lw	v1,28(s1)
-    2890:	8e240020 	lw	a0,32(s1)
-    2894:	0064102b 	sltu	v0,v1,a0
-    2898:	1440010f 	bnez	v0,2cd8 <HcdRequest+0x55c>
-    289c:	00000000 	nop
-    28a0:	ae200024 	sw	zero,36(s1)
-    28a4:	8e460030 	lw	a2,48(s2)
-    28a8:	0066102b 	sltu	v0,v1,a2
-    28ac:	104000e9 	beqz	v0,2c54 <HcdRequest+0x4d8>
-    28b0:	00661023 	subu	v0,v1,a2
-    28b4:	30a20004 	andi	v0,a1,0x4
-    28b8:	1440010b 	bnez	v0,2ce8 <HcdRequest+0x56c>
-    28bc:	00000000 	nop
-    28c0:	00863023 	subu	a2,a0,a2
-    28c4:	00c4102b 	sltu	v0,a2,a0
-    28c8:	10400109 	beqz	v0,2cf0 <HcdRequest+0x574>
-    28cc:	00000000 	nop
-    28d0:	10c00107 	beqz	a2,2cf0 <HcdRequest+0x574>
-    28d4:	00000000 	nop
-    28d8:	3c020000 	lui	v0,0x0
-			28d8: R_MIPS_HI16	.text
-    28dc:	02202021 	move	a0,s1
-    28e0:	24421da4 	addiu	v0,v0,7588
-			28e0: R_MIPS_LO16	.text
-    28e4:	0040f809 	jalr	v0
-    28e8:	24051300 	li	a1,4864
-    28ec:	044000d1 	bltz	v0,2c34 <HcdRequest+0x4b8>
-    28f0:	00408021 	move	s0,v0
-    28f4:	27b50010 	addiu	s5,sp,16
-    28f8:	26761d24 	addiu	s6,s3,7460
-			28f8: R_MIPS_LO16	.text
-    28fc:	02202021 	move	a0,s1
-    2900:	24050500 	li	a1,1280
-    2904:	02c0f809 	jalr	s6
-    2908:	02a03021 	move	a2,s5
-    290c:	044000c9 	bltz	v0,2c34 <HcdRequest+0x4b8>
-    2910:	00408021 	move	s0,v0
-    2914:	8fa20010 	lw	v0,16(sp)
-    2918:	24030004 	li	v1,4
-    291c:	30530006 	andi	s3,v0,0x6
-    2920:	126300a1 	beq	s3,v1,2ba8 <HcdRequest+0x42c>
-    2924:	3c020000 	lui	v0,0x0
-			2924: R_MIPS_HI16	HW_UsecDelay
-    2928:	24020001 	li	v0,1
-    292c:	a2220019 	sb	v0,25(s1)
-    2930:	3c020000 	lui	v0,0x0
-			2930: R_MIPS_HI16	.text
-    2934:	02202021 	move	a0,s1
-    2938:	24421f3c 	addiu	v0,v0,7996
-			2938: R_MIPS_LO16	.text
-    293c:	0040f809 	jalr	v0
-    2940:	24050400 	li	a1,1024
-    2944:	8f820014 	lw	v0,20(gp)
-    2948:	3c030000 	lui	v1,0x0
-			2948: R_MIPS_HI16	local_bh_enable
-    294c:	2442ffff 	addiu	v0,v0,-1
-    2950:	24630000 	addiu	v1,v1,0
-			2950: R_MIPS_LO16	local_bh_enable
-    2954:	0060f809 	jalr	v1
-    2958:	af820014 	sw	v0,20(gp)
-    295c:	08000aba 	j	2ae8 <HcdRequest+0x36c>
-			295c: R_MIPS_26	.text
-    2960:	24100003 	li	s0,3
-    2964:	10400079 	beqz	v0,2b4c <HcdRequest+0x3d0>
-    2968:	30620080 	andi	v0,v1,0x80
-    296c:	8e44002c 	lw	a0,44(s2)
-    2970:	9646001a 	lhu	a2,26(s2)
-    2974:	30630020 	andi	v1,v1,0x20
-    2978:	24020040 	li	v0,64
-    297c:	0003100a 	movz	v0,zero,v1
-    2980:	ae460030 	sw	a2,48(s2)
-    2984:	ae440034 	sw	a0,52(s2)
-    2988:	afa20018 	sw	v0,24(sp)
-    298c:	8e430030 	lw	v1,48(s2)
-    2990:	3c150000 	lui	s5,0x0
-			2990: R_MIPS_HI16	.text
-    2994:	00431025 	or	v0,v0,v1
-    2998:	00403021 	move	a2,v0
-    299c:	02202021 	move	a0,s1
-    29a0:	24050600 	li	a1,1536
-    29a4:	26b31da4 	addiu	s3,s5,7588
-			29a4: R_MIPS_LO16	.text
-    29a8:	0260f809 	jalr	s3
-    29ac:	afa20018 	sw	v0,24(sp)
-    29b0:	04400072 	bltz	v0,2b7c <HcdRequest+0x400>
-    29b4:	00408021 	move	s0,v0
-    29b8:	96420010 	lhu	v0,16(s2)
-    29bc:	30420080 	andi	v0,v0,0x80
-    29c0:	104000cd 	beqz	v0,2cf8 <HcdRequest+0x57c>
-    29c4:	3c020000 	lui	v0,0x0
-			29c4: R_MIPS_HI16	HW_InOut_Token
-    29c8:	34048000 	li	a0,0x8000
-    29cc:	afa40018 	sw	a0,24(sp)
-    29d0:	96420010 	lhu	v0,16(s2)
-    29d4:	3403c000 	li	v1,0xc000
-    29d8:	30420080 	andi	v0,v0,0x80
-    29dc:	0082180b 	movn	v1,a0,v0
-    29e0:	afa30018 	sw	v1,24(sp)
-    29e4:	96420018 	lhu	v0,24(s2)
-    29e8:	02202021 	move	a0,s1
-    29ec:	00431025 	or	v0,v0,v1
-    29f0:	00403021 	move	a2,v0
-    29f4:	24050700 	li	a1,1792
-    29f8:	0260f809 	jalr	s3
-    29fc:	afa20018 	sw	v0,24(sp)
-    2a00:	0440005e 	bltz	v0,2b7c <HcdRequest+0x400>
-    2a04:	00408021 	move	s0,v0
-    2a08:	3c130000 	lui	s3,0x0
-			2a08: R_MIPS_HI16	.text
-    2a0c:	26741d24 	addiu	s4,s3,7460
+00002708 <HcdSpiInterrupt>:
+    2708:	27bdffd0 	addiu	sp,sp,-48
+    270c:	3c020000 	lui	v0,0x0
+			270c: R_MIPS_HI16	local_bh_disable
+    2710:	afb1001c 	sw	s1,28(sp)
+    2714:	afbf002c 	sw	ra,44(sp)
+    2718:	afb40028 	sw	s4,40(sp)
+    271c:	afb30024 	sw	s3,36(sp)
+    2720:	afb20020 	sw	s2,32(sp)
+    2724:	afb00018 	sw	s0,24(sp)
+    2728:	24420000 	addiu	v0,v0,0
+			2728: R_MIPS_LO16	local_bh_disable
+    272c:	0040f809 	jalr	v0
+    2730:	00808821 	move	s1,a0
+    2734:	8f820014 	lw	v0,20(gp)
+    2738:	24420001 	addiu	v0,v0,1
+    273c:	af820014 	sw	v0,20(gp)
+    2740:	40036000 	mfc0	v1,c0_status
+    2744:	30630001 	andi	v1,v1,0x1
+    2748:	1060006f 	beqz	v1,2908 <HcdSpiInterrupt+0x200>
+    274c:	3c040000 	lui	a0,0x0
+			274c: R_MIPS_HI16	$LC11
+    2750:	9222001a 	lbu	v0,26(s1)
+    2754:	10400010 	beqz	v0,2798 <HcdSpiInterrupt+0x90>
+    2758:	3c140000 	lui	s4,0x0
+			2758: R_MIPS_HI16	.text
+    275c:	8f830014 	lw	v1,20(gp)
+    2760:	3c040000 	lui	a0,0x0
+			2760: R_MIPS_HI16	local_bh_enable
+    2764:	2463ffff 	addiu	v1,v1,-1
+    2768:	24840000 	addiu	a0,a0,0
+			2768: R_MIPS_LO16	local_bh_enable
+    276c:	0080f809 	jalr	a0
+    2770:	af830014 	sw	v1,20(gp)
+    2774:	8fbf002c 	lw	ra,44(sp)
+    2778:	8fb40028 	lw	s4,40(sp)
+    277c:	8fb30024 	lw	s3,36(sp)
+    2780:	8fb20020 	lw	s2,32(sp)
+    2784:	8fb1001c 	lw	s1,28(sp)
+    2788:	8fb00018 	lw	s0,24(sp)
+    278c:	24020001 	li	v0,1
+    2790:	03e00008 	jr	ra
+    2794:	27bd0030 	addiu	sp,sp,48
+    2798:	02202021 	move	a0,s1
+    279c:	24050c00 	li	a1,3072
+    27a0:	26821d24 	addiu	v0,s4,7460
+			27a0: R_MIPS_LO16	.text
+    27a4:	0040f809 	jalr	v0
+    27a8:	27a60010 	addiu	a2,sp,16
+    27ac:	0440008a 	bltz	v0,29d8 <HcdSpiInterrupt+0x2d0>
+    27b0:	00409021 	move	s2,v0
+    27b4:	8fa70010 	lw	a3,16(sp)
+    27b8:	96220012 	lhu	v0,18(s1)
+    27bc:	00473824 	and	a3,v0,a3
+    27c0:	30e6070e 	andi	a2,a3,0x70e
+    27c4:	14c0008f 	bnez	a2,2a04 <HcdSpiInterrupt+0x2fc>
+    27c8:	afa70010 	sw	a3,16(sp)
+    27cc:	30e2000e 	andi	v0,a3,0xe
+    27d0:	1040005b 	beqz	v0,2940 <HcdSpiInterrupt+0x238>
+    27d4:	30e20300 	andi	v0,a3,0x300
+    27d8:	3c130000 	lui	s3,0x0
+			27d8: R_MIPS_HI16	debuglevel
+    27dc:	8e620000 	lw	v0,0(s3)
+			27dc: R_MIPS_LO16	debuglevel
+    27e0:	28420003 	slti	v0,v0,3
+    27e4:	104000ac 	beqz	v0,2a98 <HcdSpiInterrupt+0x390>
+    27e8:	8e300088 	lw	s0,136(s1)
+    27ec:	30e20008 	andi	v0,a3,0x8
+    27f0:	10400006 	beqz	v0,280c <HcdSpiInterrupt+0x104>
+    27f4:	30e20004 	andi	v0,a3,0x4
+    27f8:	8e620000 	lw	v0,0(s3)
+			27f8: R_MIPS_LO16	debuglevel
+    27fc:	28420003 	slti	v0,v0,3
+    2800:	104000f1 	beqz	v0,2bc8 <HcdSpiInterrupt+0x4c0>
+    2804:	3c040000 	lui	a0,0x0
+			2804: R_MIPS_HI16	$LC13
+    2808:	30e20004 	andi	v0,a3,0x4
+    280c:	10400006 	beqz	v0,2828 <HcdSpiInterrupt+0x120>
+    2810:	30e20002 	andi	v0,a3,0x2
+    2814:	8e620000 	lw	v0,0(s3)
+			2814: R_MIPS_LO16	debuglevel
+    2818:	28420003 	slti	v0,v0,3
+    281c:	104000e4 	beqz	v0,2bb0 <HcdSpiInterrupt+0x4a8>
+    2820:	3c040000 	lui	a0,0x0
+			2820: R_MIPS_HI16	$LC14
+    2824:	30e20002 	andi	v0,a3,0x2
+    2828:	10400004 	beqz	v0,283c <HcdSpiInterrupt+0x134>
+    282c:	8e620000 	lw	v0,0(s3)
+			282c: R_MIPS_LO16	debuglevel
+    2830:	28420003 	slti	v0,v0,3
+    2834:	104000a0 	beqz	v0,2ab8 <HcdSpiInterrupt+0x3b0>
+    2838:	3c040000 	lui	a0,0x0
+			2838: R_MIPS_HI16	$LC15
+    283c:	1200006f 	beqz	s0,29fc <HcdSpiInterrupt+0x2f4>
+    2840:	3c020000 	lui	v0,0x0
+			2840: R_MIPS_HI16	.text
+    2844:	24421b40 	addiu	v0,v0,6976
+			2844: R_MIPS_LO16	.text
+    2848:	0040f809 	jalr	v0
+    284c:	02002021 	move	a0,s0
+    2850:	9223001a 	lbu	v1,26(s1)
+    2854:	14600004 	bnez	v1,2868 <HcdSpiInterrupt+0x160>
+    2858:	00009821 	move	s3,zero
+    285c:	2402fffb 	li	v0,-5
+    2860:	24130001 	li	s3,1
+    2864:	ae020040 	sw	v0,64(s0)
+    2868:	8fa60010 	lw	a2,16(sp)
+    286c:	3c100000 	lui	s0,0x0
+			286c: R_MIPS_HI16	.text
+    2870:	26101da4 	addiu	s0,s0,7588
+			2870: R_MIPS_LO16	.text
+    2874:	30c6000e 	andi	a2,a2,0xe
+    2878:	02202021 	move	a0,s1
+    287c:	0200f809 	jalr	s0
+    2880:	24050c00 	li	a1,3072
+    2884:	8fa40010 	lw	a0,16(sp)
+    2888:	2402fff1 	li	v0,-15
+    288c:	00823824 	and	a3,a0,v0
+    2890:	24030001 	li	v1,1
+    2894:	a22300fa 	sb	v1,250(s1)
+    2898:	02202021 	move	a0,s1
+    289c:	24050d00 	li	a1,3328
+    28a0:	00003021 	move	a2,zero
+    28a4:	0200f809 	jalr	s0
+    28a8:	afa70010 	sw	a3,16(sp)
+    28ac:	8f820014 	lw	v0,20(gp)
+    28b0:	3c030000 	lui	v1,0x0
+			28b0: R_MIPS_HI16	local_bh_enable
+    28b4:	2442ffff 	addiu	v0,v0,-1
+    28b8:	24630000 	addiu	v1,v1,0
+			28b8: R_MIPS_LO16	local_bh_enable
+    28bc:	0060f809 	jalr	v1
+    28c0:	af820014 	sw	v0,20(gp)
+    28c4:	9222001a 	lbu	v0,26(s1)
+    28c8:	1040002f 	beqz	v0,2988 <HcdSpiInterrupt+0x280>
+    28cc:	00008021 	move	s0,zero
+    28d0:	16600034 	bnez	s3,29a4 <HcdSpiInterrupt+0x29c>
+    28d4:	3c020000 	lui	v0,0x0
+			28d4: R_MIPS_HI16	SDIO_HandleHcdEvent
+    28d8:	16000038 	bnez	s0,29bc <HcdSpiInterrupt+0x2b4>
+    28dc:	3c020000 	lui	v0,0x0
+			28dc: R_MIPS_HI16	SDIO_HandleHcdEvent
+    28e0:	001217c2 	srl	v0,s2,0x1f
+    28e4:	38420001 	xori	v0,v0,0x1
+    28e8:	8fbf002c 	lw	ra,44(sp)
+    28ec:	8fb40028 	lw	s4,40(sp)
+    28f0:	8fb30024 	lw	s3,36(sp)
+    28f4:	8fb20020 	lw	s2,32(sp)
+    28f8:	8fb1001c 	lw	s1,28(sp)
+    28fc:	8fb00018 	lw	s0,24(sp)
+    2900:	03e00008 	jr	ra
+    2904:	27bd0030 	addiu	sp,sp,48
+    2908:	3c020000 	lui	v0,0x0
+			2908: R_MIPS_HI16	printk
+    290c:	24420000 	addiu	v0,v0,0
+			290c: R_MIPS_LO16	printk
+    2910:	0040f809 	jalr	v0
+    2914:	24840000 	addiu	a0,a0,0
+			2914: R_MIPS_LO16	$LC11
+    2918:	40016000 	mfc0	at,c0_status
+    291c:	3421001f 	ori	at,at,0x1f
+    2920:	3821001e 	xori	at,at,0x1e
+    2924:	40816000 	mtc0	at,c0_status
+    2928:	00000040 	ssnop
+    292c:	00000040 	ssnop
+    2930:	00000040 	ssnop
+    2934:	000000c0 	sll	zero,zero,0x3
+    2938:	080009d5 	j	2754 <HcdSpiInterrupt+0x4c>
+			2938: R_MIPS_26	.text
+    293c:	9222001a 	lbu	v0,26(s1)
+    2940:	14400039 	bnez	v0,2a28 <HcdSpiInterrupt+0x320>
+    2944:	00009821 	move	s3,zero
+    2948:	30e20400 	andi	v0,a3,0x400
+    294c:	14400046 	bnez	v0,2a68 <HcdSpiInterrupt+0x360>
+    2950:	2402fbff 	li	v0,-1025
+    2954:	30e20081 	andi	v0,a3,0x81
+    2958:	14400022 	bnez	v0,29e4 <HcdSpiInterrupt+0x2dc>
+    295c:	3c020000 	lui	v0,0x0
+			295c: R_MIPS_HI16	.text
+    2960:	00008021 	move	s0,zero
+    2964:	8f820014 	lw	v0,20(gp)
+    2968:	3c030000 	lui	v1,0x0
+			2968: R_MIPS_HI16	local_bh_enable
+    296c:	2442ffff 	addiu	v0,v0,-1
+    2970:	24630000 	addiu	v1,v1,0
+			2970: R_MIPS_LO16	local_bh_enable
+    2974:	0060f809 	jalr	v1
+    2978:	af820014 	sw	v0,20(gp)
+    297c:	9222001a 	lbu	v0,26(s1)
+    2980:	1440ffd3 	bnez	v0,28d0 <HcdSpiInterrupt+0x1c8>
+    2984:	00000000 	nop
+    2988:	3c020000 	lui	v0,0x0
+			2988: R_MIPS_HI16	.text
+    298c:	02202021 	move	a0,s1
+    2990:	244224d4 	addiu	v0,v0,9428
+			2990: R_MIPS_LO16	.text
+    2994:	0040f809 	jalr	v0
+    2998:	24050001 	li	a1,1
+    299c:	1260ffce 	beqz	s3,28d8 <HcdSpiInterrupt+0x1d0>
+    29a0:	3c020000 	lui	v0,0x0
+			29a0: R_MIPS_HI16	SDIO_HandleHcdEvent
+    29a4:	26240044 	addiu	a0,s1,68
+    29a8:	24420000 	addiu	v0,v0,0
+			29a8: R_MIPS_LO16	SDIO_HandleHcdEvent
+    29ac:	0040f809 	jalr	v0
+    29b0:	24050004 	li	a1,4
+    29b4:	1200ffca 	beqz	s0,28e0 <HcdSpiInterrupt+0x1d8>
+    29b8:	3c020000 	lui	v0,0x0
+			29b8: R_MIPS_HI16	SDIO_HandleHcdEvent
+    29bc:	26240044 	addiu	a0,s1,68
+    29c0:	24420000 	addiu	v0,v0,0
+			29c0: R_MIPS_LO16	SDIO_HandleHcdEvent
+    29c4:	0040f809 	jalr	v0
+    29c8:	24050003 	li	a1,3
+    29cc:	001217c2 	srl	v0,s2,0x1f
+    29d0:	08000a3a 	j	28e8 <HcdSpiInterrupt+0x1e0>
+			29d0: R_MIPS_26	.text
+    29d4:	38420001 	xori	v0,v0,0x1
+    29d8:	00008021 	move	s0,zero
+    29dc:	08000a59 	j	2964 <HcdSpiInterrupt+0x25c>
+			29dc: R_MIPS_26	.text
+    29e0:	00009821 	move	s3,zero
+    29e4:	02202021 	move	a0,s1
+    29e8:	24421f14 	addiu	v0,v0,7956
+			29e8: R_MIPS_LO16	.text
+    29ec:	0040f809 	jalr	v0
+    29f0:	24050081 	li	a1,129
+    29f4:	08000a59 	j	2964 <HcdSpiInterrupt+0x25c>
+			29f4: R_MIPS_26	.text
+    29f8:	24100001 	li	s0,1
+    29fc:	08000a1a 	j	2868 <HcdSpiInterrupt+0x160>
+			29fc: R_MIPS_26	.text
+    2a00:	00009821 	move	s3,zero
+    2a04:	3c020000 	lui	v0,0x0
+			2a04: R_MIPS_HI16	.text
+    2a08:	02202021 	move	a0,s1
+    2a0c:	24421da4 	addiu	v0,v0,7588
 			2a0c: R_MIPS_LO16	.text
-    2a10:	24100003 	li	s0,3
-    2a14:	27b30018 	addiu	s3,sp,24
-    2a18:	02202021 	move	a0,s1
-    2a1c:	24050500 	li	a1,1280
-    2a20:	0280f809 	jalr	s4
-    2a24:	02603021 	move	a2,s3
-    2a28:	044000c4 	bltz	v0,2d3c <HcdRequest+0x5c0>
-    2a2c:	2610ffff 	addiu	s0,s0,-1
-    2a30:	8fa20018 	lw	v0,24(sp)
-    2a34:	30420001 	andi	v0,v0,0x1
-    2a38:	144000c0 	bnez	v0,2d3c <HcdRequest+0x5c0>
-    2a3c:	00000000 	nop
-    2a40:	1600fff6 	bnez	s0,2a1c <HcdRequest+0x2a0>
-    2a44:	02202021 	move	a0,s1
-    2a48:	24020001 	li	v0,1
-    2a4c:	a2220016 	sb	v0,22(s1)
-    2a50:	3c020000 	lui	v0,0x0
-			2a50: R_MIPS_HI16	HW_StartTimer
-    2a54:	240507d0 	li	a1,2000
-    2a58:	24420000 	addiu	v0,v0,0
-			2a58: R_MIPS_LO16	HW_StartTimer
-    2a5c:	0040f809 	jalr	v0
-    2a60:	24060001 	li	a2,1
-    2a64:	96430010 	lhu	v1,16(s2)
-    2a68:	30630080 	andi	v1,v1,0x80
-    2a6c:	14600093 	bnez	v1,2cbc <HcdRequest+0x540>
-    2a70:	00000000 	nop
-    2a74:	3c020000 	lui	v0,0x0
-			2a74: R_MIPS_HI16	.text
-    2a78:	02202021 	move	a0,s1
-    2a7c:	24421f3c 	addiu	v0,v0,7996
-			2a7c: R_MIPS_LO16	.text
-    2a80:	0040f809 	jalr	v0
-    2a84:	24050100 	li	a1,256
-    2a88:	24100003 	li	s0,3
-    2a8c:	8f830014 	lw	v1,20(gp)
-    2a90:	3c040000 	lui	a0,0x0
-			2a90: R_MIPS_HI16	local_bh_enable
-    2a94:	2463ffff 	addiu	v1,v1,-1
-    2a98:	24840000 	addiu	a0,a0,0
-			2a98: R_MIPS_LO16	local_bh_enable
-    2a9c:	0080f809 	jalr	a0
-    2aa0:	af830014 	sw	v1,20(gp)
-    2aa4:	08000abb 	j	2aec <HcdRequest+0x370>
-			2aa4: R_MIPS_26	.text
-    2aa8:	02001021 	move	v0,s0
-    2aac:	8f830014 	lw	v1,20(gp)
-    2ab0:	3c040000 	lui	a0,0x0
-			2ab0: R_MIPS_HI16	local_bh_enable
-    2ab4:	2463ffff 	addiu	v1,v1,-1
-    2ab8:	24840000 	addiu	a0,a0,0
-			2ab8: R_MIPS_LO16	local_bh_enable
-    2abc:	0080f809 	jalr	a0
-    2ac0:	af830014 	sw	v1,20(gp)
-    2ac4:	8e420008 	lw	v0,8(s2)
-    2ac8:	30420100 	andi	v0,v0,0x100
-    2acc:	10400006 	beqz	v0,2ae8 <HcdRequest+0x36c>
-    2ad0:	ae500040 	sw	s0,64(s2)
-    2ad4:	3c020000 	lui	v0,0x0
-			2ad4: R_MIPS_HI16	HW_QueueDeferredCompletion
-    2ad8:	24420000 	addiu	v0,v0,0
-			2ad8: R_MIPS_LO16	HW_QueueDeferredCompletion
-    2adc:	0040f809 	jalr	v0
-    2ae0:	02202021 	move	a0,s1
-    2ae4:	24100003 	li	s0,3
-    2ae8:	02001021 	move	v0,s0
-    2aec:	8fbf003c 	lw	ra,60(sp)
-    2af0:	8fb60038 	lw	s6,56(sp)
-    2af4:	8fb50034 	lw	s5,52(sp)
-    2af8:	8fb40030 	lw	s4,48(sp)
-    2afc:	8fb3002c 	lw	s3,44(sp)
-    2b00:	8fb20028 	lw	s2,40(sp)
-    2b04:	8fb10024 	lw	s1,36(sp)
-    2b08:	8fb00020 	lw	s0,32(sp)
-    2b0c:	03e00008 	jr	ra
-    2b10:	27bd0040 	addiu	sp,sp,64
-    2b14:	3c020000 	lui	v0,0x0
-			2b14: R_MIPS_HI16	printk
-    2b18:	24420000 	addiu	v0,v0,0
-			2b18: R_MIPS_LO16	printk
-    2b1c:	0040f809 	jalr	v0
-    2b20:	24840000 	addiu	a0,a0,0
-			2b20: R_MIPS_LO16	$LC11
-    2b24:	40016000 	mfc0	at,c0_status
-    2b28:	3421001f 	ori	at,at,0x1f
-    2b2c:	3821001e 	xori	at,at,0x1e
-    2b30:	40816000 	mtc0	at,c0_status
-    2b34:	00000040 	ssnop
-    2b38:	00000040 	ssnop
-    2b3c:	00000040 	ssnop
-    2b40:	000000c0 	sll	zero,zero,0x3
-    2b44:	080009f5 	j	27d4 <HcdRequest+0x58>
-			2b44: R_MIPS_26	.text
-    2b48:	922200fa 	lbu	v0,250(s1)
-    2b4c:	1040004d 	beqz	v0,2c84 <HcdRequest+0x508>
-    2b50:	3c020000 	lui	v0,0x0
-			2b50: R_MIPS_HI16	.text
-    2b54:	96450018 	lhu	a1,24(s2)
-    2b58:	3c020000 	lui	v0,0x0
-			2b58: R_MIPS_HI16	.text
+    2a10:	0040f809 	jalr	v0
+    2a14:	24050c00 	li	a1,3072
+    2a18:	0440ffef 	bltz	v0,29d8 <HcdSpiInterrupt+0x2d0>
+    2a1c:	00409021 	move	s2,v0
+    2a20:	080009f3 	j	27cc <HcdSpiInterrupt+0xc4>
+			2a20: R_MIPS_26	.text
+    2a24:	8fa70010 	lw	a3,16(sp)
+    2a28:	8e300088 	lw	s0,136(s1)
+    2a2c:	12000005 	beqz	s0,2a44 <HcdSpiInterrupt+0x33c>
+    2a30:	2402fcff 	li	v0,-769
+    2a34:	92220016 	lbu	v0,22(s1)
+    2a38:	14400025 	bnez	v0,2ad0 <HcdSpiInterrupt+0x3c8>
+    2a3c:	3c020000 	lui	v0,0x0
+			2a3c: R_MIPS_HI16	HW_StopTimer
+    2a40:	2402fcff 	li	v0,-769
+    2a44:	00e23824 	and	a3,a3,v0
+    2a48:	3c020000 	lui	v0,0x0
+			2a48: R_MIPS_HI16	.text
+    2a4c:	afa70010 	sw	a3,16(sp)
+    2a50:	02202021 	move	a0,s1
+    2a54:	24421f14 	addiu	v0,v0,7956
+			2a54: R_MIPS_LO16	.text
+    2a58:	0040f809 	jalr	v0
+    2a5c:	24050300 	li	a1,768
+    2a60:	08000a52 	j	2948 <HcdSpiInterrupt+0x240>
+			2a60: R_MIPS_26	.text
+    2a64:	8fa70010 	lw	a3,16(sp)
+    2a68:	00e23824 	and	a3,a3,v0
+    2a6c:	3c020000 	lui	v0,0x0
+			2a6c: R_MIPS_HI16	.text
+    2a70:	02202021 	move	a0,s1
+    2a74:	24050400 	li	a1,1024
+    2a78:	24421f14 	addiu	v0,v0,7956
+			2a78: R_MIPS_LO16	.text
+    2a7c:	0040f809 	jalr	v0
+    2a80:	afa70010 	sw	a3,16(sp)
+    2a84:	92230019 	lbu	v1,25(s1)
+    2a88:	1460001d 	bnez	v1,2b00 <HcdSpiInterrupt+0x3f8>
+    2a8c:	02202021 	move	a0,s1
+    2a90:	08000a55 	j	2954 <HcdSpiInterrupt+0x24c>
+			2a90: R_MIPS_26	.text
+    2a94:	8fa70010 	lw	a3,16(sp)
+    2a98:	3c040000 	lui	a0,0x0
+			2a98: R_MIPS_HI16	$LC12
+    2a9c:	3c020000 	lui	v0,0x0
+			2a9c: R_MIPS_HI16	printk
+    2aa0:	00e02821 	move	a1,a3
+    2aa4:	24420000 	addiu	v0,v0,0
+			2aa4: R_MIPS_LO16	printk
+    2aa8:	0040f809 	jalr	v0
+    2aac:	24840000 	addiu	a0,a0,0
+			2aac: R_MIPS_LO16	$LC12
+    2ab0:	080009fb 	j	27ec <HcdSpiInterrupt+0xe4>
+			2ab0: R_MIPS_26	.text
+    2ab4:	8fa70010 	lw	a3,16(sp)
+    2ab8:	3c020000 	lui	v0,0x0
+			2ab8: R_MIPS_HI16	printk
+    2abc:	24420000 	addiu	v0,v0,0
+			2abc: R_MIPS_LO16	printk
+    2ac0:	0040f809 	jalr	v0
+    2ac4:	24840000 	addiu	a0,a0,0
+			2ac4: R_MIPS_LO16	$LC15
+    2ac8:	08000a0f 	j	283c <HcdSpiInterrupt+0x134>
+			2ac8: R_MIPS_26	.text
+    2acc:	00000000 	nop
+    2ad0:	24420000 	addiu	v0,v0,0
+			2ad0: R_MIPS_LO16	HW_StopTimer
+    2ad4:	0040f809 	jalr	v0
+    2ad8:	02202021 	move	a0,s1
+    2adc:	a2200016 	sb	zero,22(s1)
+    2ae0:	96020010 	lhu	v0,16(s0)
+    2ae4:	30420080 	andi	v0,v0,0x80
+    2ae8:	1440003d 	bnez	v0,2be0 <HcdSpiInterrupt+0x4d8>
+    2aec:	00009021 	move	s2,zero
+    2af0:	ae120040 	sw	s2,64(s0)
+    2af4:	8fa70010 	lw	a3,16(sp)
+    2af8:	08000a90 	j	2a40 <HcdSpiInterrupt+0x338>
+			2af8: R_MIPS_26	.text
+    2afc:	24130001 	li	s3,1
+    2b00:	24050200 	li	a1,512
+    2b04:	2626001c 	addiu	a2,s1,28
+    2b08:	26821d24 	addiu	v0,s4,7460
+			2b08: R_MIPS_LO16	.text
+    2b0c:	0040f809 	jalr	v0
+    2b10:	8e300088 	lw	s0,136(s1)
+    2b14:	0440ff92 	bltz	v0,2960 <HcdSpiInterrupt+0x258>
+    2b18:	00409021 	move	s2,v0
+    2b1c:	1200ff8d 	beqz	s0,2954 <HcdSpiInterrupt+0x24c>
+    2b20:	8fa70010 	lw	a3,16(sp)
+    2b24:	922200f9 	lbu	v0,249(s1)
+    2b28:	30420004 	andi	v0,v0,0x4
+    2b2c:	1040003c 	beqz	v0,2c20 <HcdSpiInterrupt+0x518>
+    2b30:	00000000 	nop
+    2b34:	8e22001c 	lw	v0,28(s1)
+    2b38:	8e230020 	lw	v1,32(s1)
+    2b3c:	0043102b 	sltu	v0,v0,v1
+    2b40:	1440003d 	bnez	v0,2c38 <HcdSpiInterrupt+0x530>
+    2b44:	24051300 	li	a1,4864
+    2b48:	ae200024 	sw	zero,36(s1)
+    2b4c:	3c020000 	lui	v0,0x0
+			2b4c: R_MIPS_HI16	.text
+    2b50:	a2200019 	sb	zero,25(s1)
+    2b54:	24421eb0 	addiu	v0,v0,7856
+			2b54: R_MIPS_LO16	.text
+    2b58:	0040f809 	jalr	v0
     2b5c:	02202021 	move	a0,s1
-    2b60:	24421d24 	addiu	v0,v0,7460
-			2b60: R_MIPS_LO16	.text
-    2b64:	0040f809 	jalr	v0
-    2b68:	27a60010 	addiu	a2,sp,16
-    2b6c:	04400003 	bltz	v0,2b7c <HcdRequest+0x400>
-    2b70:	00408021 	move	s0,v0
-    2b74:	8fa20010 	lw	v0,16(sp)
-    2b78:	ae42001c 	sw	v0,28(s2)
-    2b7c:	8f820014 	lw	v0,20(gp)
-    2b80:	3c030000 	lui	v1,0x0
-			2b80: R_MIPS_HI16	local_bh_enable
-    2b84:	2442ffff 	addiu	v0,v0,-1
-    2b88:	24630000 	addiu	v1,v1,0
-			2b88: R_MIPS_LO16	local_bh_enable
-    2b8c:	0060f809 	jalr	v1
-    2b90:	af820014 	sw	v0,20(gp)
+    2b60:	0440ff7f 	bltz	v0,2960 <HcdSpiInterrupt+0x258>
+    2b64:	00409021 	move	s2,v0
+    2b68:	8e22001c 	lw	v0,28(s1)
+    2b6c:	8e030030 	lw	v1,48(s0)
+    2b70:	02202021 	move	a0,s1
+    2b74:	00431023 	subu	v0,v0,v1
+    2b78:	2442fffb 	addiu	v0,v0,-5
+    2b7c:	ae22001c 	sw	v0,28(s1)
+    2b80:	3c020000 	lui	v0,0x0
+			2b80: R_MIPS_HI16	.text
+    2b84:	2442256c 	addiu	v0,v0,9580
+			2b84: R_MIPS_LO16	.text
+    2b88:	0040f809 	jalr	v0
+    2b8c:	02002821 	move	a1,s0
+    2b90:	00409021 	move	s2,v0
     2b94:	24020003 	li	v0,3
-    2b98:	1602ffca 	bne	s0,v0,2ac4 <HcdRequest+0x348>
-    2b9c:	02001021 	move	v0,s0
-    2ba0:	08000abc 	j	2af0 <HcdRequest+0x374>
-			2ba0: R_MIPS_26	.text
-    2ba4:	8fbf003c 	lw	ra,60(sp)
-    2ba8:	2405003c 	li	a1,60
-    2bac:	24420000 	addiu	v0,v0,0
-			2bac: R_MIPS_LO16	HW_UsecDelay
-    2bb0:	0040f809 	jalr	v0
-    2bb4:	02202021 	move	a0,s1
-    2bb8:	02202021 	move	a0,s1
-    2bbc:	02a03021 	move	a2,s5
-    2bc0:	02c0f809 	jalr	s6
-    2bc4:	24050500 	li	a1,1280
-    2bc8:	0440001a 	bltz	v0,2c34 <HcdRequest+0x4b8>
-    2bcc:	00408021 	move	s0,v0
-    2bd0:	8fa20010 	lw	v0,16(sp)
-    2bd4:	30420006 	andi	v0,v0,0x6
-    2bd8:	1453ff54 	bne	v0,s3,292c <HcdRequest+0x1b0>
-    2bdc:	24020001 	li	v0,1
-    2be0:	02803021 	move	a2,s4
+    2b98:	1242ff71 	beq	s2,v0,2960 <HcdSpiInterrupt+0x258>
+    2b9c:	00000000 	nop
+    2ba0:	ae120040 	sw	s2,64(s0)
+    2ba4:	8fa70010 	lw	a3,16(sp)
+    2ba8:	08000a55 	j	2954 <HcdSpiInterrupt+0x24c>
+			2ba8: R_MIPS_26	.text
+    2bac:	24130001 	li	s3,1
+    2bb0:	3c020000 	lui	v0,0x0
+			2bb0: R_MIPS_HI16	printk
+    2bb4:	24420000 	addiu	v0,v0,0
+			2bb4: R_MIPS_LO16	printk
+    2bb8:	0040f809 	jalr	v0
+    2bbc:	24840000 	addiu	a0,a0,0
+			2bbc: R_MIPS_LO16	$LC14
+    2bc0:	08000a09 	j	2824 <HcdSpiInterrupt+0x11c>
+			2bc0: R_MIPS_26	.text
+    2bc4:	8fa70010 	lw	a3,16(sp)
+    2bc8:	3c020000 	lui	v0,0x0
+			2bc8: R_MIPS_HI16	printk
+    2bcc:	24420000 	addiu	v0,v0,0
+			2bcc: R_MIPS_LO16	printk
+    2bd0:	0040f809 	jalr	v0
+    2bd4:	24840000 	addiu	a0,a0,0
+			2bd4: R_MIPS_LO16	$LC13
+    2bd8:	08000a02 	j	2808 <HcdSpiInterrupt+0x100>
+			2bd8: R_MIPS_26	.text
+    2bdc:	8fa70010 	lw	a3,16(sp)
+    2be0:	3c020000 	lui	v0,0x0
+			2be0: R_MIPS_HI16	HW_InOut_Token
     2be4:	02202021 	move	a0,s1
-    2be8:	02c0f809 	jalr	s6
-    2bec:	24050200 	li	a1,512
-    2bf0:	04400010 	bltz	v0,2c34 <HcdRequest+0x4b8>
-    2bf4:	00408021 	move	s0,v0
-    2bf8:	922200f9 	lbu	v0,249(s1)
-    2bfc:	30420004 	andi	v0,v0,0x4
-    2c00:	10400067 	beqz	v0,2da0 <HcdRequest+0x624>
-    2c04:	00000000 	nop
-    2c08:	8e22001c 	lw	v0,28(s1)
-    2c0c:	8e230020 	lw	v1,32(s1)
-    2c10:	0043102b 	sltu	v0,v0,v1
-    2c14:	1440ff45 	bnez	v0,292c <HcdRequest+0x1b0>
-    2c18:	24020001 	li	v0,1
-    2c1c:	ae200024 	sw	zero,36(s1)
-    2c20:	3c020000 	lui	v0,0x0
-			2c20: R_MIPS_HI16	.text
-    2c24:	24421eb0 	addiu	v0,v0,7856
-			2c24: R_MIPS_LO16	.text
-    2c28:	0040f809 	jalr	v0
-    2c2c:	02202021 	move	a0,s1
-    2c30:	00408021 	move	s0,v0
-    2c34:	24020003 	li	v0,3
-    2c38:	1202ff94 	beq	s0,v0,2a8c <HcdRequest+0x310>
-    2c3c:	00000000 	nop
-    2c40:	1600ff9a 	bnez	s0,2aac <HcdRequest+0x330>
-    2c44:	00000000 	nop
-    2c48:	8e460030 	lw	a2,48(s2)
-    2c4c:	8e23001c 	lw	v1,28(s1)
-    2c50:	00661023 	subu	v0,v1,a2
-    2c54:	2442fffb 	addiu	v0,v0,-5
-    2c58:	ae22001c 	sw	v0,28(s1)
-    2c5c:	3c020000 	lui	v0,0x0
-			2c5c: R_MIPS_HI16	.text
-    2c60:	02202021 	move	a0,s1
-    2c64:	2442256c 	addiu	v0,v0,9580
-			2c64: R_MIPS_LO16	.text
-    2c68:	0040f809 	jalr	v0
-    2c6c:	02402821 	move	a1,s2
-    2c70:	08000adf 	j	2b7c <HcdRequest+0x400>
-			2c70: R_MIPS_26	.text
-    2c74:	00408021 	move	s0,v0
-    2c78:	34a20004 	ori	v0,a1,0x4
-    2c7c:	08000a09 	j	2824 <HcdRequest+0xa8>
-			2c7c: R_MIPS_26	.text
-    2c80:	3046fffd 	andi	a2,v0,0xfffd
-    2c84:	96450018 	lhu	a1,24(s2)
-    2c88:	8e460014 	lw	a2,20(s2)
-    2c8c:	24421da4 	addiu	v0,v0,7588
-			2c8c: R_MIPS_LO16	.text
-    2c90:	0040f809 	jalr	v0
-    2c94:	02202021 	move	a0,s1
-    2c98:	08000adf 	j	2b7c <HcdRequest+0x400>
-			2c98: R_MIPS_26	.text
-    2c9c:	00408021 	move	s0,v0
-    2ca0:	8e23001c 	lw	v1,28(s1)
-    2ca4:	8e460030 	lw	a2,48(s2)
-    2ca8:	0066102b 	sltu	v0,v1,a2
-    2cac:	1040ffe9 	beqz	v0,2c54 <HcdRequest+0x4d8>
-    2cb0:	00661023 	subu	v0,v1,a2
-    2cb4:	08000a30 	j	28c0 <HcdRequest+0x144>
-			2cb4: R_MIPS_26	.text
-    2cb8:	8e240020 	lw	a0,32(s1)
-    2cbc:	3c020000 	lui	v0,0x0
-			2cbc: R_MIPS_HI16	.text
+    2be8:	3405c800 	li	a1,0xc800
+    2bec:	24060001 	li	a2,1
+    2bf0:	24420000 	addiu	v0,v0,0
+			2bf0: R_MIPS_LO16	HW_InOut_Token
+    2bf4:	0040f809 	jalr	v0
+    2bf8:	00003821 	move	a3,zero
+    2bfc:	0440ffbc 	bltz	v0,2af0 <HcdSpiInterrupt+0x3e8>
+    2c00:	00409021 	move	s2,v0
+    2c04:	3c020000 	lui	v0,0x0
+			2c04: R_MIPS_HI16	.text
+    2c08:	02202021 	move	a0,s1
+    2c0c:	24422264 	addiu	v0,v0,8804
+			2c0c: R_MIPS_LO16	.text
+    2c10:	0040f809 	jalr	v0
+    2c14:	02002821 	move	a1,s0
+    2c18:	08000abc 	j	2af0 <HcdSpiInterrupt+0x3e8>
+			2c18: R_MIPS_26	.text
+    2c1c:	00409021 	move	s2,v0
+    2c20:	8e22001c 	lw	v0,28(s1)
+    2c24:	8e030030 	lw	v1,48(s0)
+    2c28:	0043102b 	sltu	v0,v0,v1
+    2c2c:	1040ffc8 	beqz	v0,2b50 <HcdSpiInterrupt+0x448>
+    2c30:	3c020000 	lui	v0,0x0
+			2c30: R_MIPS_HI16	.text
+    2c34:	24051300 	li	a1,4864
+    2c38:	27a60014 	addiu	a2,sp,20
+    2c3c:	02202021 	move	a0,s1
+    2c40:	26821d24 	addiu	v0,s4,7460
+			2c40: R_MIPS_LO16	.text
+    2c44:	0040f809 	jalr	v0
+    2c48:	afa00014 	sw	zero,20(sp)
+    2c4c:	3c020000 	lui	v0,0x0
+			2c4c: R_MIPS_HI16	.text
+    2c50:	02202021 	move	a0,s1
+    2c54:	24421f3c 	addiu	v0,v0,7996
+			2c54: R_MIPS_LO16	.text
+    2c58:	0040f809 	jalr	v0
+    2c5c:	24050400 	li	a1,1024
+    2c60:	08000a55 	j	2954 <HcdSpiInterrupt+0x24c>
+			2c60: R_MIPS_26	.text
+    2c64:	8fa70010 	lw	a3,16(sp)
+
+00002c68 <HcdTimerCallback>:
+    2c68:	27bdffe0 	addiu	sp,sp,-32
+    2c6c:	24020001 	li	v0,1
+    2c70:	afb10014 	sw	s1,20(sp)
+    2c74:	afbf0018 	sw	ra,24(sp)
+    2c78:	afb00010 	sw	s0,16(sp)
+    2c7c:	10a20006 	beq	a1,v0,2c98 <HcdTimerCallback+0x30>
+    2c80:	00808821 	move	s1,a0
+    2c84:	8fbf0018 	lw	ra,24(sp)
+    2c88:	8fb10014 	lw	s1,20(sp)
+    2c8c:	8fb00010 	lw	s0,16(sp)
+    2c90:	03e00008 	jr	ra
+    2c94:	27bd0020 	addiu	sp,sp,32
+    2c98:	8c900088 	lw	s0,136(a0)
+    2c9c:	1200fff9 	beqz	s0,2c84 <HcdTimerCallback+0x1c>
+    2ca0:	02002021 	move	a0,s0
+    2ca4:	3c020000 	lui	v0,0x0
+			2ca4: R_MIPS_HI16	.text
+    2ca8:	24421b40 	addiu	v0,v0,6976
+			2ca8: R_MIPS_LO16	.text
+    2cac:	0040f809 	jalr	v0
+    2cb0:	00000000 	nop
+    2cb4:	2403fff5 	li	v1,-11
+    2cb8:	ae030040 	sw	v1,64(s0)
+    2cbc:	3c190000 	lui	t9,0x0
+			2cbc: R_MIPS_HI16	HW_QueueDeferredCompletion
     2cc0:	02202021 	move	a0,s1
-    2cc4:	24421f3c 	addiu	v0,v0,7996
-			2cc4: R_MIPS_LO16	.text
-    2cc8:	0040f809 	jalr	v0
-    2ccc:	24050200 	li	a1,512
-    2cd0:	08000aa3 	j	2a8c <HcdRequest+0x310>
-			2cd0: R_MIPS_26	.text
-    2cd4:	24100003 	li	s0,3
-    2cd8:	8e220024 	lw	v0,36(s1)
-    2cdc:	2c420002 	sltiu	v0,v0,2
-    2ce0:	1440fef0 	bnez	v0,28a4 <HcdRequest+0x128>
-    2ce4:	00000000 	nop
-    2ce8:	08000a31 	j	28c4 <HcdRequest+0x148>
-			2ce8: R_MIPS_26	.text
-    2cec:	24060001 	li	a2,1
-    2cf0:	08000a36 	j	28d8 <HcdRequest+0x15c>
-			2cf0: R_MIPS_26	.text
-    2cf4:	24060001 	li	a2,1
-    2cf8:	02202021 	move	a0,s1
-    2cfc:	24054a00 	li	a1,18944
-    2d00:	24060001 	li	a2,1
+    2cc4:	8fbf0018 	lw	ra,24(sp)
+    2cc8:	8fb10014 	lw	s1,20(sp)
+    2ccc:	8fb00010 	lw	s0,16(sp)
+    2cd0:	27390000 	addiu	t9,t9,0
+			2cd0: R_MIPS_LO16	HW_QueueDeferredCompletion
+    2cd4:	03200008 	jr	t9
+    2cd8:	27bd0020 	addiu	sp,sp,32
+
+00002cdc <HcdRequest>:
+    2cdc:	27bdffc0 	addiu	sp,sp,-64
+    2ce0:	3c020000 	lui	v0,0x0
+			2ce0: R_MIPS_HI16	local_bh_disable
+    2ce4:	afbf003c 	sw	ra,60(sp)
+    2ce8:	afb60038 	sw	s6,56(sp)
+    2cec:	afb50034 	sw	s5,52(sp)
+    2cf0:	afb40030 	sw	s4,48(sp)
+    2cf4:	afb3002c 	sw	s3,44(sp)
+    2cf8:	afb20028 	sw	s2,40(sp)
+    2cfc:	afb10024 	sw	s1,36(sp)
+    2d00:	afb00020 	sw	s0,32(sp)
     2d04:	24420000 	addiu	v0,v0,0
-			2d04: R_MIPS_LO16	HW_InOut_Token
-    2d08:	0040f809 	jalr	v0
-    2d0c:	00003821 	move	a3,zero
-    2d10:	0440ff9a 	bltz	v0,2b7c <HcdRequest+0x400>
-    2d14:	00408021 	move	s0,v0
-    2d18:	3c020000 	lui	v0,0x0
-			2d18: R_MIPS_HI16	.text
-    2d1c:	02202021 	move	a0,s1
-    2d20:	24422264 	addiu	v0,v0,8804
-			2d20: R_MIPS_LO16	.text
-    2d24:	0040f809 	jalr	v0
-    2d28:	02402821 	move	a1,s2
-    2d2c:	0441ff26 	bgez	v0,29c8 <HcdRequest+0x24c>
-    2d30:	00408021 	move	s0,v0
-    2d34:	08000ae0 	j	2b80 <HcdRequest+0x404>
-			2d34: R_MIPS_26	.text
-    2d38:	8f820014 	lw	v0,20(gp)
-    2d3c:	96420010 	lhu	v0,16(s2)
-    2d40:	30420080 	andi	v0,v0,0x80
-    2d44:	14400008 	bnez	v0,2d68 <HcdRequest+0x5ec>
-    2d48:	3c020000 	lui	v0,0x0
-			2d48: R_MIPS_HI16	HW_InOut_Token
-    2d4c:	26a21da4 	addiu	v0,s5,7588
-			2d4c: R_MIPS_LO16	.text
-    2d50:	02202021 	move	a0,s1
-    2d54:	24050c00 	li	a1,3072
-    2d58:	0040f809 	jalr	v0
-    2d5c:	24060300 	li	a2,768
-    2d60:	08000adf 	j	2b7c <HcdRequest+0x400>
-			2d60: R_MIPS_26	.text
-    2d64:	00408021 	move	s0,v0
-    2d68:	02202021 	move	a0,s1
-    2d6c:	3405c800 	li	a1,0xc800
-    2d70:	24060001 	li	a2,1
+			2d04: R_MIPS_LO16	local_bh_disable
+    2d08:	8c920044 	lw	s2,68(a0)
+    2d0c:	0040f809 	jalr	v0
+    2d10:	8c910020 	lw	s1,32(a0)
+    2d14:	8f820014 	lw	v0,20(gp)
+    2d18:	24420001 	addiu	v0,v0,1
+    2d1c:	af820014 	sw	v0,20(gp)
+    2d20:	40036000 	mfc0	v1,c0_status
+    2d24:	30630001 	andi	v1,v1,0x1
+    2d28:	10600078 	beqz	v1,2f0c <HcdRequest+0x230>
+    2d2c:	3c040000 	lui	a0,0x0
+			2d2c: R_MIPS_HI16	$LC11
+    2d30:	922200fa 	lbu	v0,250(s1)
+    2d34:	14400004 	bnez	v0,2d48 <HcdRequest+0x6c>
+    2d38:	2410fffb 	li	s0,-5
+    2d3c:	92220008 	lbu	v0,8(s1)
+    2d40:	1040001b 	beqz	v0,2db0 <HcdRequest+0xd4>
+    2d44:	2410fff8 	li	s0,-8
+    2d48:	8f830014 	lw	v1,20(gp)
+    2d4c:	3c040000 	lui	a0,0x0
+			2d4c: R_MIPS_HI16	local_bh_enable
+    2d50:	2463ffff 	addiu	v1,v1,-1
+    2d54:	24840000 	addiu	a0,a0,0
+			2d54: R_MIPS_LO16	local_bh_enable
+    2d58:	0080f809 	jalr	a0
+    2d5c:	af830014 	sw	v1,20(gp)
+    2d60:	8e420008 	lw	v0,8(s2)
+    2d64:	30420100 	andi	v0,v0,0x100
+    2d68:	10400006 	beqz	v0,2d84 <HcdRequest+0xa8>
+    2d6c:	ae500040 	sw	s0,64(s2)
+    2d70:	3c020000 	lui	v0,0x0
+			2d70: R_MIPS_HI16	HW_QueueDeferredCompletion
     2d74:	24420000 	addiu	v0,v0,0
-			2d74: R_MIPS_LO16	HW_InOut_Token
+			2d74: R_MIPS_LO16	HW_QueueDeferredCompletion
     2d78:	0040f809 	jalr	v0
-    2d7c:	00003821 	move	a3,zero
-    2d80:	0440fff2 	bltz	v0,2d4c <HcdRequest+0x5d0>
-    2d84:	3c020000 	lui	v0,0x0
-			2d84: R_MIPS_HI16	.text
-    2d88:	02202021 	move	a0,s1
-    2d8c:	24422264 	addiu	v0,v0,8804
-			2d8c: R_MIPS_LO16	.text
-    2d90:	0040f809 	jalr	v0
-    2d94:	02402821 	move	a1,s2
-    2d98:	08000b54 	j	2d50 <HcdRequest+0x5d4>
-			2d98: R_MIPS_26	.text
-    2d9c:	26a21da4 	addiu	v0,s5,7588
-			2d9c: R_MIPS_LO16	.text
-    2da0:	8e22001c 	lw	v0,28(s1)
-    2da4:	8e430030 	lw	v1,48(s2)
-    2da8:	0043102b 	sltu	v0,v0,v1
-    2dac:	1040ff9c 	beqz	v0,2c20 <HcdRequest+0x4a4>
-    2db0:	27a60014 	addiu	a2,sp,20
-    2db4:	02202021 	move	a0,s1
-    2db8:	24050200 	li	a1,512
-    2dbc:	afa00014 	sw	zero,20(sp)
-    2dc0:	02c0f809 	jalr	s6
-    2dc4:	afa00018 	sw	zero,24(sp)
-    2dc8:	02202021 	move	a0,s1
-    2dcc:	24050500 	li	a1,1280
-    2dd0:	02c0f809 	jalr	s6
-    2dd4:	27a60018 	addiu	a2,sp,24
-    2dd8:	08000a4b 	j	292c <HcdRequest+0x1b0>
-			2dd8: R_MIPS_26	.text
-    2ddc:	24020001 	li	v0,1
-
-00002de0 <HcdCommonBufferCopy>:
-    2de0:	93a20010 	lbu	v0,16(sp)
-    2de4:	00a05821 	move	t3,a1
-    2de8:	308800ff 	andi	t0,a0,0xff
-    2dec:	00c02821 	move	a1,a2
-    2df0:	1040000b 	beqz	v0,2e20 <HcdCommonBufferCopy+0x40>
-    2df4:	00e03021 	move	a2,a3
-    2df8:	1100000a 	beqz	t0,2e24 <HcdCommonBufferCopy+0x44>
-    2dfc:	3c190000 	lui	t9,0x0
-			2dfc: R_MIPS_HI16	memcpy
-    2e00:	24020003 	li	v0,3
-    2e04:	11020032 	beq	t0,v0,2ed0 <HcdCommonBufferCopy+0xf0>
-    2e08:	31640003 	andi	a0,t3,0x3
-    2e0c:	24020001 	li	v0,1
-    2e10:	11020007 	beq	t0,v0,2e30 <HcdCommonBufferCopy+0x50>
-    2e14:	00000000 	nop
-    2e18:	03e00008 	jr	ra
-    2e1c:	00000000 	nop
-    2e20:	3c190000 	lui	t9,0x0
-			2e20: R_MIPS_HI16	memcpy
-    2e24:	27390000 	addiu	t9,t9,0
-			2e24: R_MIPS_LO16	memcpy
-    2e28:	03200008 	jr	t9
-    2e2c:	01602021 	move	a0,t3
-    2e30:	31620001 	andi	v0,t3,0x1
-    2e34:	24030002 	li	v1,2
-    2e38:	0002180a 	movz	v1,zero,v0
-    2e3c:	30a40001 	andi	a0,a1,0x1
-    2e40:	00644825 	or	t1,v1,a0
-    2e44:	11200040 	beqz	t1,2f48 <HcdCommonBufferCopy+0x168>
-    2e48:	01604021 	move	t0,t3
-    2e4c:	00063043 	sra	a2,a2,0x1
-    2e50:	18c0006e 	blez	a2,300c <HcdCommonBufferCopy+0x22c>
-    2e54:	00000000 	nop
-    2e58:	24070001 	li	a3,1
-    2e5c:	00005021 	move	t2,zero
-    2e60:	11270009 	beq	t1,a3,2e88 <HcdCommonBufferCopy+0xa8>
-    2e64:	240b0002 	li	t3,2
-    2e68:	112b0010 	beq	t1,t3,2eac <HcdCommonBufferCopy+0xcc>
-    2e6c:	00000000 	nop
-    2e70:	254a0001 	addiu	t2,t2,1
-    2e74:	24a50002 	addiu	a1,a1,2
-    2e78:	1146ffe7 	beq	t2,a2,2e18 <HcdCommonBufferCopy+0x38>
-    2e7c:	25080002 	addiu	t0,t0,2
-    2e80:	1527fff9 	bne	t1,a3,2e68 <HcdCommonBufferCopy+0x88>
-    2e84:	00000000 	nop
-    2e88:	90a20001 	lbu	v0,1(a1)
-    2e8c:	90a30000 	lbu	v1,0(a1)
-    2e90:	00021200 	sll	v0,v0,0x8
-    2e94:	00431025 	or	v0,v0,v1
-    2e98:	00022202 	srl	a0,v0,0x8
-    2e9c:	00021200 	sll	v0,v0,0x8
-    2ea0:	00441025 	or	v0,v0,a0
-    2ea4:	08000b9c 	j	2e70 <HcdCommonBufferCopy+0x90>
-			2ea4: R_MIPS_26	.text
-    2ea8:	a5020000 	sh	v0,0(t0)
-    2eac:	94a20000 	lhu	v0,0(a1)
-    2eb0:	00021a02 	srl	v1,v0,0x8
-    2eb4:	00021200 	sll	v0,v0,0x8
-    2eb8:	00431025 	or	v0,v0,v1
-    2ebc:	3042ffff 	andi	v0,v0,0xffff
-    2ec0:	00021a02 	srl	v1,v0,0x8
-    2ec4:	a1030001 	sb	v1,1(t0)
-    2ec8:	08000b9c 	j	2e70 <HcdCommonBufferCopy+0x90>
-			2ec8: R_MIPS_26	.text
-    2ecc:	a1020000 	sb	v0,0(t0)
-    2ed0:	24030002 	li	v1,2
-    2ed4:	30a20003 	andi	v0,a1,0x3
-    2ed8:	0004180a 	movz	v1,zero,a0
-    2edc:	0002102b 	sltu	v0,zero,v0
-    2ee0:	00621825 	or	v1,v1,v0
-    2ee4:	00a05021 	move	t2,a1
-    2ee8:	14600026 	bnez	v1,2f84 <HcdCommonBufferCopy+0x1a4>
-    2eec:	01604821 	move	t1,t3
-    2ef0:	00073083 	sra	a2,a3,0x2
-    2ef4:	18c00045 	blez	a2,300c <HcdCommonBufferCopy+0x22c>
-    2ef8:	00000000 	nop
-    2efc:	00004021 	move	t0,zero
-    2f00:	3c0700ff 	lui	a3,0xff
-    2f04:	8d420000 	lw	v0,0(t2)
-    2f08:	25080001 	addiu	t0,t0,1
-    2f0c:	00021e00 	sll	v1,v0,0x18
-    2f10:	00022e02 	srl	a1,v0,0x18
-    2f14:	3044ff00 	andi	a0,v0,0xff00
-    2f18:	00651825 	or	v1,v1,a1
-    2f1c:	00042200 	sll	a0,a0,0x8
-    2f20:	00471024 	and	v0,v0,a3
-    2f24:	00641825 	or	v1,v1,a0
-    2f28:	00021202 	srl	v0,v0,0x8
-    2f2c:	00621825 	or	v1,v1,v0
-    2f30:	ad230000 	sw	v1,0(t1)
-    2f34:	254a0004 	addiu	t2,t2,4
-    2f38:	14c8fff2 	bne	a2,t0,2f04 <HcdCommonBufferCopy+0x124>
-    2f3c:	25290004 	addiu	t1,t1,4
-    2f40:	03e00008 	jr	ra
-    2f44:	00000000 	nop
-    2f48:	00063043 	sra	a2,a2,0x1
-    2f4c:	18c0002f 	blez	a2,300c <HcdCommonBufferCopy+0x22c>
-    2f50:	00000000 	nop
-    2f54:	00002021 	move	a0,zero
-    2f58:	94a20000 	lhu	v0,0(a1)
-    2f5c:	24840001 	addiu	a0,a0,1
-    2f60:	00021a02 	srl	v1,v0,0x8
-    2f64:	00021200 	sll	v0,v0,0x8
-    2f68:	00431025 	or	v0,v0,v1
-    2f6c:	a5020000 	sh	v0,0(t0)
-    2f70:	24a50002 	addiu	a1,a1,2
-    2f74:	1486fff8 	bne	a0,a2,2f58 <HcdCommonBufferCopy+0x178>
-    2f78:	25080002 	addiu	t0,t0,2
-    2f7c:	03e00008 	jr	ra
-    2f80:	00000000 	nop
-    2f84:	00071083 	sra	v0,a3,0x2
-    2f88:	18400020 	blez	v0,300c <HcdCommonBufferCopy+0x22c>
-    2f8c:	00000000 	nop
-    2f90:	24020001 	li	v0,1
-    2f94:	10620010 	beq	v1,v0,2fd8 <HcdCommonBufferCopy+0x1f8>
-    2f98:	24020002 	li	v0,2
-    2f9c:	1462ff9c 	bne	v1,v0,2e10 <HcdCommonBufferCopy+0x30>
-    2fa0:	24020001 	li	v0,1
-    2fa4:	8ca20000 	lw	v0,0(a1)
-    2fa8:	304500ff 	andi	a1,v0,0xff
-    2fac:	00022202 	srl	a0,v0,0x8
-    2fb0:	3043ff00 	andi	v1,v0,0xff00
-    2fb4:	3084ff00 	andi	a0,a0,0xff00
-    2fb8:	00031a02 	srl	v1,v1,0x8
-    2fbc:	00052a00 	sll	a1,a1,0x8
-    2fc0:	00021602 	srl	v0,v0,0x18
-    2fc4:	00822025 	or	a0,a0,v0
-    2fc8:	00651825 	or	v1,v1,a1
-    2fcc:	a5630002 	sh	v1,2(t3)
-    2fd0:	03e00008 	jr	ra
-    2fd4:	a5640000 	sh	a0,0(t3)
-    2fd8:	94a20000 	lhu	v0,0(a1)
-    2fdc:	94a50002 	lhu	a1,2(a1)
-    2fe0:	3044ff00 	andi	a0,v0,0xff00
-    2fe4:	30a300ff 	andi	v1,a1,0xff
-    2fe8:	00042200 	sll	a0,a0,0x8
-    2fec:	00021600 	sll	v0,v0,0x18
-    2ff0:	00441025 	or	v0,v0,a0
-    2ff4:	00031a00 	sll	v1,v1,0x8
-    2ff8:	00431025 	or	v0,v0,v1
-    2ffc:	00052a02 	srl	a1,a1,0x8
-    3000:	00451025 	or	v0,v0,a1
-    3004:	03e00008 	jr	ra
-    3008:	ad620000 	sw	v0,0(t3)
-    300c:	03e00008 	jr	ra
-    3010:	00000000 	nop
-
-00003014 <HcdInitialize>:
-    3014:	27bdffc8 	addiu	sp,sp,-56
-    3018:	afb00020 	sw	s0,32(sp)
-    301c:	afbf0034 	sw	ra,52(sp)
-    3020:	afb40030 	sw	s4,48(sp)
-    3024:	afb3002c 	sw	s3,44(sp)
-    3028:	afb20028 	sw	s2,40(sp)
-    302c:	afb10024 	sw	s1,36(sp)
-    3030:	908300f8 	lbu	v1,248(a0)
-    3034:	00808021 	move	s0,a0
-    3038:	30620003 	andi	v0,v1,0x3
-    303c:	1440000c 	bnez	v0,3070 <HcdInitialize+0x5c>
-    3040:	afa00010 	sw	zero,16(sp)
-    3044:	2402ffdc 	li	v0,-36
-    3048:	afa20010 	sw	v0,16(sp)
-    304c:	8fa20010 	lw	v0,16(sp)
-    3050:	8fbf0034 	lw	ra,52(sp)
-    3054:	8fb40030 	lw	s4,48(sp)
-    3058:	8fb3002c 	lw	s3,44(sp)
-    305c:	8fb20028 	lw	s2,40(sp)
-    3060:	8fb10024 	lw	s1,36(sp)
-    3064:	8fb00020 	lw	s0,32(sp)
-    3068:	03e00008 	jr	ra
-    306c:	27bd0038 	addiu	sp,sp,56
-    3070:	30620008 	andi	v0,v1,0x8
-    3074:	24030001 	li	v1,1
-    3078:	a0800032 	sb	zero,50(a0)
-    307c:	1040009b 	beqz	v0,32ec <HcdInitialize+0x2d8>
-    3080:	a0830033 	sb	v1,51(a0)
-    3084:	24020003 	li	v0,3
-    3088:	a0820018 	sb	v0,24(a0)
-    308c:	a0820017 	sb	v0,23(a0)
-    3090:	8e04003c 	lw	a0,60(s0)
-    3094:	3c02016e 	lui	v0,0x16e
-    3098:	344335ff 	ori	v1,v0,0x35ff
-    309c:	0064182b 	sltu	v1,v1,a0
-    30a0:	34453601 	ori	a1,v0,0x3601
-    30a4:	34423600 	ori	v0,v0,0x3600
-    30a8:	0083100a 	movz	v0,a0,v1
-    30ac:	0085202b 	sltu	a0,a0,a1
-    30b0:	afa20014 	sw	v0,20(sp)
-    30b4:	14800003 	bnez	a0,30c4 <HcdInitialize+0xb0>
-    30b8:	a6000014 	sh	zero,20(s0)
-    30bc:	24020200 	li	v0,512
-    30c0:	a6020014 	sh	v0,20(s0)
-    30c4:	8fa60014 	lw	a2,20(sp)
-    30c8:	3c050000 	lui	a1,0x0
-			30c8: R_MIPS_HI16	.rodata
-    30cc:	3c040000 	lui	a0,0x0
-			30cc: R_MIPS_HI16	$LC17
-    30d0:	3c020000 	lui	v0,0x0
-			30d0: R_MIPS_HI16	printk
-    30d4:	24a500d0 	addiu	a1,a1,208
-			30d4: R_MIPS_LO16	.rodata
-    30d8:	24840000 	addiu	a0,a0,0
-			30d8: R_MIPS_LO16	$LC17
-    30dc:	24420000 	addiu	v0,v0,0
-			30dc: R_MIPS_LO16	printk
-    30e0:	0040f809 	jalr	v0
-    30e4:	3c140000 	lui	s4,0x0
-			30e4: R_MIPS_HI16	HW_SetClock
-    30e8:	02002021 	move	a0,s0
-    30ec:	26820000 	addiu	v0,s4,0
-			30ec: R_MIPS_LO16	HW_SetClock
-    30f0:	0040f809 	jalr	v0
-    30f4:	27a50014 	addiu	a1,sp,20
-    30f8:	96030014 	lhu	v1,20(s0)
-    30fc:	92040018 	lbu	a0,24(s0)
-    3100:	34630080 	ori	v1,v1,0x80
-    3104:	24020003 	li	v0,3
-    3108:	10820086 	beq	a0,v0,3324 <HcdInitialize+0x310>
-    310c:	a6030014 	sh	v1,20(s0)
-    3110:	24020001 	li	v0,1
-    3114:	10820086 	beq	a0,v0,3330 <HcdInitialize+0x31c>
-    3118:	34620006 	ori	v0,v1,0x6
-    311c:	8e030038 	lw	v1,56(s0)
-    3120:	3c046666 	lui	a0,0x6666
-    3124:	34846667 	ori	a0,a0,0x6667
-    3128:	96020014 	lhu	v0,20(s0)
-    312c:	00640018 	mult	v1,a0
-    3130:	34420018 	ori	v0,v0,0x18
-    3134:	00002010 	mfhi	a0
-    3138:	a6020014 	sh	v0,20(s0)
-    313c:	00031fc3 	sra	v1,v1,0x1f
-    3140:	8f850000 	lw	a1,0(gp)
-    3144:	00042083 	sra	a0,a0,0x2
-    3148:	24020001 	li	v0,1
-    314c:	00832023 	subu	a0,a0,v1
-    3150:	aca20000 	sw	v0,0(a1)
-    3154:	0044200a 	movz	a0,v0,a0
-    3158:	3c020000 	lui	v0,0x0
-			3158: R_MIPS_HI16	schedule_timeout
-    315c:	24420000 	addiu	v0,v0,0
-			315c: R_MIPS_LO16	schedule_timeout
-    3160:	0040f809 	jalr	v0
-    3164:	3c110000 	lui	s1,0x0
-			3164: R_MIPS_HI16	.text
-    3168:	02002021 	move	a0,s0
-    316c:	24050400 	li	a1,1024
-    3170:	26221da4 	addiu	v0,s1,7588
-			3170: R_MIPS_LO16	.text
-    3174:	0040f809 	jalr	v0
-    3178:	34068000 	li	a2,0x8000
-    317c:	3c130000 	lui	s3,0x0
-			317c: R_MIPS_HI16	cpu_data
-    3180:	8e630000 	lw	v1,0(s3)
-			3180: R_MIPS_LO16	cpu_data
-    3184:	afa20010 	sw	v0,16(sp)
-    3188:	3c021999 	lui	v0,0x1999
-    318c:	34449aa8 	ori	a0,v0,0x9aa8
-    3190:	24050009 	li	a1,9
-    3194:	2406ffff 	li	a2,-1
-    3198:	00830019 	multu	a0,v1
-    319c:	00001010 	mfhi	v0
-    31a0:	1440ffff 	bnez	v0,31a0 <HcdInitialize+0x18c>
-    31a4:	2442ffff 	addiu	v0,v0,-1
-    31a8:	24a5ffff 	addiu	a1,a1,-1
-    31ac:	14a6fffa 	bne	a1,a2,3198 <HcdInitialize+0x184>
-    31b0:	26221da4 	addiu	v0,s1,7588
+    2d7c:	02202021 	move	a0,s1
+    2d80:	24100003 	li	s0,3
+    2d84:	02001021 	move	v0,s0
+    2d88:	8fbf003c 	lw	ra,60(sp)
+    2d8c:	8fb60038 	lw	s6,56(sp)
+    2d90:	8fb50034 	lw	s5,52(sp)
+    2d94:	8fb40030 	lw	s4,48(sp)
+    2d98:	8fb3002c 	lw	s3,44(sp)
+    2d9c:	8fb20028 	lw	s2,40(sp)
+    2da0:	8fb10024 	lw	s1,36(sp)
+    2da4:	8fb00020 	lw	s0,32(sp)
+    2da8:	03e00008 	jr	ra
+    2dac:	27bd0040 	addiu	sp,sp,64
+    2db0:	96430010 	lhu	v1,16(s2)
+    2db4:	30620004 	andi	v0,v1,0x4
+    2db8:	10400062 	beqz	v0,2f44 <HcdRequest+0x268>
+    2dbc:	30620010 	andi	v0,v1,0x10
+    2dc0:	8e42002c 	lw	v0,44(s2)
+    2dc4:	9646001a 	lhu	a2,26(s2)
+    2dc8:	ae420034 	sw	v0,52(s2)
+    2dcc:	ae460030 	sw	a2,48(s2)
+    2dd0:	92240018 	lbu	a0,24(s1)
+    2dd4:	24020003 	li	v0,3
+    2dd8:	10820101 	beq	a0,v0,31e0 <HcdRequest+0x504>
+    2ddc:	96250014 	lhu	a1,20(s1)
+    2de0:	24020001 	li	v0,1
+    2de4:	10820100 	beq	a0,v0,31e8 <HcdRequest+0x50c>
+    2de8:	34a60006 	ori	a2,a1,0x6
+    2dec:	108000fe 	beqz	a0,31e8 <HcdRequest+0x50c>
+    2df0:	30a6fff9 	andi	a2,a1,0xfff9
+    2df4:	30620080 	andi	v0,v1,0x80
+    2df8:	1440009a 	bnez	v0,3064 <HcdRequest+0x388>
+    2dfc:	3c020000 	lui	v0,0x0
+			2dfc: R_MIPS_HI16	.text
+    2e00:	2634001c 	addiu	s4,s1,28
+    2e04:	3c130000 	lui	s3,0x0
+			2e04: R_MIPS_HI16	.text
+    2e08:	02202021 	move	a0,s1
+    2e0c:	24050200 	li	a1,512
+    2e10:	26621d24 	addiu	v0,s3,7460
+			2e10: R_MIPS_LO16	.text
+    2e14:	0040f809 	jalr	v0
+    2e18:	02803021 	move	a2,s4
+    2e1c:	04400058 	bltz	v0,2f80 <HcdRequest+0x2a4>
+    2e20:	00408021 	move	s0,v0
+    2e24:	922500f9 	lbu	a1,249(s1)
+    2e28:	30a20004 	andi	v0,a1,0x4
+    2e2c:	10400100 	beqz	v0,3230 <HcdRequest+0x554>
+    2e30:	00000000 	nop
+    2e34:	8e23001c 	lw	v1,28(s1)
+    2e38:	8e240020 	lw	a0,32(s1)
+    2e3c:	0064102b 	sltu	v0,v1,a0
+    2e40:	14400115 	bnez	v0,3298 <HcdRequest+0x5bc>
+    2e44:	00000000 	nop
+    2e48:	ae200024 	sw	zero,36(s1)
+    2e4c:	8e460030 	lw	a2,48(s2)
+    2e50:	0066102b 	sltu	v0,v1,a2
+    2e54:	10400080 	beqz	v0,3058 <HcdRequest+0x37c>
+    2e58:	00661023 	subu	v0,v1,a2
+    2e5c:	30a20004 	andi	v0,a1,0x4
+    2e60:	14400111 	bnez	v0,32a8 <HcdRequest+0x5cc>
+    2e64:	00000000 	nop
+    2e68:	00863023 	subu	a2,a0,a2
+    2e6c:	00c4102b 	sltu	v0,a2,a0
+    2e70:	10400107 	beqz	v0,3290 <HcdRequest+0x5b4>
+    2e74:	00000000 	nop
+    2e78:	10c00105 	beqz	a2,3290 <HcdRequest+0x5b4>
+    2e7c:	00000000 	nop
+    2e80:	3c020000 	lui	v0,0x0
+			2e80: R_MIPS_HI16	.text
+    2e84:	02202021 	move	a0,s1
+    2e88:	24421da4 	addiu	v0,v0,7588
+			2e88: R_MIPS_LO16	.text
+    2e8c:	0040f809 	jalr	v0
+    2e90:	24051300 	li	a1,4864
+    2e94:	04400068 	bltz	v0,3038 <HcdRequest+0x35c>
+    2e98:	00408021 	move	s0,v0
+    2e9c:	27b50010 	addiu	s5,sp,16
+    2ea0:	26761d24 	addiu	s6,s3,7460
+			2ea0: R_MIPS_LO16	.text
+    2ea4:	02202021 	move	a0,s1
+    2ea8:	24050500 	li	a1,1280
+    2eac:	02c0f809 	jalr	s6
+    2eb0:	02a03021 	move	a2,s5
+    2eb4:	04400060 	bltz	v0,3038 <HcdRequest+0x35c>
+    2eb8:	00408021 	move	s0,v0
+    2ebc:	8fa20010 	lw	v0,16(sp)
+    2ec0:	24030004 	li	v1,4
+    2ec4:	30530006 	andi	s3,v0,0x6
+    2ec8:	12630038 	beq	s3,v1,2fac <HcdRequest+0x2d0>
+    2ecc:	3c020000 	lui	v0,0x0
+			2ecc: R_MIPS_HI16	HW_UsecDelay
+    2ed0:	24020001 	li	v0,1
+    2ed4:	a2220019 	sb	v0,25(s1)
+    2ed8:	3c020000 	lui	v0,0x0
+			2ed8: R_MIPS_HI16	.text
+    2edc:	02202021 	move	a0,s1
+    2ee0:	24421f3c 	addiu	v0,v0,7996
+			2ee0: R_MIPS_LO16	.text
+    2ee4:	0040f809 	jalr	v0
+    2ee8:	24050400 	li	a1,1024
+    2eec:	8f820014 	lw	v0,20(gp)
+    2ef0:	3c030000 	lui	v1,0x0
+			2ef0: R_MIPS_HI16	local_bh_enable
+    2ef4:	2442ffff 	addiu	v0,v0,-1
+    2ef8:	24630000 	addiu	v1,v1,0
+			2ef8: R_MIPS_LO16	local_bh_enable
+    2efc:	0060f809 	jalr	v1
+    2f00:	af820014 	sw	v0,20(gp)
+    2f04:	08000b61 	j	2d84 <HcdRequest+0xa8>
+			2f04: R_MIPS_26	.text
+    2f08:	24100003 	li	s0,3
+    2f0c:	3c020000 	lui	v0,0x0
+			2f0c: R_MIPS_HI16	printk
+    2f10:	24420000 	addiu	v0,v0,0
+			2f10: R_MIPS_LO16	printk
+    2f14:	0040f809 	jalr	v0
+    2f18:	24840000 	addiu	a0,a0,0
+			2f18: R_MIPS_LO16	$LC11
+    2f1c:	40016000 	mfc0	at,c0_status
+    2f20:	3421001f 	ori	at,at,0x1f
+    2f24:	3821001e 	xori	at,at,0x1e
+    2f28:	40816000 	mtc0	at,c0_status
+    2f2c:	00000040 	ssnop
+    2f30:	00000040 	ssnop
+    2f34:	00000040 	ssnop
+    2f38:	000000c0 	sll	zero,zero,0x3
+    2f3c:	08000b4d 	j	2d34 <HcdRequest+0x58>
+			2f3c: R_MIPS_26	.text
+    2f40:	922200fa 	lbu	v0,250(s1)
+    2f44:	14400057 	bnez	v0,30a4 <HcdRequest+0x3c8>
+    2f48:	24020040 	li	v0,64
+    2f4c:	30620080 	andi	v0,v1,0x80
+    2f50:	104000b0 	beqz	v0,3214 <HcdRequest+0x538>
+    2f54:	3c020000 	lui	v0,0x0
+			2f54: R_MIPS_HI16	.text
+    2f58:	96450018 	lhu	a1,24(s2)
+    2f5c:	3c020000 	lui	v0,0x0
+			2f5c: R_MIPS_HI16	.text
+    2f60:	02202021 	move	a0,s1
+    2f64:	24421d24 	addiu	v0,v0,7460
+			2f64: R_MIPS_LO16	.text
+    2f68:	0040f809 	jalr	v0
+    2f6c:	27a60010 	addiu	a2,sp,16
+    2f70:	04400003 	bltz	v0,2f80 <HcdRequest+0x2a4>
+    2f74:	00408021 	move	s0,v0
+    2f78:	8fa20010 	lw	v0,16(sp)
+    2f7c:	ae42001c 	sw	v0,28(s2)
+    2f80:	8f820014 	lw	v0,20(gp)
+    2f84:	3c030000 	lui	v1,0x0
+			2f84: R_MIPS_HI16	local_bh_enable
+    2f88:	2442ffff 	addiu	v0,v0,-1
+    2f8c:	24630000 	addiu	v1,v1,0
+			2f8c: R_MIPS_LO16	local_bh_enable
+    2f90:	0060f809 	jalr	v1
+    2f94:	af820014 	sw	v0,20(gp)
+    2f98:	24020003 	li	v0,3
+    2f9c:	1602ff70 	bne	s0,v0,2d60 <HcdRequest+0x84>
+    2fa0:	02001021 	move	v0,s0
+    2fa4:	08000b63 	j	2d8c <HcdRequest+0xb0>
+			2fa4: R_MIPS_26	.text
+    2fa8:	8fbf003c 	lw	ra,60(sp)
+    2fac:	2405003c 	li	a1,60
+    2fb0:	24420000 	addiu	v0,v0,0
+			2fb0: R_MIPS_LO16	HW_UsecDelay
+    2fb4:	0040f809 	jalr	v0
+    2fb8:	02202021 	move	a0,s1
+    2fbc:	02202021 	move	a0,s1
+    2fc0:	02a03021 	move	a2,s5
+    2fc4:	02c0f809 	jalr	s6
+    2fc8:	24050500 	li	a1,1280
+    2fcc:	0440001a 	bltz	v0,3038 <HcdRequest+0x35c>
+    2fd0:	00408021 	move	s0,v0
+    2fd4:	8fa20010 	lw	v0,16(sp)
+    2fd8:	30420006 	andi	v0,v0,0x6
+    2fdc:	1453ffbd 	bne	v0,s3,2ed4 <HcdRequest+0x1f8>
+    2fe0:	24020001 	li	v0,1
+    2fe4:	02803021 	move	a2,s4
+    2fe8:	02202021 	move	a0,s1
+    2fec:	02c0f809 	jalr	s6
+    2ff0:	24050200 	li	a1,512
+    2ff4:	04400010 	bltz	v0,3038 <HcdRequest+0x35c>
+    2ff8:	00408021 	move	s0,v0
+    2ffc:	922200f9 	lbu	v0,249(s1)
+    3000:	30420004 	andi	v0,v0,0x4
+    3004:	104000ca 	beqz	v0,3330 <HcdRequest+0x654>
+    3008:	00000000 	nop
+    300c:	8e22001c 	lw	v0,28(s1)
+    3010:	8e230020 	lw	v1,32(s1)
+    3014:	0043102b 	sltu	v0,v0,v1
+    3018:	1440ffae 	bnez	v0,2ed4 <HcdRequest+0x1f8>
+    301c:	24020001 	li	v0,1
+    3020:	ae200024 	sw	zero,36(s1)
+    3024:	3c020000 	lui	v0,0x0
+			3024: R_MIPS_HI16	.text
+    3028:	24421eb0 	addiu	v0,v0,7856
+			3028: R_MIPS_LO16	.text
+    302c:	0040f809 	jalr	v0
+    3030:	02202021 	move	a0,s1
+    3034:	00408021 	move	s0,v0
+    3038:	24020003 	li	v0,3
+    303c:	12020060 	beq	s0,v0,31c0 <HcdRequest+0x4e4>
+    3040:	00000000 	nop
+    3044:	1600ff40 	bnez	s0,2d48 <HcdRequest+0x6c>
+    3048:	00000000 	nop
+    304c:	8e460030 	lw	a2,48(s2)
+    3050:	8e23001c 	lw	v1,28(s1)
+    3054:	00661023 	subu	v0,v1,a2
+    3058:	2442fffb 	addiu	v0,v0,-5
+    305c:	ae22001c 	sw	v0,28(s1)
+    3060:	3c020000 	lui	v0,0x0
+			3060: R_MIPS_HI16	.text
+    3064:	02202021 	move	a0,s1
+    3068:	2442256c 	addiu	v0,v0,9580
+			3068: R_MIPS_LO16	.text
+    306c:	0040f809 	jalr	v0
+    3070:	02402821 	move	a1,s2
+    3074:	00408021 	move	s0,v0
+    3078:	8f820014 	lw	v0,20(gp)
+    307c:	3c030000 	lui	v1,0x0
+			307c: R_MIPS_HI16	local_bh_enable
+    3080:	2442ffff 	addiu	v0,v0,-1
+    3084:	24630000 	addiu	v1,v1,0
+			3084: R_MIPS_LO16	local_bh_enable
+    3088:	0060f809 	jalr	v1
+    308c:	af820014 	sw	v0,20(gp)
+    3090:	24020003 	li	v0,3
+    3094:	1602ff32 	bne	s0,v0,2d60 <HcdRequest+0x84>
+    3098:	02001021 	move	v0,s0
+    309c:	08000b63 	j	2d8c <HcdRequest+0xb0>
+			309c: R_MIPS_26	.text
+    30a0:	8fbf003c 	lw	ra,60(sp)
+    30a4:	8e44002c 	lw	a0,44(s2)
+    30a8:	9646001a 	lhu	a2,26(s2)
+    30ac:	30630020 	andi	v1,v1,0x20
+    30b0:	0003100a 	movz	v0,zero,v1
+    30b4:	ae460030 	sw	a2,48(s2)
+    30b8:	ae440034 	sw	a0,52(s2)
+    30bc:	afa20018 	sw	v0,24(sp)
+    30c0:	8e430030 	lw	v1,48(s2)
+    30c4:	3c150000 	lui	s5,0x0
+			30c4: R_MIPS_HI16	.text
+    30c8:	00431025 	or	v0,v0,v1
+    30cc:	00403021 	move	a2,v0
+    30d0:	02202021 	move	a0,s1
+    30d4:	24050600 	li	a1,1536
+    30d8:	26b31da4 	addiu	s3,s5,7588
+			30d8: R_MIPS_LO16	.text
+    30dc:	0260f809 	jalr	s3
+    30e0:	afa20018 	sw	v0,24(sp)
+    30e4:	0440ffa6 	bltz	v0,2f80 <HcdRequest+0x2a4>
+    30e8:	00408021 	move	s0,v0
+    30ec:	96420010 	lhu	v0,16(s2)
+    30f0:	30420080 	andi	v0,v0,0x80
+    30f4:	10400055 	beqz	v0,324c <HcdRequest+0x570>
+    30f8:	3c020000 	lui	v0,0x0
+			30f8: R_MIPS_HI16	HW_InOut_Token
+    30fc:	34048000 	li	a0,0x8000
+    3100:	afa40018 	sw	a0,24(sp)
+    3104:	96420010 	lhu	v0,16(s2)
+    3108:	3403c000 	li	v1,0xc000
+    310c:	30420080 	andi	v0,v0,0x80
+    3110:	0082180b 	movn	v1,a0,v0
+    3114:	afa30018 	sw	v1,24(sp)
+    3118:	96420018 	lhu	v0,24(s2)
+    311c:	02202021 	move	a0,s1
+    3120:	00431025 	or	v0,v0,v1
+    3124:	00403021 	move	a2,v0
+    3128:	24050700 	li	a1,1792
+    312c:	0260f809 	jalr	s3
+    3130:	afa20018 	sw	v0,24(sp)
+    3134:	0440ff92 	bltz	v0,2f80 <HcdRequest+0x2a4>
+    3138:	00408021 	move	s0,v0
+    313c:	3c130000 	lui	s3,0x0
+			313c: R_MIPS_HI16	.text
+    3140:	26741d24 	addiu	s4,s3,7460
+			3140: R_MIPS_LO16	.text
+    3144:	24100003 	li	s0,3
+    3148:	27b30018 	addiu	s3,sp,24
+    314c:	02202021 	move	a0,s1
+    3150:	24050500 	li	a1,1280
+    3154:	0280f809 	jalr	s4
+    3158:	02603021 	move	a2,s3
+    315c:	0440005b 	bltz	v0,32cc <HcdRequest+0x5f0>
+    3160:	2610ffff 	addiu	s0,s0,-1
+    3164:	8fa20018 	lw	v0,24(sp)
+    3168:	30420001 	andi	v0,v0,0x1
+    316c:	14400057 	bnez	v0,32cc <HcdRequest+0x5f0>
+    3170:	00000000 	nop
+    3174:	1600fff6 	bnez	s0,3150 <HcdRequest+0x474>
+    3178:	02202021 	move	a0,s1
+    317c:	24020001 	li	v0,1
+    3180:	a2220016 	sb	v0,22(s1)
+    3184:	3c020000 	lui	v0,0x0
+			3184: R_MIPS_HI16	HW_StartTimer
+    3188:	240507d0 	li	a1,2000
+    318c:	24420000 	addiu	v0,v0,0
+			318c: R_MIPS_LO16	HW_StartTimer
+    3190:	0040f809 	jalr	v0
+    3194:	24060001 	li	a2,1
+    3198:	96430010 	lhu	v1,16(s2)
+    319c:	30630080 	andi	v1,v1,0x80
+    31a0:	10600043 	beqz	v1,32b0 <HcdRequest+0x5d4>
+    31a4:	00000000 	nop
+    31a8:	3c020000 	lui	v0,0x0
+			31a8: R_MIPS_HI16	.text
+    31ac:	02202021 	move	a0,s1
+    31b0:	24421f3c 	addiu	v0,v0,7996
 			31b0: R_MIPS_LO16	.text
-    31b4:	96060014 	lhu	a2,20(s0)
-    31b8:	02002021 	move	a0,s0
-    31bc:	0040f809 	jalr	v0
-    31c0:	24050400 	li	a1,1024
-    31c4:	0440ffa1 	bltz	v0,304c <HcdInitialize+0x38>
-    31c8:	afa20010 	sw	v0,16(sp)
-    31cc:	27b10010 	addiu	s1,sp,16
-    31d0:	3c120000 	lui	s2,0x0
-			31d0: R_MIPS_HI16	.text
-    31d4:	02203021 	move	a2,s1
-    31d8:	24050400 	li	a1,1024
-    31dc:	26421d24 	addiu	v0,s2,7460
-			31dc: R_MIPS_LO16	.text
-    31e0:	0040f809 	jalr	v0
-    31e4:	02002021 	move	a0,s0
-    31e8:	02002021 	move	a0,s0
-    31ec:	26820000 	addiu	v0,s4,0
-			31ec: R_MIPS_LO16	HW_SetClock
-    31f0:	0040f809 	jalr	v0
-    31f4:	2605003c 	addiu	a1,s0,60
-    31f8:	3c021999 	lui	v0,0x1999
-    31fc:	8e630000 	lw	v1,0(s3)
-			31fc: R_MIPS_LO16	cpu_data
-    3200:	34449aa8 	ori	a0,v0,0x9aa8
-    3204:	24050009 	li	a1,9
-    3208:	2406ffff 	li	a2,-1
-    320c:	00830019 	multu	a0,v1
-    3210:	00001010 	mfhi	v0
-    3214:	00000000 	nop
-    3218:	1440ffff 	bnez	v0,3218 <HcdInitialize+0x204>
-    321c:	2442ffff 	addiu	v0,v0,-1
-    3220:	24a5ffff 	addiu	a1,a1,-1
-    3224:	14a6fff9 	bne	a1,a2,320c <HcdInitialize+0x1f8>
-    3228:	00000000 	nop
-    322c:	02203021 	move	a2,s1
-    3230:	24050400 	li	a1,1024
-    3234:	26511d24 	addiu	s1,s2,7460
-			3234: R_MIPS_LO16	.text
-    3238:	0220f809 	jalr	s1
-    323c:	02002021 	move	a0,s0
-    3240:	02002021 	move	a0,s0
-    3244:	24050200 	li	a1,512
-    3248:	0220f809 	jalr	s1
-    324c:	2606001c 	addiu	a2,s0,28
-    3250:	0440ff7e 	bltz	v0,304c <HcdInitialize+0x38>
-    3254:	afa20010 	sw	v0,16(sp)
-    3258:	8e02001c 	lw	v0,28(s0)
-    325c:	02002021 	move	a0,s0
-    3260:	ae020020 	sw	v0,32(s0)
-    3264:	24050400 	li	a1,1024
-    3268:	27a60018 	addiu	a2,sp,24
-    326c:	0220f809 	jalr	s1
-    3270:	afa00018 	sw	zero,24(sp)
-    3274:	0440ff75 	bltz	v0,304c <HcdInitialize+0x38>
-    3278:	afa20010 	sw	v0,16(sp)
-    327c:	8fa30018 	lw	v1,24(sp)
-    3280:	3402ffff 	li	v0,0xffff
-    3284:	1062001c 	beq	v1,v0,32f8 <HcdInitialize+0x2e4>
-    3288:	3c020000 	lui	v0,0x0
-			3288: R_MIPS_HI16	.text
-    328c:	24421eb0 	addiu	v0,v0,7856
-			328c: R_MIPS_LO16	.text
-    3290:	0040f809 	jalr	v0
-    3294:	02002021 	move	a0,s0
-    3298:	0440ff6c 	bltz	v0,304c <HcdInitialize+0x38>
-    329c:	afa20010 	sw	v0,16(sp)
-    32a0:	3c020000 	lui	v0,0x0
-			32a0: R_MIPS_HI16	.text
-    32a4:	02002021 	move	a0,s0
-    32a8:	24421f3c 	addiu	v0,v0,7996
-			32a8: R_MIPS_LO16	.text
-    32ac:	0040f809 	jalr	v0
-    32b0:	2405000e 	li	a1,14
-    32b4:	3c020000 	lui	v0,0x0
-			32b4: R_MIPS_HI16	.text
-    32b8:	02002021 	move	a0,s0
-    32bc:	244224d4 	addiu	v0,v0,9428
-			32bc: R_MIPS_LO16	.text
-    32c0:	0040f809 	jalr	v0
-    32c4:	24050001 	li	a1,1
-    32c8:	8fa20010 	lw	v0,16(sp)
-    32cc:	8fbf0034 	lw	ra,52(sp)
-    32d0:	8fb40030 	lw	s4,48(sp)
-    32d4:	8fb3002c 	lw	s3,44(sp)
-    32d8:	8fb20028 	lw	s2,40(sp)
-    32dc:	8fb10024 	lw	s1,36(sp)
-    32e0:	8fb00020 	lw	s0,32(sp)
-    32e4:	03e00008 	jr	ra
-    32e8:	27bd0038 	addiu	sp,sp,56
-    32ec:	a0830018 	sb	v1,24(a0)
-    32f0:	08000c24 	j	3090 <HcdInitialize+0x7c>
+    31b4:	0040f809 	jalr	v0
+    31b8:	24050200 	li	a1,512
+    31bc:	24100003 	li	s0,3
+    31c0:	8f830014 	lw	v1,20(gp)
+    31c4:	3c040000 	lui	a0,0x0
+			31c4: R_MIPS_HI16	local_bh_enable
+    31c8:	2463ffff 	addiu	v1,v1,-1
+    31cc:	24840000 	addiu	a0,a0,0
+			31cc: R_MIPS_LO16	local_bh_enable
+    31d0:	0080f809 	jalr	a0
+    31d4:	af830014 	sw	v1,20(gp)
+    31d8:	08000b62 	j	2d88 <HcdRequest+0xac>
+			31d8: R_MIPS_26	.text
+    31dc:	02001021 	move	v0,s0
+    31e0:	34a20004 	ori	v0,a1,0x4
+    31e4:	3046fffd 	andi	a2,v0,0xfffd
+    31e8:	10c5ff02 	beq	a2,a1,2df4 <HcdRequest+0x118>
+    31ec:	3c020000 	lui	v0,0x0
+			31ec: R_MIPS_HI16	.text
+    31f0:	a6260014 	sh	a2,20(s1)
+    31f4:	02202021 	move	a0,s1
+    31f8:	24421da4 	addiu	v0,v0,7588
+			31f8: R_MIPS_LO16	.text
+    31fc:	0040f809 	jalr	v0
+    3200:	24050400 	li	a1,1024
+    3204:	0440ff5e 	bltz	v0,2f80 <HcdRequest+0x2a4>
+    3208:	00408021 	move	s0,v0
+    320c:	08000b7d 	j	2df4 <HcdRequest+0x118>
+			320c: R_MIPS_26	.text
+    3210:	96430010 	lhu	v1,16(s2)
+    3214:	96450018 	lhu	a1,24(s2)
+    3218:	8e460014 	lw	a2,20(s2)
+    321c:	24421da4 	addiu	v0,v0,7588
+			321c: R_MIPS_LO16	.text
+    3220:	0040f809 	jalr	v0
+    3224:	02202021 	move	a0,s1
+    3228:	08000be0 	j	2f80 <HcdRequest+0x2a4>
+			3228: R_MIPS_26	.text
+    322c:	00408021 	move	s0,v0
+    3230:	8e23001c 	lw	v1,28(s1)
+    3234:	8e460030 	lw	a2,48(s2)
+    3238:	0066102b 	sltu	v0,v1,a2
+    323c:	1040ff86 	beqz	v0,3058 <HcdRequest+0x37c>
+    3240:	00661023 	subu	v0,v1,a2
+    3244:	08000b9a 	j	2e68 <HcdRequest+0x18c>
+			3244: R_MIPS_26	.text
+    3248:	8e240020 	lw	a0,32(s1)
+    324c:	02202021 	move	a0,s1
+    3250:	24054a00 	li	a1,18944
+    3254:	24060001 	li	a2,1
+    3258:	24420000 	addiu	v0,v0,0
+			3258: R_MIPS_LO16	HW_InOut_Token
+    325c:	0040f809 	jalr	v0
+    3260:	00003821 	move	a3,zero
+    3264:	0440ff46 	bltz	v0,2f80 <HcdRequest+0x2a4>
+    3268:	00408021 	move	s0,v0
+    326c:	3c020000 	lui	v0,0x0
+			326c: R_MIPS_HI16	.text
+    3270:	02202021 	move	a0,s1
+    3274:	24422264 	addiu	v0,v0,8804
+			3274: R_MIPS_LO16	.text
+    3278:	0040f809 	jalr	v0
+    327c:	02402821 	move	a1,s2
+    3280:	0441ff9e 	bgez	v0,30fc <HcdRequest+0x420>
+    3284:	00408021 	move	s0,v0
+    3288:	08000be1 	j	2f84 <HcdRequest+0x2a8>
+			3288: R_MIPS_26	.text
+    328c:	8f820014 	lw	v0,20(gp)
+    3290:	08000ba0 	j	2e80 <HcdRequest+0x1a4>
+			3290: R_MIPS_26	.text
+    3294:	24060001 	li	a2,1
+    3298:	8e220024 	lw	v0,36(s1)
+    329c:	2c420002 	sltiu	v0,v0,2
+    32a0:	1440feea 	bnez	v0,2e4c <HcdRequest+0x170>
+    32a4:	00000000 	nop
+    32a8:	08000b9b 	j	2e6c <HcdRequest+0x190>
+			32a8: R_MIPS_26	.text
+    32ac:	24060001 	li	a2,1
+    32b0:	3c020000 	lui	v0,0x0
+			32b0: R_MIPS_HI16	.text
+    32b4:	02202021 	move	a0,s1
+    32b8:	24421f3c 	addiu	v0,v0,7996
+			32b8: R_MIPS_LO16	.text
+    32bc:	0040f809 	jalr	v0
+    32c0:	24050100 	li	a1,256
+    32c4:	08000c70 	j	31c0 <HcdRequest+0x4e4>
+			32c4: R_MIPS_26	.text
+    32c8:	24100003 	li	s0,3
+    32cc:	96420010 	lhu	v0,16(s2)
+    32d0:	30420080 	andi	v0,v0,0x80
+    32d4:	14400008 	bnez	v0,32f8 <HcdRequest+0x61c>
+    32d8:	3c020000 	lui	v0,0x0
+			32d8: R_MIPS_HI16	HW_InOut_Token
+    32dc:	26a21da4 	addiu	v0,s5,7588
+			32dc: R_MIPS_LO16	.text
+    32e0:	02202021 	move	a0,s1
+    32e4:	24050c00 	li	a1,3072
+    32e8:	0040f809 	jalr	v0
+    32ec:	24060300 	li	a2,768
+    32f0:	08000be0 	j	2f80 <HcdRequest+0x2a4>
 			32f0: R_MIPS_26	.text
-    32f4:	a0830017 	sb	v1,23(a0)
-    32f8:	2402fffb 	li	v0,-5
-    32fc:	afa20010 	sw	v0,16(sp)
-    3300:	8fa20010 	lw	v0,16(sp)
-    3304:	8fbf0034 	lw	ra,52(sp)
-    3308:	8fb40030 	lw	s4,48(sp)
-    330c:	8fb3002c 	lw	s3,44(sp)
-    3310:	8fb20028 	lw	s2,40(sp)
-    3314:	8fb10024 	lw	s1,36(sp)
-    3318:	8fb00020 	lw	s0,32(sp)
-    331c:	03e00008 	jr	ra
-    3320:	27bd0038 	addiu	sp,sp,56
-    3324:	34620004 	ori	v0,v1,0x4
-    3328:	08000c47 	j	311c <HcdInitialize+0x108>
+    32f4:	00408021 	move	s0,v0
+    32f8:	02202021 	move	a0,s1
+    32fc:	3405c800 	li	a1,0xc800
+    3300:	24060001 	li	a2,1
+    3304:	24420000 	addiu	v0,v0,0
+			3304: R_MIPS_LO16	HW_InOut_Token
+    3308:	0040f809 	jalr	v0
+    330c:	00003821 	move	a3,zero
+    3310:	0440fff2 	bltz	v0,32dc <HcdRequest+0x600>
+    3314:	3c020000 	lui	v0,0x0
+			3314: R_MIPS_HI16	.text
+    3318:	02202021 	move	a0,s1
+    331c:	24422264 	addiu	v0,v0,8804
+			331c: R_MIPS_LO16	.text
+    3320:	0040f809 	jalr	v0
+    3324:	02402821 	move	a1,s2
+    3328:	08000cb8 	j	32e0 <HcdRequest+0x604>
 			3328: R_MIPS_26	.text
-    332c:	a6020014 	sh	v0,20(s0)
-    3330:	08000c47 	j	311c <HcdInitialize+0x108>
-			3330: R_MIPS_26	.text
-    3334:	a6020014 	sh	v0,20(s0)
+    332c:	26a21da4 	addiu	v0,s5,7588
+			332c: R_MIPS_LO16	.text
+    3330:	8e22001c 	lw	v0,28(s1)
+    3334:	8e430030 	lw	v1,48(s2)
+    3338:	0043102b 	sltu	v0,v0,v1
+    333c:	1040ff39 	beqz	v0,3024 <HcdRequest+0x348>
+    3340:	27a60014 	addiu	a2,sp,20
+    3344:	02202021 	move	a0,s1
+    3348:	24050200 	li	a1,512
+    334c:	afa00014 	sw	zero,20(sp)
+    3350:	02c0f809 	jalr	s6
+    3354:	afa00018 	sw	zero,24(sp)
+    3358:	02202021 	move	a0,s1
+    335c:	24050500 	li	a1,1280
+    3360:	02c0f809 	jalr	s6
+    3364:	27a60018 	addiu	a2,sp,24
+    3368:	08000bb5 	j	2ed4 <HcdRequest+0x1f8>
+			3368: R_MIPS_26	.text
+    336c:	24020001 	li	v0,1
+
+00003370 <HcdCommonBufferCopy>:
+    3370:	93a20010 	lbu	v0,16(sp)
+    3374:	00a05821 	move	t3,a1
+    3378:	308800ff 	andi	t0,a0,0xff
+    337c:	00c02821 	move	a1,a2
+    3380:	1040000b 	beqz	v0,33b0 <HcdCommonBufferCopy+0x40>
+    3384:	00e03021 	move	a2,a3
+    3388:	1100000a 	beqz	t0,33b4 <HcdCommonBufferCopy+0x44>
+    338c:	3c190000 	lui	t9,0x0
+			338c: R_MIPS_HI16	memcpy
+    3390:	24020003 	li	v0,3
+    3394:	11020032 	beq	t0,v0,3460 <HcdCommonBufferCopy+0xf0>
+    3398:	31640003 	andi	a0,t3,0x3
+    339c:	24020001 	li	v0,1
+    33a0:	11020007 	beq	t0,v0,33c0 <HcdCommonBufferCopy+0x50>
+    33a4:	00000000 	nop
+    33a8:	03e00008 	jr	ra
+    33ac:	00000000 	nop
+    33b0:	3c190000 	lui	t9,0x0
+			33b0: R_MIPS_HI16	memcpy
+    33b4:	27390000 	addiu	t9,t9,0
+			33b4: R_MIPS_LO16	memcpy
+    33b8:	03200008 	jr	t9
+    33bc:	01602021 	move	a0,t3
+    33c0:	31620001 	andi	v0,t3,0x1
+    33c4:	24030002 	li	v1,2
+    33c8:	0002180a 	movz	v1,zero,v0
+    33cc:	30a40001 	andi	a0,a1,0x1
+    33d0:	00644825 	or	t1,v1,a0
+    33d4:	11200040 	beqz	t1,34d8 <HcdCommonBufferCopy+0x168>
+    33d8:	01604021 	move	t0,t3
+    33dc:	00063043 	sra	a2,a2,0x1
+    33e0:	18c0006e 	blez	a2,359c <HcdCommonBufferCopy+0x22c>
+    33e4:	00000000 	nop
+    33e8:	24070001 	li	a3,1
+    33ec:	00005021 	move	t2,zero
+    33f0:	11270009 	beq	t1,a3,3418 <HcdCommonBufferCopy+0xa8>
+    33f4:	240b0002 	li	t3,2
+    33f8:	112b0010 	beq	t1,t3,343c <HcdCommonBufferCopy+0xcc>
+    33fc:	00000000 	nop
+    3400:	254a0001 	addiu	t2,t2,1
+    3404:	24a50002 	addiu	a1,a1,2
+    3408:	1146ffe7 	beq	t2,a2,33a8 <HcdCommonBufferCopy+0x38>
+    340c:	25080002 	addiu	t0,t0,2
+    3410:	1527fff9 	bne	t1,a3,33f8 <HcdCommonBufferCopy+0x88>
+    3414:	00000000 	nop
+    3418:	90a20001 	lbu	v0,1(a1)
+    341c:	90a30000 	lbu	v1,0(a1)
+    3420:	00021200 	sll	v0,v0,0x8
+    3424:	00431025 	or	v0,v0,v1
+    3428:	00022202 	srl	a0,v0,0x8
+    342c:	00021200 	sll	v0,v0,0x8
+    3430:	00441025 	or	v0,v0,a0
+    3434:	08000d00 	j	3400 <HcdCommonBufferCopy+0x90>
+			3434: R_MIPS_26	.text
+    3438:	a5020000 	sh	v0,0(t0)
+    343c:	94a20000 	lhu	v0,0(a1)
+    3440:	00021a02 	srl	v1,v0,0x8
+    3444:	00021200 	sll	v0,v0,0x8
+    3448:	00431025 	or	v0,v0,v1
+    344c:	3042ffff 	andi	v0,v0,0xffff
+    3450:	00021a02 	srl	v1,v0,0x8
+    3454:	a1030001 	sb	v1,1(t0)
+    3458:	08000d00 	j	3400 <HcdCommonBufferCopy+0x90>
+			3458: R_MIPS_26	.text
+    345c:	a1020000 	sb	v0,0(t0)
+    3460:	24030002 	li	v1,2
+    3464:	30a20003 	andi	v0,a1,0x3
+    3468:	0004180a 	movz	v1,zero,a0
+    346c:	0002102b 	sltu	v0,zero,v0
+    3470:	00621825 	or	v1,v1,v0
+    3474:	00a05021 	move	t2,a1
+    3478:	14600026 	bnez	v1,3514 <HcdCommonBufferCopy+0x1a4>
+    347c:	01604821 	move	t1,t3
+    3480:	00073083 	sra	a2,a3,0x2
+    3484:	18c00045 	blez	a2,359c <HcdCommonBufferCopy+0x22c>
+    3488:	00000000 	nop
+    348c:	00004021 	move	t0,zero
+    3490:	3c0700ff 	lui	a3,0xff
+    3494:	8d420000 	lw	v0,0(t2)
+    3498:	25080001 	addiu	t0,t0,1
+    349c:	00021e00 	sll	v1,v0,0x18
+    34a0:	00022e02 	srl	a1,v0,0x18
+    34a4:	3044ff00 	andi	a0,v0,0xff00
+    34a8:	00651825 	or	v1,v1,a1
+    34ac:	00042200 	sll	a0,a0,0x8
+    34b0:	00471024 	and	v0,v0,a3
+    34b4:	00641825 	or	v1,v1,a0
+    34b8:	00021202 	srl	v0,v0,0x8
+    34bc:	00621825 	or	v1,v1,v0
+    34c0:	ad230000 	sw	v1,0(t1)
+    34c4:	254a0004 	addiu	t2,t2,4
+    34c8:	14c8fff2 	bne	a2,t0,3494 <HcdCommonBufferCopy+0x124>
+    34cc:	25290004 	addiu	t1,t1,4
+    34d0:	03e00008 	jr	ra
+    34d4:	00000000 	nop
+    34d8:	00063043 	sra	a2,a2,0x1
+    34dc:	18c0002f 	blez	a2,359c <HcdCommonBufferCopy+0x22c>
+    34e0:	00000000 	nop
+    34e4:	00002021 	move	a0,zero
+    34e8:	94a20000 	lhu	v0,0(a1)
+    34ec:	24840001 	addiu	a0,a0,1
+    34f0:	00021a02 	srl	v1,v0,0x8
+    34f4:	00021200 	sll	v0,v0,0x8
+    34f8:	00431025 	or	v0,v0,v1
+    34fc:	a5020000 	sh	v0,0(t0)
+    3500:	24a50002 	addiu	a1,a1,2
+    3504:	1486fff8 	bne	a0,a2,34e8 <HcdCommonBufferCopy+0x178>
+    3508:	25080002 	addiu	t0,t0,2
+    350c:	03e00008 	jr	ra
+    3510:	00000000 	nop
+    3514:	00071083 	sra	v0,a3,0x2
+    3518:	18400020 	blez	v0,359c <HcdCommonBufferCopy+0x22c>
+    351c:	00000000 	nop
+    3520:	24020001 	li	v0,1
+    3524:	10620010 	beq	v1,v0,3568 <HcdCommonBufferCopy+0x1f8>
+    3528:	24020002 	li	v0,2
+    352c:	1462ff9c 	bne	v1,v0,33a0 <HcdCommonBufferCopy+0x30>
+    3530:	24020001 	li	v0,1
+    3534:	8ca20000 	lw	v0,0(a1)
+    3538:	304500ff 	andi	a1,v0,0xff
+    353c:	00022202 	srl	a0,v0,0x8
+    3540:	3043ff00 	andi	v1,v0,0xff00
+    3544:	3084ff00 	andi	a0,a0,0xff00
+    3548:	00031a02 	srl	v1,v1,0x8
+    354c:	00052a00 	sll	a1,a1,0x8
+    3550:	00021602 	srl	v0,v0,0x18
+    3554:	00822025 	or	a0,a0,v0
+    3558:	00651825 	or	v1,v1,a1
+    355c:	a5630002 	sh	v1,2(t3)
+    3560:	03e00008 	jr	ra
+    3564:	a5640000 	sh	a0,0(t3)
+    3568:	94a20000 	lhu	v0,0(a1)
+    356c:	94a50002 	lhu	a1,2(a1)
+    3570:	3044ff00 	andi	a0,v0,0xff00
+    3574:	30a300ff 	andi	v1,a1,0xff
+    3578:	00042200 	sll	a0,a0,0x8
+    357c:	00021600 	sll	v0,v0,0x18
+    3580:	00441025 	or	v0,v0,a0
+    3584:	00031a00 	sll	v1,v1,0x8
+    3588:	00431025 	or	v0,v0,v1
+    358c:	00052a02 	srl	a1,a1,0x8
+    3590:	00451025 	or	v0,v0,a1
+    3594:	03e00008 	jr	ra
+    3598:	ad620000 	sw	v0,0(t3)
+    359c:	03e00008 	jr	ra
+    35a0:	00000000 	nop
+
+000035a4 <HcdInitialize>:
+    35a4:	27bdffc8 	addiu	sp,sp,-56
+    35a8:	afb00020 	sw	s0,32(sp)
+    35ac:	afbf0034 	sw	ra,52(sp)
+    35b0:	afb40030 	sw	s4,48(sp)
+    35b4:	afb3002c 	sw	s3,44(sp)
+    35b8:	afb20028 	sw	s2,40(sp)
+    35bc:	afb10024 	sw	s1,36(sp)
+    35c0:	908300f8 	lbu	v1,248(a0)
+    35c4:	00808021 	move	s0,a0
+    35c8:	30620003 	andi	v0,v1,0x3
+    35cc:	1440000c 	bnez	v0,3600 <HcdInitialize+0x5c>
+    35d0:	afa00010 	sw	zero,16(sp)
+    35d4:	2402ffdc 	li	v0,-36
+    35d8:	afa20010 	sw	v0,16(sp)
+    35dc:	8fa20010 	lw	v0,16(sp)
+    35e0:	8fbf0034 	lw	ra,52(sp)
+    35e4:	8fb40030 	lw	s4,48(sp)
+    35e8:	8fb3002c 	lw	s3,44(sp)
+    35ec:	8fb20028 	lw	s2,40(sp)
+    35f0:	8fb10024 	lw	s1,36(sp)
+    35f4:	8fb00020 	lw	s0,32(sp)
+    35f8:	03e00008 	jr	ra
+    35fc:	27bd0038 	addiu	sp,sp,56
+    3600:	30620008 	andi	v0,v1,0x8
+    3604:	24030001 	li	v1,1
+    3608:	a0800032 	sb	zero,50(a0)
+    360c:	1040009b 	beqz	v0,387c <HcdInitialize+0x2d8>
+    3610:	a0830033 	sb	v1,51(a0)
+    3614:	24020003 	li	v0,3
+    3618:	a0820018 	sb	v0,24(a0)
+    361c:	a0820017 	sb	v0,23(a0)
+    3620:	8e04003c 	lw	a0,60(s0)
+    3624:	3c02016e 	lui	v0,0x16e
+    3628:	344335ff 	ori	v1,v0,0x35ff
+    362c:	0064182b 	sltu	v1,v1,a0
+    3630:	34453601 	ori	a1,v0,0x3601
+    3634:	34423600 	ori	v0,v0,0x3600
+    3638:	0083100a 	movz	v0,a0,v1
+    363c:	0085202b 	sltu	a0,a0,a1
+    3640:	afa20014 	sw	v0,20(sp)
+    3644:	14800003 	bnez	a0,3654 <HcdInitialize+0xb0>
+    3648:	a6000014 	sh	zero,20(s0)
+    364c:	24020200 	li	v0,512
+    3650:	a6020014 	sh	v0,20(s0)
+    3654:	8fa60014 	lw	a2,20(sp)
+    3658:	3c050000 	lui	a1,0x0
+			3658: R_MIPS_HI16	.rodata
+    365c:	3c040000 	lui	a0,0x0
+			365c: R_MIPS_HI16	$LC17
+    3660:	3c020000 	lui	v0,0x0
+			3660: R_MIPS_HI16	printk
+    3664:	24a500d0 	addiu	a1,a1,208
+			3664: R_MIPS_LO16	.rodata
+    3668:	24840000 	addiu	a0,a0,0
+			3668: R_MIPS_LO16	$LC17
+    366c:	24420000 	addiu	v0,v0,0
+			366c: R_MIPS_LO16	printk
+    3670:	0040f809 	jalr	v0
+    3674:	3c140000 	lui	s4,0x0
+			3674: R_MIPS_HI16	HW_SetClock
+    3678:	02002021 	move	a0,s0
+    367c:	26820000 	addiu	v0,s4,0
+			367c: R_MIPS_LO16	HW_SetClock
+    3680:	0040f809 	jalr	v0
+    3684:	27a50014 	addiu	a1,sp,20
+    3688:	96030014 	lhu	v1,20(s0)
+    368c:	92040018 	lbu	a0,24(s0)
+    3690:	34630080 	ori	v1,v1,0x80
+    3694:	24020003 	li	v0,3
+    3698:	10820086 	beq	a0,v0,38b4 <HcdInitialize+0x310>
+    369c:	a6030014 	sh	v1,20(s0)
+    36a0:	24020001 	li	v0,1
+    36a4:	10820086 	beq	a0,v0,38c0 <HcdInitialize+0x31c>
+    36a8:	34620006 	ori	v0,v1,0x6
+    36ac:	8e030038 	lw	v1,56(s0)
+    36b0:	3c046666 	lui	a0,0x6666
+    36b4:	34846667 	ori	a0,a0,0x6667
+    36b8:	96020014 	lhu	v0,20(s0)
+    36bc:	00640018 	mult	v1,a0
+    36c0:	34420018 	ori	v0,v0,0x18
+    36c4:	00002010 	mfhi	a0
+    36c8:	a6020014 	sh	v0,20(s0)
+    36cc:	00031fc3 	sra	v1,v1,0x1f
+    36d0:	8f850000 	lw	a1,0(gp)
+    36d4:	00042083 	sra	a0,a0,0x2
+    36d8:	24020001 	li	v0,1
+    36dc:	00832023 	subu	a0,a0,v1
+    36e0:	aca20000 	sw	v0,0(a1)
+    36e4:	0044200a 	movz	a0,v0,a0
+    36e8:	3c020000 	lui	v0,0x0
+			36e8: R_MIPS_HI16	schedule_timeout
+    36ec:	24420000 	addiu	v0,v0,0
+			36ec: R_MIPS_LO16	schedule_timeout
+    36f0:	0040f809 	jalr	v0
+    36f4:	3c110000 	lui	s1,0x0
+			36f4: R_MIPS_HI16	.text
+    36f8:	02002021 	move	a0,s0
+    36fc:	24050400 	li	a1,1024
+    3700:	26221da4 	addiu	v0,s1,7588
+			3700: R_MIPS_LO16	.text
+    3704:	0040f809 	jalr	v0
+    3708:	34068000 	li	a2,0x8000
+    370c:	3c130000 	lui	s3,0x0
+			370c: R_MIPS_HI16	cpu_data
+    3710:	8e630000 	lw	v1,0(s3)
+			3710: R_MIPS_LO16	cpu_data
+    3714:	afa20010 	sw	v0,16(sp)
+    3718:	3c021999 	lui	v0,0x1999
+    371c:	34449aa8 	ori	a0,v0,0x9aa8
+    3720:	24050009 	li	a1,9
+    3724:	2406ffff 	li	a2,-1
+    3728:	00830019 	multu	a0,v1
+    372c:	00001010 	mfhi	v0
+    3730:	1440ffff 	bnez	v0,3730 <HcdInitialize+0x18c>
+    3734:	2442ffff 	addiu	v0,v0,-1
+    3738:	24a5ffff 	addiu	a1,a1,-1
+    373c:	14a6fffa 	bne	a1,a2,3728 <HcdInitialize+0x184>
+    3740:	26221da4 	addiu	v0,s1,7588
+			3740: R_MIPS_LO16	.text
+    3744:	96060014 	lhu	a2,20(s0)
+    3748:	02002021 	move	a0,s0
+    374c:	0040f809 	jalr	v0
+    3750:	24050400 	li	a1,1024
+    3754:	0440ffa1 	bltz	v0,35dc <HcdInitialize+0x38>
+    3758:	afa20010 	sw	v0,16(sp)
+    375c:	27b10010 	addiu	s1,sp,16
+    3760:	3c120000 	lui	s2,0x0
+			3760: R_MIPS_HI16	.text
+    3764:	02203021 	move	a2,s1
+    3768:	24050400 	li	a1,1024
+    376c:	26421d24 	addiu	v0,s2,7460
+			376c: R_MIPS_LO16	.text
+    3770:	0040f809 	jalr	v0
+    3774:	02002021 	move	a0,s0
+    3778:	02002021 	move	a0,s0
+    377c:	26820000 	addiu	v0,s4,0
+			377c: R_MIPS_LO16	HW_SetClock
+    3780:	0040f809 	jalr	v0
+    3784:	2605003c 	addiu	a1,s0,60
+    3788:	3c021999 	lui	v0,0x1999
+    378c:	8e630000 	lw	v1,0(s3)
+			378c: R_MIPS_LO16	cpu_data
+    3790:	34449aa8 	ori	a0,v0,0x9aa8
+    3794:	24050009 	li	a1,9
+    3798:	2406ffff 	li	a2,-1
+    379c:	00830019 	multu	a0,v1
+    37a0:	00001010 	mfhi	v0
+    37a4:	00000000 	nop
+    37a8:	1440ffff 	bnez	v0,37a8 <HcdInitialize+0x204>
+    37ac:	2442ffff 	addiu	v0,v0,-1
+    37b0:	24a5ffff 	addiu	a1,a1,-1
+    37b4:	14a6fff9 	bne	a1,a2,379c <HcdInitialize+0x1f8>
+    37b8:	00000000 	nop
+    37bc:	02203021 	move	a2,s1
+    37c0:	24050400 	li	a1,1024
+    37c4:	26511d24 	addiu	s1,s2,7460
+			37c4: R_MIPS_LO16	.text
+    37c8:	0220f809 	jalr	s1
+    37cc:	02002021 	move	a0,s0
+    37d0:	02002021 	move	a0,s0
+    37d4:	24050200 	li	a1,512
+    37d8:	0220f809 	jalr	s1
+    37dc:	2606001c 	addiu	a2,s0,28
+    37e0:	0440ff7e 	bltz	v0,35dc <HcdInitialize+0x38>
+    37e4:	afa20010 	sw	v0,16(sp)
+    37e8:	8e02001c 	lw	v0,28(s0)
+    37ec:	02002021 	move	a0,s0
+    37f0:	ae020020 	sw	v0,32(s0)
+    37f4:	24050400 	li	a1,1024
+    37f8:	27a60018 	addiu	a2,sp,24
+    37fc:	0220f809 	jalr	s1
+    3800:	afa00018 	sw	zero,24(sp)
+    3804:	0440ff75 	bltz	v0,35dc <HcdInitialize+0x38>
+    3808:	afa20010 	sw	v0,16(sp)
+    380c:	8fa30018 	lw	v1,24(sp)
+    3810:	3402ffff 	li	v0,0xffff
+    3814:	1062001c 	beq	v1,v0,3888 <HcdInitialize+0x2e4>
+    3818:	3c020000 	lui	v0,0x0
+			3818: R_MIPS_HI16	.text
+    381c:	24421eb0 	addiu	v0,v0,7856
+			381c: R_MIPS_LO16	.text
+    3820:	0040f809 	jalr	v0
+    3824:	02002021 	move	a0,s0
+    3828:	0440ff6c 	bltz	v0,35dc <HcdInitialize+0x38>
+    382c:	afa20010 	sw	v0,16(sp)
+    3830:	3c020000 	lui	v0,0x0
+			3830: R_MIPS_HI16	.text
+    3834:	02002021 	move	a0,s0
+    3838:	24421f3c 	addiu	v0,v0,7996
+			3838: R_MIPS_LO16	.text
+    383c:	0040f809 	jalr	v0
+    3840:	2405000e 	li	a1,14
+    3844:	3c020000 	lui	v0,0x0
+			3844: R_MIPS_HI16	.text
+    3848:	02002021 	move	a0,s0
+    384c:	244224d4 	addiu	v0,v0,9428
+			384c: R_MIPS_LO16	.text
+    3850:	0040f809 	jalr	v0
+    3854:	24050001 	li	a1,1
+    3858:	8fa20010 	lw	v0,16(sp)
+    385c:	8fbf0034 	lw	ra,52(sp)
+    3860:	8fb40030 	lw	s4,48(sp)
+    3864:	8fb3002c 	lw	s3,44(sp)
+    3868:	8fb20028 	lw	s2,40(sp)
+    386c:	8fb10024 	lw	s1,36(sp)
+    3870:	8fb00020 	lw	s0,32(sp)
+    3874:	03e00008 	jr	ra
+    3878:	27bd0038 	addiu	sp,sp,56
+    387c:	a0830018 	sb	v1,24(a0)
+    3880:	08000d88 	j	3620 <HcdInitialize+0x7c>
+			3880: R_MIPS_26	.text
+    3884:	a0830017 	sb	v1,23(a0)
+    3888:	2402fffb 	li	v0,-5
+    388c:	afa20010 	sw	v0,16(sp)
+    3890:	8fa20010 	lw	v0,16(sp)
+    3894:	8fbf0034 	lw	ra,52(sp)
+    3898:	8fb40030 	lw	s4,48(sp)
+    389c:	8fb3002c 	lw	s3,44(sp)
+    38a0:	8fb20028 	lw	s2,40(sp)
+    38a4:	8fb10024 	lw	s1,36(sp)
+    38a8:	8fb00020 	lw	s0,32(sp)
+    38ac:	03e00008 	jr	ra
+    38b0:	27bd0038 	addiu	sp,sp,56
+    38b4:	34620004 	ori	v0,v1,0x4
+    38b8:	08000dab 	j	36ac <HcdInitialize+0x108>
+			38b8: R_MIPS_26	.text
+    38bc:	a6020014 	sh	v0,20(s0)
+    38c0:	08000dab 	j	36ac <HcdInitialize+0x108>
+			38c0: R_MIPS_26	.text
+    38c4:	a6020014 	sh	v0,20(s0)
 	...
 Disassembly of section .exit.text:
 
@@ -4078,439 +4524,6 @@ Disassembly of section .init.text:
  188:	08000039 	j	e4 <init_module+0xe4>
 			188: R_MIPS_26	.init.text
  18c:	2402fffc 	li	v0,-4
-Disassembly of section xxx:
-
-00000000 <HcdSpiInterrupt>:
-   0:	27bdffd0 	addiu	sp,sp,-48
-   4:	3c020000 	lui	v0,0x0
-			4: R_MIPS_HI16	local_bh_disable
-   8:	afb1001c 	sw	s1,28(sp)
-   c:	afbf002c 	sw	ra,44(sp)
-  10:	afb40028 	sw	s4,40(sp)
-  14:	afb30024 	sw	s3,36(sp)
-  18:	afb20020 	sw	s2,32(sp)
-  1c:	afb00018 	sw	s0,24(sp)
-  20:	24420000 	addiu	v0,v0,0
-			20: R_MIPS_LO16	local_bh_disable
-  24:	0040f809 	jalr	v0
-  28:	00808821 	move	s1,a0
-  2c:	8f820014 	lw	v0,20(gp)
-  30:	24420001 	addiu	v0,v0,1
-  34:	af820014 	sw	v0,20(gp)
-  38:	40036000 	mfc0	v1,c0_status
-  3c:	30630001 	andi	v1,v1,0x1
-  40:	1060006f 	beqz	v1,200 <HcdSpiInterrupt+0x200>
-  44:	3c040000 	lui	a0,0x0
-			44: R_MIPS_HI16	$LC11
-  48:	9222001a 	lbu	v0,26(s1)
-  4c:	10400010 	beqz	v0,90 <HcdSpiInterrupt+0x90>
-  50:	3c140000 	lui	s4,0x0
-			50: R_MIPS_HI16	.text
-  54:	8f830014 	lw	v1,20(gp)
-  58:	3c040000 	lui	a0,0x0
-			58: R_MIPS_HI16	local_bh_enable
-  5c:	2463ffff 	addiu	v1,v1,-1
-  60:	24840000 	addiu	a0,a0,0
-			60: R_MIPS_LO16	local_bh_enable
-  64:	0080f809 	jalr	a0
-  68:	af830014 	sw	v1,20(gp)
-  6c:	8fbf002c 	lw	ra,44(sp)
-  70:	8fb40028 	lw	s4,40(sp)
-  74:	8fb30024 	lw	s3,36(sp)
-  78:	8fb20020 	lw	s2,32(sp)
-  7c:	8fb1001c 	lw	s1,28(sp)
-  80:	8fb00018 	lw	s0,24(sp)
-  84:	24020001 	li	v0,1
-  88:	03e00008 	jr	ra
-  8c:	27bd0030 	addiu	sp,sp,48
-  90:	02202021 	move	a0,s1
-  94:	24050c00 	li	a1,3072
-  98:	26821d24 	addiu	v0,s4,7460
-			98: R_MIPS_LO16	.text
-  9c:	0040f809 	jalr	v0
-  a0:	27a60010 	addiu	a2,sp,16
-  a4:	0440008a 	bltz	v0,2d0 <HcdSpiInterrupt+0x2d0>
-  a8:	00409021 	move	s2,v0
-  ac:	8fa70010 	lw	a3,16(sp)
-  b0:	96220012 	lhu	v0,18(s1)
-  b4:	00473824 	and	a3,v0,a3
-  b8:	30e6070e 	andi	a2,a3,0x70e
-  bc:	14c0008f 	bnez	a2,2fc <HcdSpiInterrupt+0x2fc>
-  c0:	afa70010 	sw	a3,16(sp)
-  c4:	30e2000e 	andi	v0,a3,0xe
-  c8:	1040005b 	beqz	v0,238 <HcdSpiInterrupt+0x238>
-  cc:	30e20300 	andi	v0,a3,0x300
-  d0:	3c130000 	lui	s3,0x0
-			d0: R_MIPS_HI16	debuglevel
-  d4:	8e620000 	lw	v0,0(s3)
-			d4: R_MIPS_LO16	debuglevel
-  d8:	28420003 	slti	v0,v0,3
-  dc:	104000ac 	beqz	v0,390 <HcdSpiInterrupt+0x390>
-  e0:	8e300088 	lw	s0,136(s1)
-  e4:	30e20008 	andi	v0,a3,0x8
-  e8:	10400006 	beqz	v0,104 <HcdSpiInterrupt+0x104>
-  ec:	30e20004 	andi	v0,a3,0x4
-  f0:	8e620000 	lw	v0,0(s3)
-			f0: R_MIPS_LO16	debuglevel
-  f4:	28420003 	slti	v0,v0,3
-  f8:	104000f1 	beqz	v0,4c0 <HcdSpiInterrupt+0x4c0>
-  fc:	3c040000 	lui	a0,0x0
-			fc: R_MIPS_HI16	$LC13
- 100:	30e20004 	andi	v0,a3,0x4
- 104:	10400006 	beqz	v0,120 <HcdSpiInterrupt+0x120>
- 108:	30e20002 	andi	v0,a3,0x2
- 10c:	8e620000 	lw	v0,0(s3)
-			10c: R_MIPS_LO16	debuglevel
- 110:	28420003 	slti	v0,v0,3
- 114:	104000e4 	beqz	v0,4a8 <HcdSpiInterrupt+0x4a8>
- 118:	3c040000 	lui	a0,0x0
-			118: R_MIPS_HI16	$LC14
- 11c:	30e20002 	andi	v0,a3,0x2
- 120:	10400004 	beqz	v0,134 <HcdSpiInterrupt+0x134>
- 124:	8e620000 	lw	v0,0(s3)
-			124: R_MIPS_LO16	debuglevel
- 128:	28420003 	slti	v0,v0,3
- 12c:	104000a0 	beqz	v0,3b0 <HcdSpiInterrupt+0x3b0>
- 130:	3c040000 	lui	a0,0x0
-			130: R_MIPS_HI16	$LC15
- 134:	1200006f 	beqz	s0,2f4 <HcdSpiInterrupt+0x2f4>
- 138:	3c020000 	lui	v0,0x0
-			138: R_MIPS_HI16	.text
- 13c:	24421b40 	addiu	v0,v0,6976
-			13c: R_MIPS_LO16	.text
- 140:	0040f809 	jalr	v0
- 144:	02002021 	move	a0,s0
- 148:	9223001a 	lbu	v1,26(s1)
- 14c:	14600004 	bnez	v1,160 <HcdSpiInterrupt+0x160>
- 150:	00009821 	move	s3,zero
- 154:	2402fffb 	li	v0,-5
- 158:	24130001 	li	s3,1
- 15c:	ae020040 	sw	v0,64(s0)
- 160:	8fa60010 	lw	a2,16(sp)
- 164:	3c100000 	lui	s0,0x0
-			164: R_MIPS_HI16	.text
- 168:	26101da4 	addiu	s0,s0,7588
-			168: R_MIPS_LO16	.text
- 16c:	30c6000e 	andi	a2,a2,0xe
- 170:	02202021 	move	a0,s1
- 174:	0200f809 	jalr	s0
- 178:	24050c00 	li	a1,3072
- 17c:	8fa40010 	lw	a0,16(sp)
- 180:	2402fff1 	li	v0,-15
- 184:	00823824 	and	a3,a0,v0
- 188:	24030001 	li	v1,1
- 18c:	a22300fa 	sb	v1,250(s1)
- 190:	02202021 	move	a0,s1
- 194:	24050d00 	li	a1,3328
- 198:	00003021 	move	a2,zero
- 19c:	0200f809 	jalr	s0
- 1a0:	afa70010 	sw	a3,16(sp)
- 1a4:	8f820014 	lw	v0,20(gp)
- 1a8:	3c030000 	lui	v1,0x0
-			1a8: R_MIPS_HI16	local_bh_enable
- 1ac:	2442ffff 	addiu	v0,v0,-1
- 1b0:	24630000 	addiu	v1,v1,0
-			1b0: R_MIPS_LO16	local_bh_enable
- 1b4:	0060f809 	jalr	v1
- 1b8:	af820014 	sw	v0,20(gp)
- 1bc:	9222001a 	lbu	v0,26(s1)
- 1c0:	1040002f 	beqz	v0,280 <HcdSpiInterrupt+0x280>
- 1c4:	00008021 	move	s0,zero
- 1c8:	16600034 	bnez	s3,29c <HcdSpiInterrupt+0x29c>
- 1cc:	3c020000 	lui	v0,0x0
-			1cc: R_MIPS_HI16	SDIO_HandleHcdEvent
- 1d0:	16000038 	bnez	s0,2b4 <HcdSpiInterrupt+0x2b4>
- 1d4:	3c020000 	lui	v0,0x0
-			1d4: R_MIPS_HI16	SDIO_HandleHcdEvent
- 1d8:	001217c2 	srl	v0,s2,0x1f
- 1dc:	38420001 	xori	v0,v0,0x1
- 1e0:	8fbf002c 	lw	ra,44(sp)
- 1e4:	8fb40028 	lw	s4,40(sp)
- 1e8:	8fb30024 	lw	s3,36(sp)
- 1ec:	8fb20020 	lw	s2,32(sp)
- 1f0:	8fb1001c 	lw	s1,28(sp)
- 1f4:	8fb00018 	lw	s0,24(sp)
- 1f8:	03e00008 	jr	ra
- 1fc:	27bd0030 	addiu	sp,sp,48
- 200:	3c020000 	lui	v0,0x0
-			200: R_MIPS_HI16	printk
- 204:	24420000 	addiu	v0,v0,0
-			204: R_MIPS_LO16	printk
- 208:	0040f809 	jalr	v0
- 20c:	24840000 	addiu	a0,a0,0
-			20c: R_MIPS_LO16	$LC11
- 210:	40016000 	mfc0	at,c0_status
- 214:	3421001f 	ori	at,at,0x1f
- 218:	3821001e 	xori	at,at,0x1e
- 21c:	40816000 	mtc0	at,c0_status
- 220:	00000040 	ssnop
- 224:	00000040 	ssnop
- 228:	00000040 	ssnop
- 22c:	000000c0 	sll	zero,zero,0x3
- 230:	08000013 	j	4c <HcdSpiInterrupt+0x4c>
-			230: R_MIPS_26	xxx
- 234:	9222001a 	lbu	v0,26(s1)
- 238:	14400039 	bnez	v0,320 <HcdSpiInterrupt+0x320>
- 23c:	00009821 	move	s3,zero
- 240:	30e20400 	andi	v0,a3,0x400
- 244:	14400046 	bnez	v0,360 <HcdSpiInterrupt+0x360>
- 248:	2402fbff 	li	v0,-1025
- 24c:	30e20081 	andi	v0,a3,0x81
- 250:	14400022 	bnez	v0,2dc <HcdSpiInterrupt+0x2dc>
- 254:	3c020000 	lui	v0,0x0
-			254: R_MIPS_HI16	.text
- 258:	00008021 	move	s0,zero
- 25c:	8f820014 	lw	v0,20(gp)
- 260:	3c030000 	lui	v1,0x0
-			260: R_MIPS_HI16	local_bh_enable
- 264:	2442ffff 	addiu	v0,v0,-1
- 268:	24630000 	addiu	v1,v1,0
-			268: R_MIPS_LO16	local_bh_enable
- 26c:	0060f809 	jalr	v1
- 270:	af820014 	sw	v0,20(gp)
- 274:	9222001a 	lbu	v0,26(s1)
- 278:	1440ffd3 	bnez	v0,1c8 <HcdSpiInterrupt+0x1c8>
- 27c:	00000000 	nop
- 280:	3c020000 	lui	v0,0x0
-			280: R_MIPS_HI16	.text
- 284:	02202021 	move	a0,s1
- 288:	244224d4 	addiu	v0,v0,9428
-			288: R_MIPS_LO16	.text
- 28c:	0040f809 	jalr	v0
- 290:	24050001 	li	a1,1
- 294:	1260ffce 	beqz	s3,1d0 <HcdSpiInterrupt+0x1d0>
- 298:	3c020000 	lui	v0,0x0
-			298: R_MIPS_HI16	SDIO_HandleHcdEvent
- 29c:	26240044 	addiu	a0,s1,68
- 2a0:	24420000 	addiu	v0,v0,0
-			2a0: R_MIPS_LO16	SDIO_HandleHcdEvent
- 2a4:	0040f809 	jalr	v0
- 2a8:	24050004 	li	a1,4
- 2ac:	1200ffca 	beqz	s0,1d8 <HcdSpiInterrupt+0x1d8>
- 2b0:	3c020000 	lui	v0,0x0
-			2b0: R_MIPS_HI16	SDIO_HandleHcdEvent
- 2b4:	26240044 	addiu	a0,s1,68
- 2b8:	24420000 	addiu	v0,v0,0
-			2b8: R_MIPS_LO16	SDIO_HandleHcdEvent
- 2bc:	0040f809 	jalr	v0
- 2c0:	24050003 	li	a1,3
- 2c4:	001217c2 	srl	v0,s2,0x1f
- 2c8:	08000078 	j	1e0 <HcdSpiInterrupt+0x1e0>
-			2c8: R_MIPS_26	xxx
- 2cc:	38420001 	xori	v0,v0,0x1
- 2d0:	00008021 	move	s0,zero
- 2d4:	08000097 	j	25c <HcdSpiInterrupt+0x25c>
-			2d4: R_MIPS_26	xxx
- 2d8:	00009821 	move	s3,zero
- 2dc:	02202021 	move	a0,s1
- 2e0:	24421f14 	addiu	v0,v0,7956
-			2e0: R_MIPS_LO16	.text
- 2e4:	0040f809 	jalr	v0
- 2e8:	24050081 	li	a1,129
- 2ec:	08000097 	j	25c <HcdSpiInterrupt+0x25c>
-			2ec: R_MIPS_26	xxx
- 2f0:	24100001 	li	s0,1
- 2f4:	08000058 	j	160 <HcdSpiInterrupt+0x160>
-			2f4: R_MIPS_26	xxx
- 2f8:	00009821 	move	s3,zero
- 2fc:	3c020000 	lui	v0,0x0
-			2fc: R_MIPS_HI16	.text
- 300:	02202021 	move	a0,s1
- 304:	24421da4 	addiu	v0,v0,7588
-			304: R_MIPS_LO16	.text
- 308:	0040f809 	jalr	v0
- 30c:	24050c00 	li	a1,3072
- 310:	0440ffef 	bltz	v0,2d0 <HcdSpiInterrupt+0x2d0>
- 314:	00409021 	move	s2,v0
- 318:	08000031 	j	c4 <HcdSpiInterrupt+0xc4>
-			318: R_MIPS_26	xxx
- 31c:	8fa70010 	lw	a3,16(sp)
- 320:	8e300088 	lw	s0,136(s1)
- 324:	12000005 	beqz	s0,33c <HcdSpiInterrupt+0x33c>
- 328:	2402fcff 	li	v0,-769
- 32c:	92220016 	lbu	v0,22(s1)
- 330:	14400025 	bnez	v0,3c8 <HcdSpiInterrupt+0x3c8>
- 334:	3c020000 	lui	v0,0x0
-			334: R_MIPS_HI16	HW_StopTimer
- 338:	2402fcff 	li	v0,-769
- 33c:	00e23824 	and	a3,a3,v0
- 340:	3c020000 	lui	v0,0x0
-			340: R_MIPS_HI16	.text
- 344:	afa70010 	sw	a3,16(sp)
- 348:	02202021 	move	a0,s1
- 34c:	24421f14 	addiu	v0,v0,7956
-			34c: R_MIPS_LO16	.text
- 350:	0040f809 	jalr	v0
- 354:	24050300 	li	a1,768
- 358:	08000090 	j	240 <HcdSpiInterrupt+0x240>
-			358: R_MIPS_26	xxx
- 35c:	8fa70010 	lw	a3,16(sp)
- 360:	00e23824 	and	a3,a3,v0
- 364:	3c020000 	lui	v0,0x0
-			364: R_MIPS_HI16	.text
- 368:	02202021 	move	a0,s1
- 36c:	24050400 	li	a1,1024
- 370:	24421f14 	addiu	v0,v0,7956
-			370: R_MIPS_LO16	.text
- 374:	0040f809 	jalr	v0
- 378:	afa70010 	sw	a3,16(sp)
- 37c:	92230019 	lbu	v1,25(s1)
- 380:	1460001d 	bnez	v1,3f8 <HcdSpiInterrupt+0x3f8>
- 384:	02202021 	move	a0,s1
- 388:	08000093 	j	24c <HcdSpiInterrupt+0x24c>
-			388: R_MIPS_26	xxx
- 38c:	8fa70010 	lw	a3,16(sp)
- 390:	3c040000 	lui	a0,0x0
-			390: R_MIPS_HI16	$LC12
- 394:	3c020000 	lui	v0,0x0
-			394: R_MIPS_HI16	printk
- 398:	00e02821 	move	a1,a3
- 39c:	24420000 	addiu	v0,v0,0
-			39c: R_MIPS_LO16	printk
- 3a0:	0040f809 	jalr	v0
- 3a4:	24840000 	addiu	a0,a0,0
-			3a4: R_MIPS_LO16	$LC12
- 3a8:	08000039 	j	e4 <HcdSpiInterrupt+0xe4>
-			3a8: R_MIPS_26	xxx
- 3ac:	8fa70010 	lw	a3,16(sp)
- 3b0:	3c020000 	lui	v0,0x0
-			3b0: R_MIPS_HI16	printk
- 3b4:	24420000 	addiu	v0,v0,0
-			3b4: R_MIPS_LO16	printk
- 3b8:	0040f809 	jalr	v0
- 3bc:	24840000 	addiu	a0,a0,0
-			3bc: R_MIPS_LO16	$LC15
- 3c0:	0800004d 	j	134 <HcdSpiInterrupt+0x134>
-			3c0: R_MIPS_26	xxx
- 3c4:	00000000 	nop
- 3c8:	24420000 	addiu	v0,v0,0
-			3c8: R_MIPS_LO16	HW_StopTimer
- 3cc:	0040f809 	jalr	v0
- 3d0:	02202021 	move	a0,s1
- 3d4:	a2200016 	sb	zero,22(s1)
- 3d8:	96020010 	lhu	v0,16(s0)
- 3dc:	30420080 	andi	v0,v0,0x80
- 3e0:	1440003d 	bnez	v0,4d8 <HcdSpiInterrupt+0x4d8>
- 3e4:	00009021 	move	s2,zero
- 3e8:	ae120040 	sw	s2,64(s0)
- 3ec:	8fa70010 	lw	a3,16(sp)
- 3f0:	080000ce 	j	338 <HcdSpiInterrupt+0x338>
-			3f0: R_MIPS_26	xxx
- 3f4:	24130001 	li	s3,1
- 3f8:	24050200 	li	a1,512
- 3fc:	2626001c 	addiu	a2,s1,28
- 400:	26821d24 	addiu	v0,s4,7460
-			400: R_MIPS_LO16	.text
- 404:	0040f809 	jalr	v0
- 408:	8e300088 	lw	s0,136(s1)
- 40c:	0440ff92 	bltz	v0,258 <HcdSpiInterrupt+0x258>
- 410:	00409021 	move	s2,v0
- 414:	1200ff8d 	beqz	s0,24c <HcdSpiInterrupt+0x24c>
- 418:	8fa70010 	lw	a3,16(sp)
- 41c:	922200f9 	lbu	v0,249(s1)
- 420:	30420004 	andi	v0,v0,0x4
- 424:	1040003c 	beqz	v0,518 <HcdSpiInterrupt+0x518>
- 428:	00000000 	nop
- 42c:	8e22001c 	lw	v0,28(s1)
- 430:	8e230020 	lw	v1,32(s1)
- 434:	0043102b 	sltu	v0,v0,v1
- 438:	1440003d 	bnez	v0,530 <HcdSpiInterrupt+0x530>
- 43c:	24051300 	li	a1,4864
- 440:	ae200024 	sw	zero,36(s1)
- 444:	3c020000 	lui	v0,0x0
-			444: R_MIPS_HI16	.text
- 448:	a2200019 	sb	zero,25(s1)
- 44c:	24421eb0 	addiu	v0,v0,7856
-			44c: R_MIPS_LO16	.text
- 450:	0040f809 	jalr	v0
- 454:	02202021 	move	a0,s1
- 458:	0440ff7f 	bltz	v0,258 <HcdSpiInterrupt+0x258>
- 45c:	00409021 	move	s2,v0
- 460:	8e22001c 	lw	v0,28(s1)
- 464:	8e030030 	lw	v1,48(s0)
- 468:	02202021 	move	a0,s1
- 46c:	00431023 	subu	v0,v0,v1
- 470:	2442fffb 	addiu	v0,v0,-5
- 474:	ae22001c 	sw	v0,28(s1)
- 478:	3c020000 	lui	v0,0x0
-			478: R_MIPS_HI16	.text
- 47c:	2442256c 	addiu	v0,v0,9580
-			47c: R_MIPS_LO16	.text
- 480:	0040f809 	jalr	v0
- 484:	02002821 	move	a1,s0
- 488:	00409021 	move	s2,v0
- 48c:	24020003 	li	v0,3
- 490:	1242ff71 	beq	s2,v0,258 <HcdSpiInterrupt+0x258>
- 494:	00000000 	nop
- 498:	ae120040 	sw	s2,64(s0)
- 49c:	8fa70010 	lw	a3,16(sp)
- 4a0:	08000093 	j	24c <HcdSpiInterrupt+0x24c>
-			4a0: R_MIPS_26	xxx
- 4a4:	24130001 	li	s3,1
- 4a8:	3c020000 	lui	v0,0x0
-			4a8: R_MIPS_HI16	printk
- 4ac:	24420000 	addiu	v0,v0,0
-			4ac: R_MIPS_LO16	printk
- 4b0:	0040f809 	jalr	v0
- 4b4:	24840000 	addiu	a0,a0,0
-			4b4: R_MIPS_LO16	$LC14
- 4b8:	08000047 	j	11c <HcdSpiInterrupt+0x11c>
-			4b8: R_MIPS_26	xxx
- 4bc:	8fa70010 	lw	a3,16(sp)
- 4c0:	3c020000 	lui	v0,0x0
-			4c0: R_MIPS_HI16	printk
- 4c4:	24420000 	addiu	v0,v0,0
-			4c4: R_MIPS_LO16	printk
- 4c8:	0040f809 	jalr	v0
- 4cc:	24840000 	addiu	a0,a0,0
-			4cc: R_MIPS_LO16	$LC13
- 4d0:	08000040 	j	100 <HcdSpiInterrupt+0x100>
-			4d0: R_MIPS_26	xxx
- 4d4:	8fa70010 	lw	a3,16(sp)
- 4d8:	3c020000 	lui	v0,0x0
-			4d8: R_MIPS_HI16	HW_InOut_Token
- 4dc:	02202021 	move	a0,s1
- 4e0:	3405c800 	li	a1,0xc800
- 4e4:	24060001 	li	a2,1
- 4e8:	24420000 	addiu	v0,v0,0
-			4e8: R_MIPS_LO16	HW_InOut_Token
- 4ec:	0040f809 	jalr	v0
- 4f0:	00003821 	move	a3,zero
- 4f4:	0440ffbc 	bltz	v0,3e8 <HcdSpiInterrupt+0x3e8>
- 4f8:	00409021 	move	s2,v0
- 4fc:	3c020000 	lui	v0,0x0
-			4fc: R_MIPS_HI16	.text
- 500:	02202021 	move	a0,s1
- 504:	24422264 	addiu	v0,v0,8804
-			504: R_MIPS_LO16	.text
- 508:	0040f809 	jalr	v0
- 50c:	02002821 	move	a1,s0
- 510:	080000fa 	j	3e8 <HcdSpiInterrupt+0x3e8>
-			510: R_MIPS_26	xxx
- 514:	00409021 	move	s2,v0
- 518:	8e22001c 	lw	v0,28(s1)
- 51c:	8e030030 	lw	v1,48(s0)
- 520:	0043102b 	sltu	v0,v0,v1
- 524:	1040ffc8 	beqz	v0,448 <HcdSpiInterrupt+0x448>
- 528:	3c020000 	lui	v0,0x0
-			528: R_MIPS_HI16	.text
- 52c:	24051300 	li	a1,4864
- 530:	27a60014 	addiu	a2,sp,20
- 534:	02202021 	move	a0,s1
- 538:	26821d24 	addiu	v0,s4,7460
-			538: R_MIPS_LO16	.text
- 53c:	0040f809 	jalr	v0
- 540:	afa00014 	sw	zero,20(sp)
- 544:	3c020000 	lui	v0,0x0
-			544: R_MIPS_HI16	.text
- 548:	02202021 	move	a0,s1
- 54c:	24421f3c 	addiu	v0,v0,7996
-			54c: R_MIPS_LO16	.text
- 550:	0040f809 	jalr	v0
- 554:	24050400 	li	a1,1024
- 558:	08000093 	j	24c <HcdSpiInterrupt+0x24c>
-			558: R_MIPS_26	xxx
- 55c:	8fa70010 	lw	a3,16(sp)
 Disassembly of section xxz:
 
 00000000 <HcdDmaCompletion>:
