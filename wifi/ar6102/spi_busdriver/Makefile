@@ -3,7 +3,7 @@
 ifneq (${KERNELRELEASE},)
 obj-m := sdio_busdriver.o
 sdio_busdriver-objs := sdio_bus.o sdio_function.o sdio_bus_misc.o sdio_bus_events.o sdio_bus_linux.o
-MY_CFLAGS += -g
+#MY_CFLAGS += -g
 ccflags-y += ${MY_CFLAGS}
 CC += ${MY_CFLAGS}
 # Otherwise we were called directly from the command line.

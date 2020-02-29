@@ -173,7 +173,9 @@ static int QueueWork(struct spi_dev *dev, struct work_struct *w);
 #endif
 
 SDIO_STATUS SDIO_RegisterHostController(PSDHCD pHcd);
-//static const char *bub="sdiobd_spi_raw";
+SDIO_STATUS HcdRequest(PSDHCD pHcd);
+SDIO_STATUS HcdConfig(PSDHCD pHcd, PSDCONFIG pConfig);
+
 
 #define __gpio_as_spi()                 \
 do {                                            \
@@ -182,7 +184,7 @@ do {                                            \
 	REG_GPIO_PXTRGC(1) = 0x80000000;        \
 	REG_GPIO_PXPES(1)  = 0x80000000;        \
         REG_GPIO_PXFUNS(5) = 0x00001c00;        \
-        REG_GPIO_PXTRGC(5) = 0x00001c00;        \
+        REG_GPIO_PXTRG(5)  = 0x00001c00;        \
         REG_GPIO_PXSELC(5) = 0x00001c00;        \
         REG_GPIO_PXPEC(5)  = 0x00001000;        \
         REG_GPIO_PXPES(5)  = 0x00000c00;        \
@@ -198,7 +200,7 @@ MODULE_PARM_DESC(debuglevel, "debuglevel 0-7, controls debug prints");
 
 static INT op_clock = 0x01f78a40;
 module_param(op_clock, int, 0444);
-MODULE_PARM_DESC(op_clock, "Operational Clock Hz");
+MODULE_PARM_DESC(op_clock, "Operational Clock in Hz");
 
 static INT dma_mode = 1;
 module_param(dma_mode, int, 0644);
@@ -269,7 +271,7 @@ static SDHCD_DEVICE ar6k_spi = {
   .CurrentTransferDirRx=0,	// ub48
   .CurrentDmaWidth=0,		// ub49
   .MaxBytesPerDMARequest=0x1000, // ul52
-//  .PowerUpDelay = 0,			//56
+  .PowerUpDelay = 1,			//56
   .OperationalClock = 0x1f78a40,             // 60,    33MHz
   .pHWDevice = &dev_spi,                     // 64
   .Hcd.Version = 0x27,                      // 68
@@ -280,6 +282,8 @@ static SDHCD_DEVICE ar6k_spi = {
   .Hcd.MaxBlocksPerTrans=0x1,               // 90
   .Hcd.MaxClockRate=0x02dc6c00,             // 96,    48MHz
   .Hcd.pContext = &ar6k_spi,                // 100
+  .Hcd.pRequest = HcdRequest,
+  .Hcd.pConfigure=HcdConfig,
   .SpiHWCapabilitiesFlags = HW_SPI_FRAME_WIDTH_16,
 };
 
@@ -377,7 +381,7 @@ SDIO_STATUS HW_SpiSetUpDMA(PSDHCD_DEVICE h_ctx) {
 
 	if (((unsigned int)bufp)&1) {
 //1adc
-		printk("AR6k buffer address misaligned");
+		printk("AR6k buffer address misaligned\n");
 		return SDIO_STATUS_INVALID_PARAMETER;
 	}
 //185c
@@ -702,7 +706,7 @@ SDIO_STATUS HW_InOut_Token(PSDHCD_DEVICE hcd_ctx,
 	}
 
 	if (debuglevel>=8) {
-		printk("Colman: %s: OutToken=%X InToken=%X", __FUNCTION__, out_token, itok);
+		printk("Colman: %s: OutToken=%X InToken=%X\n", __FUNCTION__, out_token, itok);
 	}
 
 	return SDIO_STATUS_SUCCESS;
@@ -996,7 +1000,7 @@ int init_hardware(struct spi_dev *spi_dev) {
 	int rc;
 
 	ar6k_spi.OperationalClock=op_clock;
-	printk("Colman: op_clock= %d\n", op_clock);
+	printk("Colman: op_clock = %d\n", op_clock);
 
 	spi_dev->pHcd_ctx=&ar6k_spi;
 	module_power_off();
@@ -1102,9 +1106,9 @@ int __init spi_jz4750_init(void) {
 	char *dmode;
 	SDIO_STATUS rc;
 	if (dma_mode) {
-		dmode="DMA MODE";
+		dmode="DMA Mode";
 	} else {
-		dmode="PIO MODE";
+		dmode="PIO Mode";
 	}
 
 	printk("athspi_jz4755_hcd version: %s, %s\n", VERSION, dmode);
@@ -1170,9 +1174,9 @@ void HW_StopTimer(PSDHCD_DEVICE hcd_ctx) {
 module_exit(spi_jz4750_cleanup);
 module_init(spi_jz4750_init);
 
-EXPORT_SYMBOL(stack_force_interrupt);
-EXPORT_SYMBOL(stack_force_interrupt_get);
 EXPORT_SYMBOL(stack_force_interrupt_clear);
+EXPORT_SYMBOL(stack_force_interrupt_get);
+EXPORT_SYMBOL(stack_force_interrupt);
 
 MODULE_AUTHOR(AUTHOR);
 MODULE_DESCRIPTION(DESCRIPTION);

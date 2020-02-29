@@ -1610,7 +1610,6 @@ SDIO_STATUS HcdRequest(PSDHCD pHcd) {
   Notes: The bus driver guarantees that HCD config requests are serialized with HCD bus requests
 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-//SDIO_STATUS HcdConfig(PSDHCD pHcd, PSDCONFIG pConfig) __attribute__ ((section ("xxv")));
 SDIO_STATUS HcdConfig(PSDHCD pHcd, PSDCONFIG pConfig) {
 	PSDHCD_DEVICE pDevice = (PSDHCD_DEVICE)pHcd->pContext;
 	SDIO_STATUS status = SDIO_STATUS_SUCCESS;
