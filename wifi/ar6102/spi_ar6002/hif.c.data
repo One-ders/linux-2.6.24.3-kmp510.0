@@ -1,0 +1,106 @@
+
+
+00000000 l       .rodata.str1.4 00000000 $LC0
+"<1>%s: Device: %p\n"
+00000014 l       .rodata.str1.4 00000000 $LC1
+"<1>Debug Assert Caught, file %s, Line: %d, Test: %s\n"
+0000004c l       .rodata.str1.4 00000000 $LC2
+"/app1/colman2/ar6k/AR6102-2.2.0.78/AR6kSDK.build_sw.78/host/os/linux/../../hif/spi2/linux_athspi/hif.c"
+000000b4 l       .rodata.str1.4 00000000 $LC3
+"status == A_OK"
+000000c4 l       .rodata.str1.4 00000000 $LC4
+"<1> SPI2 HIF requires sync mode IRQ processing \n"
+000000f8 l       .rodata.str1.4 00000000 $LC5
+"<1>Invalid configuration opcode: %d\n"
+00000120 l       .rodata.str1.4 00000000 $LC6
+"<1>\n/app1/colman2/ar6k/AR6102-2.2.0.78/AR6kSDK.build_sw.78/host/os/linux/../../hif/spi2/linux_athspi/hif.c:%d: Assertion handle != NULL failed!\n"
+000001b4 l       .rodata.str1.4 00000000 $LC7
+"handle != NULL"
+000001c4 l       .rodata.str1.4 00000000 $LC8
+"function != NULL"
+00000200 l       .rodata.str1.4 00000000 $LC11
+"SDIO_SUCCESS(status)"
+000001d8 l       .rodata.str1.4 00000000 $LC9
+"device != NULL"
+000001e8 l       .rodata.str1.4 00000000 $LC10
+"device->handle != NULL"
+00000228 l       .rodata.str1.4 00000000 $LC13
+"Colman: Re-enable IRQ\n"
+00000218 l       .rodata.str1.4 00000000 $LC12
+"request != NULL"
+00000240 l       .rodata.str1.4 00000000 $LC14
+"busrequest->request == request"
+00000294 l       .rodata.str1.4 00000000 $LC17
+"<1>Address mode: Incremental\n"
+000002d8 l       .rodata.str1.4 00000000 $LC19
+"<1>Debug Assert Caught, File %s, Line: %d, Test:%s \n"
+00000310 l       .rodata.str1.4 00000000 $LC20
+"length <= HIF_MBOX_WIDTH"
+00000394 l       .rodata.str1.4 00000000 $LC24
+"<1>Direction: Write\n"
+00000350 l       .rodata.str1.4 00000000 $LC22
+"<1>Execution mode: Synchronous\n"
+000002b4 l       .rodata.str1.4 00000000 $LC18
+"<1>Invalid address mode: 0x%08x\n"
+0000027c l       .rodata.str1.4 00000000 $LC16
+"<1>Address mode: Fixed\n"
+0000032c l       .rodata.str1.4 00000000 $LC21
+"<1>Unable to allocate bus request\n"
+00000428 l       .rodata.str1.4 00000000 $LC29
+"<1>HIF Read/Write failure: %d\n"
+00000408 l       .rodata.str1.4 00000000 $LC28
+"<1>Invalid direction: 0x%08x\n"
+000003e4 l       .rodata.str1.4 00000000 $LC27
+"<1> --- MAILBOX READ ACCESS!!!!\n"
+000003d0 l       .rodata.str1.4 00000000 $LC26
+"<1>Direction: Read\n"
+000003ac l       .rodata.str1.4 00000000 $LC25
+"<1>--- MAILBOX WRITE ACCESS!!!!\n"
+00000370 l       .rodata.str1.4 00000000 $LC23
+"<1>Execution mode: Asynchronous\n"
+00000260 l       .rodata.str1.4 00000000 $LC15
+"<1>Invalid data length: %d\n"
+00000448 l       .rodata.str1.4 00000000 $LC30
+"<1>Spi Internal Read/Write failure: %d\n"
+00000548 l       .rodata.str1.4 00000000 $LC34
+"<1>HIFGetLookAhead:lookahead:0x%4.4X\n"
+00000470 l       .rodata.str1.4 00000000 $LC31
+"<1>HIFGetLookAhead:  bytesAvail:%d\n"
+00000494 l       .rodata.str1.4 00000000 $LC32
+"<1>\n/app1/colman2/ar6k/AR6102-2.2.0.78/AR6kSDK.build_sw.78/host/os/linux/../../hif/spi2/linux_athspi/hif.c:%d: Assertion assembledLookAhead != 0 failed!\n"
+00000530 l       .rodata.str1.4 00000000 $LC33
+"assembledLookAhead != 0"
+00000608 l       .rodata.str1.4 00000000 $LC41
+"<1>Failed to configure the device\n"
+00000580 l       .rodata.str1.4 00000000 $LC36
+"sdiobd_spi_raw"
+00000590 l       .rodata.str1.4 00000000 $LC37
+"<1>SPI card: %s\n"
+00000570 l       .rodata.str1.4 00000000 $LC35
+"<1>Device: %p\n"
+000005a4 l       .rodata.str1.4 00000000 $LC38
+"<1>Stack version: %d.%d\n"
+000005c0 l       .rodata.str1.4 00000000 $LC39
+"<1>Maximum block length: %d bytes\n"
+000005e4 l       .rodata.str1.4 00000000 $LC40
+"<1>Current block length: %d bytes\n"
+0000062c l       .rodata.str1.4 00000000 $LC42
+"<1>Device rejected\n"
+00000788 l       .rodata.str1.4 00000000 $LC49
+"<1>-hifGetPendingEvents\n"
+00000640 l       .rodata.str1.4 00000000 $LC43
+"<1>+hifGetPendingEvents : (hifdev: 0x%X) \n"
+00000750 l       .rodata.str1.4 00000000 $LC48
+"<1>hifGetLookAhead: bytesAvail:%d, lookahead:0x%4.4X\n"
+000006fc l       .rodata.str1.4 00000000 $LC46
+"<1>hifGetPendingEvents : SPI INTR_CAUSE: 0x%x\n"
+0000072c l       .rodata.str1.4 00000000 $LC47
+"<1>hifGetLookAhead:  bytesAvail:%d\n"
+0000066c l       .rodata.str1.4 00000000 $LC44
+"<1>\n/app1/colman2/ar6k/AR6102-2.2.0.78/AR6kSDK.build_sw.78/host/os/linux/../../hif/spi2/linux_athspi/hif.c:%d: Assertion FALSE failed!\n"
+000006f4 l       .rodata.str1.4 00000000 $LC45
+"FALSE"
+000007a4 l       .rodata.str1.4 00000000 $LC50
+"<1>Unregistering with the bus driver\n"
+000007cc l       .rodata.str1.4 00000000 $LC51
+"callbacks != NULL"

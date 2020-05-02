@@ -1,0 +1,93 @@
+000012bc l       .rodata.str1.4 00000000 $LC0
+<1>--- EP : %d  ServiceID: 0x%X    --------------\n
+000012f0 l       .rodata.str1.4 00000000 $LC1
+<1> this:0x%X next:0x%X prev:0x%X\n
+00001314 l       .rodata.str1.4 00000000 $LC2
+<1> DistFlags          : 0x%X \n
+00001334 l       .rodata.str1.4 00000000 $LC3
+<1> TxCreditsNorm      : %d \n
+00001354 l       .rodata.str1.4 00000000 $LC4
+<1> TxCreditsMin       : %d \n
+00001374 l       .rodata.str1.4 00000000 $LC5
+<1> TxCredits          : %d \n
+00001394 l       .rodata.str1.4 00000000 $LC6
+<1> TxCreditsAssigned  : %d \n
+000013b4 l       .rodata.str1.4 00000000 $LC7
+<1> TxCreditsSeek      : %d \n
+000013d4 l       .rodata.str1.4 00000000 $LC8
+<1> TxCreditSize       : %d \n
+000013f4 l       .rodata.str1.4 00000000 $LC9
+<1> TxCreditsPerMaxMsg : %d \n
+00001414 l       .rodata.str1.4 00000000 $LC10
+<1> TxCreditsToDist    : %d \n
+00001434 l       .rodata.str1.4 00000000 $LC11
+<1> TxQueueDepth       : %d \n
+00001454 l       .rodata.str1.4 00000000 $LC12
+<1>----------------------------------------------------\n
+00001490 l       .rodata.str1.4 00000000 $LC13
+<1>  calling distribute function (%s) (dfn:0x%X, ctxt:0x%X, dist:0x%X) \n
+000014dc l       .rodata.str1.4 00000000 $LC14
+Dump State
+000014e8 l       .rodata.str1.4 00000000 $LC15
+<1>HTCSendPktCompletionHandler: request failed (status:%d, ep:%d) \n
+0000152c l       .rodata.str1.4 00000000 $LC16
+<1>  Flushing TX packet:0x%X, length:%d, ep:%d tag:0x%X \n
+00001568 l       .rodata.str1.4 00000000 $LC17
+<1>Debug Assert Caught, File %s, Line: %d, Test:%s \n
+000015a0 l       .rodata.str1.4 00000000 $LC18
+/app1/colman2/ar6k/AR6102-2.2.0.78/AR6kSDK.build_sw.78/host/os/linux/../../htc2/htc_send.c
+000015fc l       .rodata.str1.4 00000000 $LC19
+FALSE
+00001604 l       .rodata.str1.4 00000000 $LC20
+SYNC
+00001614 l       .rodata.str1.4 00000000 $LC22
+<1>+-HTCIssueSend: transmit length : %d (%s) \n
+00001644 l       .rodata.str1.4 00000000 $LC23
+<1>DevSendPacket, Padded Length: %d Mbox:0x%X (mode:%s)\n
+0000160c l       .rodata.str1.4 00000000 $LC21
+ASYNC
+00001680 l       .rodata.str1.4 00000000 $LC24
+<1>+HTCTrySend (pPkt:0x%X)\n
+00001704 l       .rodata.str1.4 00000000 $LC27
+<1>-HTCTrySend:  \n
+000017b0 l       .rodata.str1.4 00000000 $LC32
+<1> Host Needs Credits  \n
+00001744 l       .rodata.str1.4 00000000 $LC29
+<1> Creds Required:%d   Got:%d\n
+00001718 l       .rodata.str1.4 00000000 $LC28
+<1> Got head packet:0x%X , Queue Depth: %d\n
+00001764 l       .rodata.str1.4 00000000 $LC30
+Seek Credits
+0000169c l       .rodata.str1.4 00000000 $LC25
+<1>Endpoint %d, TX queue is full, Depth:%d, Max:%d \n
+000016d4 l       .rodata.str1.4 00000000 $LC26
+<1> Calling driver's send full callback.... \n
+00001774 l       .rodata.str1.4 00000000 $LC31
+<1> Not enough credits for ep %d leaving packet in queue..\n
+000017fc l       .rodata.str1.4 00000000 $LC35
+<1> Ep %d has %d credits and %d Packets in TX Queue \n
+00001834 l       .rodata.str1.4 00000000 $LC36
+<1>-HTCCheckEndpointTxQueues \n
+000017cc l       .rodata.str1.4 00000000 $LC33
+Activity Change
+000017dc l       .rodata.str1.4 00000000 $LC34
+<1>+HTCCheckEndpointTxQueues \n
+000018d4 l       .rodata.str1.4 00000000 $LC40
+<1>-HTCSendPkt \n
+00001854 l       .rodata.str1.4 00000000 $LC37
+<1>+HTCSendPkt: Enter endPointId: %d, buffer: 0x%X, length: %d \n
+00001898 l       .rodata.str1.4 00000000 $LC38
+ep < ENDPOINT_MAX
+000018ac l       .rodata.str1.4 00000000 $LC39
+<1> Endpoint %d, TX packet dropped \n
+0000191c l       .rodata.str1.4 00000000 $LC42
+<1>  Endpoint %d got %d credits \n
+00001984 l       .rodata.str1.4 00000000 $LC45
+<1>-HTCProcessCreditRpt \n
+00001940 l       .rodata.str1.4 00000000 $LC43
+<1>  Report indicated %d credits to distribute \n
+000018e8 l       .rodata.str1.4 00000000 $LC41
+<1>+HTCProcessCreditRpt, Credit Report Entries:%d \n
+00001974 l       .rodata.str1.4 00000000 $LC44
+Send Complete
+

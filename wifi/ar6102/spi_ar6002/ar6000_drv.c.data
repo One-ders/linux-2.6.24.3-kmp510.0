@@ -1,0 +1,583 @@
+0000323c l       .rodata.str1.4 00000000 $LC0
+"%02x: "
+00003244 l       .rodata.str1.4 00000000 $LC1
+"\n"
+00003248 l       .rodata.str1.4 00000000 $LC2
+"Filter for this cmd=%d not defined\n"
+0000326c l       .rodata.str1.4 00000000 $LC3
+"Number of Cached PMKIDs is %d\n"
+0000328c l       .rodata.str1.4 00000000 $LC4
+"\nBSSID %d "
+00003298 l       .rodata.str1.4 00000000 $LC5
+"%2.2x"
+000032a0 l       .rodata.str1.4 00000000 $LC6
+"\nPMKID %d "
+00000018 l       .rodata.cst4   00000000 $LC7
+000032ac l       .rodata.str1.4 00000000 $LC8
+"lq threshold range %d, lq %d\n"
+000032cc l       .rodata.str1.4 00000000 $LC9
+"Tx retries reach maximum!\n"
+000032e8 l       .rodata.str1.4 00000000 $LC10
+"Disconnect Data : BSSID: "
+00003304 l       .rodata.str1.4 00000000 $LC11
+"%2.2x:%2.2x:%2.2x:%2.2x:%2.2x:%2.2x "
+0000332c l       .rodata.str1.4 00000000 $LC12
+" RSSI %d DISASSOC Time %d NO_TXRX_TIME %d\n"
+00003358 l       .rodata.str1.4 00000000 $LC13
+"Connect Data: BSSID: "
+00003370 l       .rodata.str1.4 00000000 $LC14
+" RSSI %d ASSOC Time %d TXRX_TIME %d\n"
+00003398 l       .rodata.str1.4 00000000 $LC15
+"Last Data Tx Time (b4 Disassoc) %d First Data Tx Time (after Assoc) %d\n"
+000033e0 l       .rodata.str1.4 00000000 $LC16
+"WOW pattern %d of %d patterns\n"
+00003400 l       .rodata.str1.4 00000000 $LC17
+"disabled"
+0000341c l       .rodata.str1.4 00000000 $LC20
+"asleep"
+00003424 l       .rodata.str1.4 00000000 $LC21
+"wow mode = %s host mode = %s\n"
+0000340c l       .rodata.str1.4 00000000 $LC18
+"enabled"
+00003414 l       .rodata.str1.4 00000000 $LC19
+"awake"
+00003444 l       .rodata.str1.4 00000000 $LC22
+"id=%d size=%d offset=%d\n"
+00003460 l       .rodata.str1.4 00000000 $LC23
+"wow pattern = "
+00003470 l       .rodata.str1.4 00000000 $LC24
+"\nwow mask = "
+00003480 l       .rodata.str1.4 00000000 $LC25
+"ROAM TABLE NO OF ENTRIES is %d ROAM MODE is %d\n"
+000034b0 l       .rodata.str1.4 00000000 $LC26
+"[%d]bssid %2.2x:%2.2x:%2.2x:%2.2x:%2.2x:%2.2x "
+000034e0 l       .rodata.str1.4 00000000 $LC27
+"RSSI %d RSSIDT %d LAST RSSI %d UTIL %d ROAM_UTIL %d BIAS %d\n"
+00003520 l       .rodata.str1.4 00000000 $LC28
+"Channel Change notification\nOld Channel: %d, New Channel: %d\n"
+00003560 l       .rodata.str1.4 00000000 $LC29
+"AR6000 CAC notification. AC = %d, cacIndication = 0x%x, statusCode = 0x%x\n"
+000035ac l       .rodata.str1.4 00000000 $LC30
+"AR6000 Error on Target. Error = 0x%x\n"
+000035d4 l       .rodata.str1.4 00000000 $LC31
+"AR6000 Error type = "
+0000366c l       .rodata.str1.4 00000000 $LC38
+"INVALID\n"
+000035ec l       .rodata.str1.4 00000000 $LC32
+"WMI_TARGET_PM_ERR_FAIL"
+00003604 l       .rodata.str1.4 00000000 $LC33
+"WMI_TARGET_KEY_NOT_FOUND"
+00003620 l       .rodata.str1.4 00000000 $LC34
+"WMI_TARGET_DECRYPTION_ERR"
+0000363c l       .rodata.str1.4 00000000 $LC35
+"WMI_TARGET_BMISS"
+00003650 l       .rodata.str1.4 00000000 $LC36
+"WMI_PSDISABLE_NODE_JOIN"
+00003668 l       .rodata.str1.4 00000000 $LC37
+"%s\n"
+00003678 l       .rodata.str1.4 00000000 $LC39
+"AR6000 Reg Code = 0x%x\n"
+00003690 l       .rodata.str1.4 00000000 $LC40
+"%d %d (%d)\n"
+0000369c l       .rodata.str1.4 00000000 $LC41
+"%d %d (%d): 0x%x\n"
+000036b0 l       .rodata.str1.4 00000000 $LC42
+"%d %d (%d): 0x%x, 0x%x\n"
+000036c8 l       .rodata.str1.4 00000000 $LC43
+"Invalid args: %d\n"
+00003750 l       .rodata.str1.4 00000000 $LC48
+"Cipher not supported in AP mode Open auth\n"
+0000377c l       .rodata.str1.4 00000000 $LC49
+"Cipher not supported in AP mode WPA\n"
+000037a4 l       .rodata.str1.4 00000000 $LC50
+"Cipher not supported in AP mode WPA2\n"
+000037cc l       .rodata.str1.4 00000000 $LC51
+"This key mgmt type not supported in AP mode\n"
+00003728 l       .rodata.str1.4 00000000 $LC47
+"Mixed cipher not supported in AP mode\n"
+000036dc l       .rodata.str1.4 00000000 $LC44
+"COMMIT: No change in profile!!!\n"
+00003700 l       .rodata.str1.4 00000000 $LC45
+"SSID not set!!!\n"
+00003714 l       .rodata.str1.4 00000000 $LC46
+"Channel not set!!!\n"
+000037fc l       .rodata.str1.4 00000000 $LC52
+"<1>\n/app1/colman2/ar6k/AR6102-2.2.0.78/AR6kSDK.build_sw.78/host/os/linux/ar6000_drv.c:%d: Assertion ar != NULL failed!\n"
+00003874 l       .rodata.str1.4 00000000 $LC53
+"ar != NULL"
+00003880 l       .rodata.str1.4 00000000 $LC54
+"<1>\n/app1/colman2/ar6k/AR6102-2.2.0.78/AR6kSDK.build_sw.78/host/os/linux/ar6000_drv.c:%d: Assertion cookie != NULL failed!\n"
+000038fc l       .rodata.str1.4 00000000 $LC55
+"cookie != NULL"
+0000390c l       .rodata.str1.4 00000000 $LC56
+"<1>\n/app1/colman2/ar6k/AR6102-2.2.0.78/AR6kSDK.build_sw.78/host/os/linux/ar6000_drv.c:%d: Assertion num <= (HTC_MAILBOX_NUM_MAX - 1) failed!\n"
+0000399c l       .rodata.str1.4 00000000 $LC57
+"num <= (HTC_MAILBOX_NUM_MAX - 1)"
+000039c0 l       .rodata.str1.4 00000000 $LC58
+"%2.2x "
+000039c8 l       .rodata.str1.4 00000000 $LC59
+"AR6000 scan complete: %d\n"
+000039e4 l       .rodata.str1.4 00000000 $LC60
+"WMI event ID : 0x%4.4X, len = %d too big for IWEVCUSTOM (max=%d) \n"
+00003a28 l       .rodata.str1.4 00000000 $LC61
+"rssi Threshold range = %d tag = %d  rssi = %d\n"
+00003aec l       .rodata.str1.4 00000000 $LC69
+"%s: file read error, length=[0x%x]\n"
+00003acc l       .rodata.str1.4 00000000 $LC68
+"%s: Get inode from filp failed\n"
+00003aa8 l       .rodata.str1.4 00000000 $LC67
+"%s: File Operation Method Error\n"
+00003b10 l       .rodata.str1.4 00000000 $LC70
+"%s: Enter, filename=%s\n"
+00003b48 l       .rodata.str1.4 00000000 $LC72
+"%s file offset opsition: %xh\n"
+00003b88 l       .rodata.str1.4 00000000 $LC74
+"%s: Try to get file size error\n"
+00003ba8 l       .rodata.str1.4 00000000 $LC75
+"%s: length=%d, address=0x%x\n"
+00003c14 l       .rodata.str1.4 00000000 $LC78
+"%s: BMILZData: len=%d, org_len=%d\n"
+00003c58 l       .rodata.str1.4 00000000 $LC80
+"%s: BMIWriteMemory failed, ret=%d\n"
+00003bc8 l       .rodata.str1.4 00000000 $LC76
+"%s: BMILZStreamStart failed, ret=%d\n"
+00003b68 l       .rodata.str1.4 00000000 $LC73
+"%s: kernel memory alloc error\n"
+00003bf0 l       .rodata.str1.4 00000000 $LC77
+"%s: file read error, remaining=%d\n"
+00003c38 l       .rodata.str1.4 00000000 $LC79
+"%s: BMILZData failed, ret=%d\n"
+00003b28 l       .rodata.str1.4 00000000 $LC71
+"%s: file %s filp_open error\n"
+00003cd0 l       .rodata.str1.4 00000000 $LC83
+"AR6000 TKIP MIC error received for keyid %d %scast\n"
+00003d2c l       .rodata.str1.4 00000000 $LC87
+"uni"
+00003d04 l       .rodata.str1.4 00000000 $LC84
+"multi"
+00003d0c l       .rodata.str1.4 00000000 $LC85
+"mult"
+00003d14 l       .rodata.str1.4 00000000 $LC86
+"%s(keyid=%d %sicast)"
+00003d30 l       .rodata.str1.4 00000000 $LC88
+"un"
+00003c7c l       .rodata.str1.4 00000000 $LC81
+"AP TKIP MIC error received from aid=%d\n"
+00003ca4 l       .rodata.str1.4 00000000 $LC82
+"%s addr=%2.2x:%2.2x:%2.2x:%2.2x:%2.2x:%2.2x"
+00003d34 l       .rodata.str1.4 00000000 $LC89
+"%s%2.2x%2.2x%2.2x%2.2x%2.2x%2.2x%2.2x%2.2x"
+00003d60 l       .rodata.str1.4 00000000 $LC90
+"DEL STA %2.2x:%2.2x:%2.2x:%2.2x:%2.2x:%2.2x  aid=%d REASON=%d\n"
+00003da0 l       .rodata.str1.4 00000000 $LC91
+"<1>\n/app1/colman2/ar6k/AR6102-2.2.0.78/AR6kSDK.build_sw.78/host/os/linux/ar6000_drv.c:%d: Assertion ar->arNodeNum <= MAX_NODE_NUM failed!\n"
+00003e2c l       .rodata.str1.4 00000000 $LC92
+"ar->arNodeNum <= MAX_NODE_NUM"
+00003e4c l       .rodata.str1.4 00000000 $LC93
+"ar6000_data_tx start - skb=0x%x, data=0x%x, len=0x%x\n"
+00003e84 l       .rodata.str1.4 00000000 $LC94
+"ar6000_data_tx-wmi_dot11_hdr_add failed\n"
+00003eb0 l       .rodata.str1.4 00000000 $LC95
+"ar6000_data_tx - wmi_dix_2_dot3 failed\n"
+00003ed8 l       .rodata.str1.4 00000000 $LC96
+"ar6000_data_tx - wmi_data_hdr_add failed\n"
+00003f20 l       .rodata.str1.4 00000000 $LC98
+" eid %d is NOT mapped!\n"
+00003f04 l       .rodata.str1.4 00000000 $LC97
+"IRQs disabled:AR6000_LOCK\n"
+00003f38 l       .rodata.str1.4 00000000 $LC99
+"IRQs disabled: AR6000_UNLOCK\n"
+00003f58 l       .rodata.str1.4 00000000 $LC100
+"<1>\n/app1/colman2/ar6k/AR6102-2.2.0.78/AR6kSDK.build_sw.78/host/os/linux/ar6000_drv.c:%d: Assertion isMcastQueued == FALSE failed!\n"
+00003fdc l       .rodata.str1.4 00000000 $LC101
+"isMcastQueued == FALSE"
+00004024 l       .rodata.str1.4 00000000 $LC103
+"ServiceID not mapped %d\n"
+00003ff4 l       .rodata.str1.4 00000000 $LC102
+"Failed to connect to %s service status:%d \n"
+00004040 l       .rodata.str1.4 00000000 $LC104
+"ar6000_rx_refill: providing htc with %d buffers at eid=%d\n"
+000040b4 l       .rodata.str1.4 00000000 $LC107
+"WMI CONTROL"
+000040c0 l       .rodata.str1.4 00000000 $LC108
+"WMI DATA BE"
+000040cc l       .rodata.str1.4 00000000 $LC109
+"WMI DATA BK"
+000040d8 l       .rodata.str1.4 00000000 $LC110
+"WMI DATA VI"
+000040e4 l       .rodata.str1.4 00000000 $LC111
+"WMI DATA VO"
+000043c0 l       .rodata.str1.4 00000000 $LC120
+"Youli::%s: wait wmi_ready event to trigger host app area\n\n"
+0000409c l       .rodata.str1.4 00000000 $LC106
+"%s() Got WMI @ 0x%08x.\n"
+0000407c l       .rodata.str1.4 00000000 $LC105
+"%s() Failed to initialize WMI.\n"
+0000430c l       .rodata.str1.4 00000000 $LC118
+"<1>\n/app1/colman2/ar6k/AR6102-2.2.0.78/AR6kSDK.build_sw.78/host/os/linux/ar6000_drv.c:%d: Assertion arAc2EndpointID(ar,WMM_AC_VO) != 0 failed!\n"
+0000439c l       .rodata.str1.4 00000000 $LC119
+"arAc2EndpointID(ar,WMM_AC_VO) != 0"
+00004258 l       .rodata.str1.4 00000000 $LC116
+"<1>\n/app1/colman2/ar6k/AR6102-2.2.0.78/AR6kSDK.build_sw.78/host/os/linux/ar6000_drv.c:%d: Assertion arAc2EndpointID(ar,WMM_AC_VI) != 0 failed!\n"
+000042e8 l       .rodata.str1.4 00000000 $LC117
+"arAc2EndpointID(ar,WMM_AC_VI) != 0"
+000041a4 l       .rodata.str1.4 00000000 $LC114
+"<1>\n/app1/colman2/ar6k/AR6102-2.2.0.78/AR6kSDK.build_sw.78/host/os/linux/ar6000_drv.c:%d: Assertion arAc2EndpointID(ar,WMM_AC_BK) != 0 failed!\n"
+00004234 l       .rodata.str1.4 00000000 $LC115
+"arAc2EndpointID(ar,WMM_AC_BK) != 0"
+000040f0 l       .rodata.str1.4 00000000 $LC112
+"<1>\n/app1/colman2/ar6k/AR6102-2.2.0.78/AR6kSDK.build_sw.78/host/os/linux/ar6000_drv.c:%d: Assertion arAc2EndpointID(ar,WMM_AC_BE) != 0 failed!\n"
+00004180 l       .rodata.str1.4 00000000 $LC113
+"arAc2EndpointID(ar,WMM_AC_BE) != 0"
+000043fc l       .rodata.str1.4 00000000 $LC121
+"Length: %d (Total size: %d)\n"
+0000446c l       .rodata.str1.4 00000000 $LC125
+"%s(): WMI stopped\n"
+0000441c l       .rodata.str1.4 00000000 $LC122
+"+ar6000_destroy \n"
+00004430 l       .rodata.str1.4 00000000 $LC123
+"%s(): Failed to get device structure\n"
+00004534 l       .rodata.str1.4 00000000 $LC131
+"-ar6000_destroy \n"
+000044bc l       .rodata.str1.4 00000000 $LC128
+"Shuting down HTC .... \n"
+00004480 l       .rodata.str1.4 00000000 $LC126
+"%s(): WMI not ready 0x%08x 0x%08x\n"
+00004510 l       .rodata.str1.4 00000000 $LC130
+" Host does not want target reset. \n"
+000044d8 l       .rodata.str1.4 00000000 $LC129
+" Attempting to reset target on instance destroy.... \n"
+000044a4 l       .rodata.str1.4 00000000 $LC127
+"Shut down WMI\n"
+00004458 l       .rodata.str1.4 00000000 $LC124
+"%s(): Disconnect\n"
+00004564 l       .rodata.str1.4 00000000 $LC133
+"<3>ar6000_target_failure: target asserted \n"
+00004590 l       .rodata.str1.4 00000000 $LC134
+"Youli::%s: use wmi_ready event trigger setting host app\n"
+000045cc l       .rodata.str1.4 00000000 $LC135
+"Youli::%s:#########Unable to set the host app area\n"
+00004600 l       .rodata.str1.4 00000000 $LC136
+"mac address = %2.2x:%2.2x:%2.2x:%2.2x:%2.2x:%2.2x\n"
+00004744 l       .rodata.str1.4 00000000 $LC139
+"ar6000_rx ar=0x%x eid=%d, skb=0x%x, data=0x%x, len=0x%x "
+00004780 l       .rodata.str1.4 00000000 $LC140
+"ERR\n"
+00004788 l       .rodata.str1.4 00000000 $LC141
+"OK\n"
+00004634 l       .rodata.str1.4 00000000 $LC137
+"<1>\n/app1/colman2/ar6k/AR6102-2.2.0.78/AR6kSDK.build_sw.78/host/os/linux/ar6000_drv.c:%d: Assertion (status != A_OK) || (pPacket->pBuffer == (A_NETBUF_DATA(skb) + HTC_HEADER_LEN)) failed!\n"
+000046f4 l       .rodata.str1.4 00000000 $LC138
+"(status != A_OK) || (pPacket->pBuffer == (A_NETBUF_DATA(skb) + HTC_HEADER_LEN))"
+0000478c l       .rodata.str1.4 00000000 $LC142
+"TOO SHORT or TOO LONG\n"
+000047a4 l       .rodata.str1.4 00000000 $LC143
+"<1>\n/app1/colman2/ar6k/AR6102-2.2.0.78/AR6kSDK.build_sw.78/host/os/linux/ar6000_drv.c:%d: Assertion FALSE failed!\n"
+00004818 l       .rodata.str1.4 00000000 $LC144
+"FALSE"
+00004820 l       .rodata.str1.4 00000000 $LC145
+"AR6000 disconnected"
+00004834 l       .rodata.str1.4 00000000 $LC146
+" from %2.2x:%2.2x:%2.2x:%2.2x:%2.2x:%2.2x "
+00004860 l       .rodata.str1.4 00000000 $LC147
+"\nDisconnect Reason is %d"
+0000487c l       .rodata.str1.4 00000000 $LC148
+"Protocol Reason/Status Code is %d"
+000048a0 l       .rodata.str1.4 00000000 $LC149
+" "
+000048ac l       .rodata.str1.4 00000000 $LC151
+"AssocResp Frame = %s"
+000048a4 l       .rodata.str1.4 00000000 $LC150
+"NULL"
+000048c4 l       .rodata.str1.4 00000000 $LC152
+"ar_contrstatus = ol_tx: skb=0x%x, len=0x%x eid =%d\n"
+00004930 l       .rodata.str1.4 00000000 $LC154
+"WMI cmd send, msgNo %d :"
+0000494c l       .rodata.str1.4 00000000 $LC155
+"%x "
+000048f8 l       .rodata.str1.4 00000000 $LC153
+" WMI Control EP full, dropping packet : 0x%X, len:%d \n"
+00004ad4 l       .rodata.str1.4 00000000 $LC166
+"Timer WAR enabled\n"
+00004bac l       .rodata.str1.4 00000000 $LC172
+"processDot11Hdr enabled\n"
+00004c34 l       .rodata.str1.4 00000000 $LC176
+"ar6000_avail: name=%s hifdevice=0x%x, dev=0x%x (%d), ar=0x%x\n"
+00004c74 l       .rodata.str1.4 00000000 $LC177
+"old options [%d] old sleep [%d]\n"
+00004c98 l       .rodata.str1.4 00000000 $LC178
+"use internal clock\n"
+00004cac l       .rodata.str1.4 00000000 $LC179
+"AR6000: download fake eeprom\n"
+00004ccc l       .rodata.str1.4 00000000 $LC180
+"AR6000: BMISetAppStart\n"
+00004ce4 l       .rodata.str1.4 00000000 $LC181
+"AR6000: enable HI_OPTION_TIMER_WAR\n"
+00004d08 l       .rodata.str1.4 00000000 $LC182
+"AR6000: firmware_transfer\n"
+00004950 l       .rodata.str1.4 00000000 $LC156
+"ar6000_available\n"
+00004964 l       .rodata.str1.4 00000000 $LC157
+"ar6000_available: max devices reached\n"
+000049e4 l       .rodata.str1.4 00000000 $LC160
+"Skip flash feature not supported\n"
+0000498c l       .rodata.str1.4 00000000 $LC158
+"ar6000_available: can't alloc etherdev\n"
+000049b4 l       .rodata.str1.4 00000000 $LC159
+"<2>ar6000_available: Could not allocate memory\n"
+00004a34 l       .rodata.str1.4 00000000 $LC162
+"Serial console prints enabled\n"
+00004b40 l       .rodata.str1.4 00000000 $LC169
+"Firmware mode set\n"
+00004aa8 l       .rodata.str1.4 00000000 $LC165
+"BMIWriteMemory for enabletimerwar failed \n"
+00004b54 l       .rodata.str1.4 00000000 $LC170
+"BMIReadMemory for processDot11Hdr failed \n"
+00004ae8 l       .rodata.str1.4 00000000 $LC167
+"BMIReadMemory for setting fwmode failed \n"
+00004b80 l       .rodata.str1.4 00000000 $LC171
+"BMIWriteMemory for processDot11Hdr failed \n"
+00004b14 l       .rodata.str1.4 00000000 $LC168
+"BMIWriteMemory for setting fwmode failed \n"
+00004bfc l       .rodata.str1.4 00000000 $LC174
+" BMI enabled \n"
+00004a7c l       .rodata.str1.4 00000000 $LC164
+"BMIReadMemory for enabletimerwar failed \n"
+00004a08 l       .rodata.str1.4 00000000 $LC161
+"BMIWriteMemory for enableuartprint failed \n"
+00004d24 l       .rodata.str1.4 00000000 $LC183
+"%s: ar6000_init failed, ret=%d\n"
+00004bc8 l       .rodata.str1.4 00000000 $LC173
+"BMIWriteMemory for hi_end_RAM_reserve_sz failed \n"
+00004c0c l       .rodata.str1.4 00000000 $LC175
+"ar6000_avail: register_netdev failed\n"
+00004a54 l       .rodata.str1.4 00000000 $LC163
+"BMIWriteMemory for htc version failed \n"
+00004d44 l       .rodata.str1.4 00000000 $LC184
+"Unable to send heart beat challenge\n"
+00004d6c l       .rodata.str1.4 00000000 $LC185
+"WMI Control Endpoint is FULL!!! \n"
+00004d90 l       .rodata.str1.4 00000000 $LC186
+"ar6000 : WMI get stats timeout \n"
+00004fac l       .rodata.str1.4 00000000 $LC193
+"ar6000_tx_complete skb=0x%x data=0x%x len=0x%x eid=%d "
+00004ee8 l       .rodata.str1.4 00000000 $LC191
+"<1>\n/app1/colman2/ar6k/AR6102-2.2.0.78/AR6kSDK.build_sw.78/host/os/linux/ar6000_drv.c:%d: Assertion pPacket->ActualLength == A_NETBUF_LEN(skb) failed!\n"
+00004f80 l       .rodata.str1.4 00000000 $LC192
+"pPacket->ActualLength == A_NETBUF_LEN(skb)"
+00004fe4 l       .rodata.str1.4 00000000 $LC194
+"%s() -TX ERROR, status: 0x%x\n"
+00004db4 l       .rodata.str1.4 00000000 $LC187
+"<1>\n/app1/colman2/ar6k/AR6102-2.2.0.78/AR6kSDK.build_sw.78/host/os/linux/ar6000_drv.c:%d: Assertion skb failed!\n"
+00004e28 l       .rodata.str1.4 00000000 $LC188
+"skb"
+00004e2c l       .rodata.str1.4 00000000 $LC189
+"<1>\n/app1/colman2/ar6k/AR6102-2.2.0.78/AR6kSDK.build_sw.78/host/os/linux/ar6000_drv.c:%d: Assertion pPacket->pBuffer == A_NETBUF_DATA(skb) failed!\n"
+00004ec0 l       .rodata.str1.4 00000000 $LC190
+"pPacket->pBuffer == A_NETBUF_DATA(skb)"
+00005004 l       .rodata.str1.4 00000000 $LC195
+"NEW STA %2.2x:%2.2x:%2.2x:%2.2x:%2.2x:%2.2x  aid=%d WPAIE=%d\n"
+00005044 l       .rodata.str1.4 00000000 $LC196
+"AR6000 connected event on freq %d "
+00005068 l       .rodata.str1.4 00000000 $LC197
+"with bssid %2.2x:%2.2x:%2.2x:%2.2x:%2.2x:%2.2x  listenInterval=%d, beaconInterval = %d, beaconIeLen = %d assocReqLen=%d assocRespLen =%d\n"
+00005110 l       .rodata.str1.4 00000000 $LC199
+"Network: Adhoc (Joiner)\n"
+00005158 l       .rodata.str1.4 00000000 $LC202
+"%s"
+000050f4 l       .rodata.str1.4 00000000 $LC198
+"Network: Adhoc (Creator)\n"
+0000512c l       .rodata.str1.4 00000000 $LC200
+"Network: Infrastructure\n"
+00005148 l       .rodata.str1.4 00000000 $LC201
+"\nBeaconIEs= "
+0000515c l       .rodata.str1.4 00000000 $LC203
+"\nAssocRespIEs= "
+0000516c l       .rodata.str1.4 00000000 $LC204
+"AssocReqIEs= "
+00003a58 l       .rodata.str1.4 00000000 $LC62
+"ar6000 version: %s\n"
+00003a6c l       .rodata.str1.4 00000000 $LC63
+"2.2.0.78-101112"
+00003a94 l       .rodata.str1.4 00000000 $LC66
+"Normal WIFI mode.\n"
+00003a88 l       .rodata.str1.4 00000000 $LC65
+"ART mode.\n"
+00003a7c l       .rodata.str1.4 00000000 $LC64
+"TCMD mode.\n"
+00004548 l       .rodata.str1.4 00000000 $LC132
+"ar6000_cleanup: success\n"
+
+
+
+00000000 l    df *ABS*  00000000 ar6000_drv.c
+0000a07c l     F .text  00000008 ar6000_cookie_cleanup
+0000a084 l     F .text  0000001c ar6000_alloc_cookie
+0000aee0 l     F .text  00000080 ar6000_free_cookie
+0000afac l     F .text  00000130 ar6000_dump_skb
+00000000 l     F .init.text     0000015c ar6000_init_module
+00000834 l     O .bss   00000004 probed.23805
+0000ed18 l     F .text  00000044 ar6000_unavail_ev
+00010138 l     F .text  00000dac ar6000_avail_ev
+000000c4 l     O .rodata        00000004 art_fw
+00000134 l     O .rodata        00000017 __func__.23894
+0000b79c l     F .text  0000040c firmware_transfer
+000000d8 l     O .rodata        00000012 __func__.23846
+000000ec l     O .rodata        00000004 tag.25220
+000000f0 l     O .rodata        00000004 tag.25188
+0000d03c l     F .text  00000780 ar6000_data_tx
+0000dad0 l     F .text  000001cc ar6000_connectservice
+0000dc9c l     F .text  000001fc ar6000_rx_refill
+00011a0c l     F .text  000005a0 ar6000_tx_complete
+0000f048 l     F .text  00000628 ar6000_rx
+0001118c l     F .text  000002a0 ar6000_tx_queue_full
+00000840 l     O .bss   00002580 s_ar_cookie_mem
+00000114 l     O .rodata        0000000c __func__.24250
+0000e33c l     F .text  00000080 deliver_frames_to_nw_stack
+0000e7fc l     F .text  0000051c ar6000_destroy
+000000b4 l     O .rodata        0000000f __func__.24073
+0000083c l     O .bss   00000004 ar6000_devices
+00000000 l     F .exit.text     00000070 ar6000_cleanup_module
+0000ed5c l     F .text  000000cc ar6000_target_failure
+00000838 l     O .bss   00000004 sip.24052
+00000100 l     O .rodata        00000013 __func__.24869
+00010ee4 l     F .text  0000020c ar6000_detect_error
+00011868 l     F .text  000001a4 ar6000_open
+000110fc l     F .text  00000090 ar6000_close
+000110f0 l     F .text  0000000c ar6000_get_stats
+0001142c l     F .text  0000043c ar6000_get_iwstats
+000000c8 l     O .rodata        00000010 __func__.23933
+00000120 l     O .rodata        00000013 __func__.24557
+000000fc l     O .rodata        00000004 tag1.24932
+000000f4 l     O .rodata        00000004 beaconIetag.24934
+000000f8 l     O .rodata        00000004 tag2.24933
+00000000 l     O .modinfo       00000015 __mod_resetoktype255
+00000000 l     O __param        00000014 __param_resetok
+0000014c l     O .rodata        00000008 __param_str_resetok
+00000018 l     O .modinfo       0000001f __mod_war23838_disabledtype254
+00000014 l     O __param        00000014 __param_war23838_disabled
+00000154 l     O .rodata        00000012 __param_str_war23838_disabled
+00000038 l     O .modinfo       00000021 __mod_hifBusRequestNumMaxtype253
+00000028 l     O __param        00000014 __param_hifBusRequestNumMax
+00000168 l     O .rodata        00000014 __param_str_hifBusRequestNumMax
+0000005c l     O .modinfo       00000022 __mod_tx_completetype252
+0000003c l     O __param        00000014 __param_tx_complete
+0000017c l     O .rodata        0000000c __param_str_tx_complete
+00000188 l     O .rodata        00000018 __param_arr_tx_complete
+00000080 l     O .modinfo       0000001e __mod_tx_posttype251
+00000050 l     O __param        00000014 __param_tx_post
+000001a0 l     O .rodata        00000008 __param_str_tx_post
+000001a8 l     O .rodata        00000018 __param_arr_tx_post
+000000a0 l     O .modinfo       00000021 __mod_tx_attempttype250
+00000064 l     O __param        00000014 __param_tx_attempt
+000001c0 l     O .rodata        0000000b __param_str_tx_attempt
+000001cc l     O .rodata        00000018 __param_arr_tx_attempt
+000000c4 l     O .modinfo       00000032 __mod_txcreditintrenableaggregatetype223
+00000078 l     O __param        00000014 __param_txcreditintrenableaggregate
+000001e4 l     O .rodata        0000001c __param_str_txcreditintrenableaggregate
+00000200 l     O .rodata        00000018 __param_arr_txcreditintrenableaggregate
+000000f8 l     O .modinfo       00000029 __mod_txcreditintrenabletype222
+0000008c l     O __param        00000014 __param_txcreditintrenable
+00000218 l     O .rodata        00000013 __param_str_txcreditintrenable
+0000022c l     O .rodata        00000018 __param_arr_txcreditintrenable
+00000124 l     O .modinfo       00000028 __mod_txcreditsconsumedtype221
+000000a0 l     O __param        00000014 __param_txcreditsconsumed
+00000244 l     O .rodata        00000012 __param_str_txcreditsconsumed
+00000258 l     O .rodata        00000018 __param_arr_txcreditsconsumed
+0000014c l     O .modinfo       00000029 __mod_txcreditsavailabletype220
+000000b4 l     O __param        00000014 __param_txcreditsavailable
+00000270 l     O .rodata        00000013 __param_str_txcreditsavailable
+00000284 l     O .rodata        00000018 __param_arr_txcreditsavailable
+00000178 l     O .modinfo       00000016 __mod_debughiftype219
+000000c8 l     O __param        00000014 __param_debughif
+0000029c l     O .rodata        00000009 __param_str_debughif
+00000190 l     O .modinfo       00000016 __mod_debugbmitype218
+000000dc l     O __param        00000014 __param_debugbmi
+000002a8 l     O .rodata        00000009 __param_str_debugbmi
+000001a8 l     O .modinfo       00000016 __mod_debughtctype217
+000000f0 l     O __param        00000014 __param_debughtc
+000002b4 l     O .rodata        00000009 __param_str_debughtc
+000001c0 l     O .modinfo       00000019 __mod_debugdrivertype216
+00000104 l     O __param        00000014 __param_debugdriver
+000002c0 l     O .rodata        0000000c __param_str_debugdriver
+000001dc l     O .modinfo       00000018 __mod_debugflagstype215
+00000118 l     O __param        00000014 __param_debugflags
+000002cc l     O .rodata        0000000b __param_str_debugflags
+000001f4 l     O .modinfo       00000016 __mod_testmodetype167
+0000012c l     O __param        00000014 __param_testmode
+000002d8 l     O .rodata        00000009 __param_str_testmode
+0000020c l     O .modinfo       0000001b __mod_eeprom_datatype163
+00000140 l     O __param        00000014 __param_eeprom_data
+000002e4 l     O .rodata        0000000c __param_str_eeprom_data
+00000228 l     O .modinfo       0000001a __mod_eeprom_bintype162
+00000154 l     O __param        00000014 __param_eeprom_bin
+000002f0 l     O .rodata        0000000b __param_str_eeprom_bin
+00000244 l     O .modinfo       00000019 __mod_tgt_patchtype161
+00000168 l     O __param        00000014 __param_tgt_patch
+000002fc l     O .rodata        0000000a __param_str_tgt_patch
+00000260 l     O .modinfo       00000016 __mod_tgt_fwtype160
+0000017c l     O __param        00000014 __param_tgt_fw
+00000308 l     O .rodata        00000007 __param_str_tgt_fw
+00000278 l     O .modinfo       00000017 __mod_work_modetype159
+00000190 l     O __param        00000014 __param_work_mode
+00000310 l     O .rodata        0000000a __param_str_work_mode
+00000290 l     O .modinfo       0000001d __mod_processDot11Hdrtype156
+000001a4 l     O __param        00000014 __param_processDot11Hdr
+0000031c l     O .rodata        00000010 __param_str_processDot11Hdr
+000002b0 l     O .modinfo       00000020 __mod_allow_trace_signaltype155
+000001b8 l     O __param        00000014 __param_allow_trace_signal
+0000032c l     O .rodata        00000013 __param_str_allow_trace_signal
+000002d0 l     O .modinfo       00000023 __mod_reduce_credit_dribbletype154
+000001cc l     O __param        00000014 __param_reduce_credit_dribble
+00000340 l     O .rodata        00000016 __param_str_reduce_credit_dribble
+000002f4 l     O .modinfo       0000001e __mod_mbox_yield_limittype153
+000001e0 l     O __param        00000014 __param_mbox_yield_limit
+00000358 l     O .rodata        00000011 __param_str_mbox_yield_limit
+00000314 l     O .modinfo       00000014 __mod_fwmodetype152
+000001f4 l     O __param        00000014 __param_fwmode
+0000036c l     O .rodata        00000007 __param_str_fwmode
+00000328 l     O .modinfo       0000001c __mod_enabletimerwartype151
+00000208 l     O __param        00000014 __param_enabletimerwar
+00000374 l     O .rodata        0000000f __param_str_enabletimerwar
+00000344 l     O .modinfo       0000001d __mod_enableuartprinttype150
+0000021c l     O __param        00000014 __param_enableuartprint
+00000384 l     O .rodata        00000010 __param_str_enableuartprint
+00000364 l     O .modinfo       0000001b __mod_logWmiRawMsgstype149
+00000230 l     O __param        00000014 __param_logWmiRawMsgs
+00000394 l     O .rodata        0000000e __param_str_logWmiRawMsgs
+00000380 l     O .modinfo       0000001d __mod_wlanNodeCachingtype148
+00000244 l     O __param        00000014 __param_wlanNodeCaching
+000003a4 l     O .rodata        00000010 __param_str_wlanNodeCaching
+000003a0 l     O .modinfo       00000018 __mod_wmitimeouttype147
+00000258 l     O __param        00000014 __param_wmitimeout
+000003b4 l     O .rodata        0000000b __param_str_wmitimeout
+000003b8 l     O .modinfo       00000017 __mod_skipflashtype146
+0000026c l     O __param        00000014 __param_skipflash
+000003c0 l     O .rodata        0000000a __param_str_skipflash
+000003d0 l     O .modinfo       00000019 __mod_busspeedlowtype145
+00000280 l     O __param        00000014 __param_busspeedlow
+000003cc l     O .rodata        0000000c __param_str_busspeedlow
+000003ec l     O .modinfo       00000018 __mod_onebitmodetype144
+00000294 l     O __param        00000014 __param_onebitmode
+000003d8 l     O .rodata        0000000b __param_str_onebitmode
+00000404 l     O .modinfo       0000001d __mod_tspecCompliancetype143
+000002a8 l     O __param        00000014 __param_tspecCompliance
+000003e4 l     O .rodata        00000010 __param_str_tspecCompliance
+00000424 l     O .modinfo       00000018 __mod_debugleveltype142
+000002bc l     O __param        00000014 __param_debuglevel
+000003f4 l     O .rodata        0000000b __param_str_debuglevel
+0000043c l     O .modinfo       00000017 __mod_bypasswmitype141
+000002d0 l     O __param        00000014 __param_bypasswmi
+00000400 l     O .rodata        0000000a __param_str_bypasswmi
+00000454 l     O .modinfo       00000017 __mod_bmienabletype140
+000002e4 l     O __param        00000014 __param_bmienable
+0000040c l     O .rodata        0000000a __param_str_bmienable
+0000046c l     O .modinfo       0000001a __mod_fwloadenabletype139
+000002f8 l     O __param        00000014 __param_fwloadenable
+00000418 l     O .rodata        0000000d __param_str_fwloadenable
+00000488 l     O .modinfo       00000017 __mod_ifnametype138
+0000030c l     O __param        00000014 __param_ifname
+00000428 l     O .rodata        00000007 __param_str_ifname
+00000430 l     O .rodata        00000008 __param_string_ifname
+000004a0 l     O .modinfo       00000022 __mod_license52
+

@@ -1,0 +1,119 @@
+000019a0 l       .rodata.str1.4 00000000 $LC0
+<1>  Flushing RX packet:0x%X, length:%d, ep:%d \n
+000019d4 l       .rodata.str1.4 00000000 $LC1
+<1>HTCUnblockRx : receiver was blocked on ep:%d, unblocking.. \n
+00001a14 l       .rodata.str1.4 00000000 $LC2
+<1>+HTCAddReceivePkt: endPointId: %d, buffer: 0x%X, length: %d\n
+00001a54 l       .rodata.str1.4 00000000 $LC3
+<1>Debug Assert Caught, File %s, Line: %d, Test:%s \n
+00001a8c l       .rodata.str1.4 00000000 $LC4
+/app1/colman2/ar6k/AR6102-2.2.0.78/AR6kSDK.build_sw.78/host/os/linux/../../htc2/htc_recv.c
+00001ae8 l       .rodata.str1.4 00000000 $LC5
+pPacket->Endpoint < ENDPOINT_MAX
+00001b0c l       .rodata.str1.4 00000000 $LC6
+<1> receiver was blocked on ep:%d, unblocking.. \n
+00001b9c l       .rodata.str1.4 00000000 $LC10
+Expected Message LookAhead
+00001dc0 l       .rodata.str1.4 00000000 $LC24
+BAD HTC Recv PKT
+00001da4 l       .rodata.str1.4 00000000 $LC23
+<1>-HTCProcessRecvHeader \n
+00001b6c l       .rodata.str1.4 00000000 $LC9
+<1>HTCProcessRecvHeader, lookahead mismatch! \n
+00001b40 l       .rodata.str1.4 00000000 $LC7
+<1>+HTCProcessRecvHeader \n
+00001b5c l       .rodata.str1.4 00000000 $LC8
+HTC Recv PKT
+00001d28 l       .rodata.str1.4 00000000 $LC18
+Next Look Ahead
+00001d8c l       .rodata.str1.4 00000000 $LC22
+HTC - Application Msg
+00001d38 l       .rodata.str1.4 00000000 $LC19
+<1> unhandled record: id:%d length:%d \n
+00001c10 l       .rodata.str1.4 00000000 $LC12
+<1>+HTCProcessTrailer (length:%d) \n
+00001c34 l       .rodata.str1.4 00000000 $LC13
+Recv Trailer
+00001cb8 l       .rodata.str1.4 00000000 $LC16
+pRecord->Length >= sizeof(HTC_LOOKAHEAD_REPORT)
+00001c44 l       .rodata.str1.4 00000000 $LC14
+<1> invalid record length: %d (id:%d) buffer has: %d bytes left \n
+00001d60 l       .rodata.str1.4 00000000 $LC20
+BAD Recv Trailer
+00001d74 l       .rodata.str1.4 00000000 $LC21
+<1>-HTCProcessTrailer \n
+00001c88 l       .rodata.str1.4 00000000 $LC15
+pRecord->Length >= sizeof(HTC_CREDIT_REPORT)
+00001bb8 l       .rodata.str1.4 00000000 $LC11
+<1>HTCProcessRecvHeader, invalid header (payloadlength should be :%d, CB[0] is:%d) \n
+00001ce8 l       .rodata.str1.4 00000000 $LC17
+<1> LookAhead Report Found (pre valid:0x%X, post valid:0x%X) \n
+00001fd8 l       .rodata.str1.4 00000000 $LC35
+SYNC
+00001fe8 l       .rodata.str1.4 00000000 $LC37
+<1>DevRecvPacket, Padded Length: %d Mbox:0x%X (mode:%s)\n
+000021c0 l       .rodata.str1.4 00000000 $LC45
+<1>-HTCRecvMessagePendingHandler \n
+00001f00 l       .rodata.str1.4 00000000 $LC31
+%s, %d, set pPacket->Completion\n
+00001fe0 l       .rodata.str1.4 00000000 $LC36
+ASYNC
+00001e84 l       .rodata.str1.4 00000000 $LC29
+pPacket->Endpoint == pHdr->EndpointID
+00002058 l       .rodata.str1.4 00000000 $LC39
+<1> recycling empty packet \n
+00002024 l       .rodata.str1.4 00000000 $LC38
+<1> completing packet 0x%X (%d bytes) on ep : %d \n
+00001dd4 l       .rodata.str1.4 00000000 $LC25
+<1>+HTCRecvMessagePendingHandler LookAhead:0x%X \n
+00002194 l       .rodata.str1.4 00000000 $LC44
+Pending BAD lookahead from lookahead report
+000020c4 l       .rodata.str1.4 00000000 $LC41
+<1>Failed to get pending message : LookAhead Value: 0x%X (status = %d) \n
+00002110 l       .rodata.str1.4 00000000 $LC42
+<1>HTCRecvMessagePendingHandler - next look ahead was non-zero : 0x%X \n
+00001e30 l       .rodata.str1.4 00000000 $LC27
+<1>Payload length %d exceeds max HTC : %d !\n
+00001e60 l       .rodata.str1.4 00000000 $LC28
+<1>Endpoint %d is not connected !\n
+00001e08 l       .rodata.str1.4 00000000 $LC26
+<1>Invalid Endpoint in look-ahead: %d \n
+00002158 l       .rodata.str1.4 00000000 $LC43
+<1>Pending Next look ahead from recv header was INVALID\n
+00001f24 l       .rodata.str1.4 00000000 $LC32
+/app1/colman2/ar6k/AR6102-2.2.0.78/AR6kSDK.build_sw.78/host/os/linux/../../htc2/AR6000/ar6k.h
+00001f84 l       .rodata.str1.4 00000000 $LC33
+FALSE
+00001eac l       .rodata.str1.4 00000000 $LC30
+<1>Payload Length Error : header reports payload of: %d, endpoint buffer size: %d \n
+00002078 l       .rodata.str1.4 00000000 $LC40
+<1> Endpoint :%d has no buffers, blocking receiver to prevent overrun.. \n
+00001f8c l       .rodata.str1.4 00000000 $LC34
+<1>DevRecvPacket, Not enough space for padlen:%d recvlen:%d bufferlen:%d \n
+00002284 l       .rodata.str1.4 00000000 $LC49
+<1>-HTCWaitforControlMessage \n
+000021e4 l       .rodata.str1.4 00000000 $LC46
+<1>+HTCWaitforControlMessage \n
+00002204 l       .rodata.str1.4 00000000 $LC47
+<1>HTCWaitforControlMessage : lookAhead : 0x%X \n
+00002238 l       .rodata.str1.4 00000000 $LC48
+<1>HTCWaitforControlMessage, HTCProcessRecvHeader failed (status = %d) \n
+00002434 l       .rodata.str1.4 00000000 $LC57
+<1>-HTCRecvCompleteHandler\n
+000022d4 l       .rodata.str1.4 00000000 $LC51
+<1>HTCRecvCompleteHandler: request failed (status:%d, ep:%d) \n
+000023f0 l       .rodata.str1.4 00000000 $LC56
+<1>HTCRecvCompleteHandler , message fetch failed (status = %d) \n
+000022a4 l       .rodata.str1.4 00000000 $LC50
+<1>+HTCRecvCompleteHandler (status:%d, ep:%d) \n
+00002314 l       .rodata.str1.4 00000000 $LC52
+<1>HTCRecvCompleteHandler - next look ahead was non-zero : 0x%X \n
+000023b0 l       .rodata.str1.4 00000000 $LC55
+<1>HTCRecvCompleteHandler - rechecking for more messages...\n
+0000238c l       .rodata.str1.4 00000000 $LC54
+BAD lookahead from lookahead report
+00002358 l       .rodata.str1.4 00000000 $LC53
+<1>Next look ahead from recv header was INVALID\n
+
+
+.rodata + 0x50 = HTCRecvMessagePendingHandler

@@ -1,0 +1,120 @@
+00002984 l       .rodata.str1.4 00000000 $LC0
+<1>BMI: Failed to get pending events \n
+000029dc l       .rodata.str1.4 00000000 $LC2
+<1>BMI Communication timeout - bmiBufferReceive FIFO empty\n
+000029ac l       .rodata.str1.4 00000000 $LC1
+<1>Unable to read RX_LOOKAHEAD_VALID register.\n
+00002a18 l       .rodata.str1.4 00000000 $LC3
+<1>Unable to read the BMI data from the device\n
+00002ab8 l       .rodata.str1.4 00000000 $LC6
+<1>BMI Communication timeout - bmiBufferSend\n
+00002a48 l       .rodata.str1.4 00000000 $LC4
+<1>%s, Unable to decrement the command credit count register\n
+00002a88 l       .rodata.str1.4 00000000 $LC5
+<1>Unable to send the BMI data to the device\n
+00002b44 l       .rodata.str1.4 00000000 $LC10
+<1>BMI Done: Exit\n
+00002ae8 l       .rodata.str1.4 00000000 $LC7
+<1>BMIDone skipped\n
+00002afc l       .rodata.str1.4 00000000 $LC8
+<1>BMI Done: Enter (device: 0x%p)\n
+00002b20 l       .rodata.str1.4 00000000 $LC9
+<1>Unable to write to the device\n
+00002bdc l       .rodata.str1.4 00000000 $LC14
+<1>BMI LZ Stream Start: Exit\n
+00002b70 l       .rodata.str1.4 00000000 $LC12
+<1>BMI LZ Stream Start: Enter (device: 0x%p, address: 0x%x)\n
+00002b58 l       .rodata.str1.4 00000000 $LC11
+<1>Command disallowed\n
+00002bb0 l       .rodata.str1.4 00000000 $LC13
+<1>Unable to Start LZ Stream to the device\n
+00000000 l       .rodata.cst4   00000000 $LC17
+0xf0020000
+00002c34 l       .rodata.str1.4 00000000 $LC16
+<1>BMI LZ Data: Exit\n
+00002bfc l       .rodata.str1.4 00000000 $LC15
+<1>BMI Send LZ Data: Enter (device: 0x%p, length: %d)\n
+00002c90 l       .rodata.str1.4 00000000 $LC19
+<1>BMI Change rompatch Activation: Exit\n
+00002c4c l       .rodata.str1.4 00000000 $LC18
+<1>BMI Change rompatch Activation: Enter (device: 0x%p, count: %d)\n
+00002d00 l       .rodata.str1.4 00000000 $LC21
+<1>BMI rompatch UNinstall: (rompatch_id=0x%x)\n
+00002cbc l       .rodata.str1.4 00000000 $LC20
+<1>BMI rompatch Uninstall: Enter (device: 0x%p, rompatch_id: %d)\n
+00002dbc l       .rodata.str1.4 00000000 $LC24
+<1>BMI rompatch Install: (rompatch_id=%d)\n
+00002d30 l       .rodata.str1.4 00000000 $LC22
+<1>BMI rompatch Install: Enter (device: 0x%p, ROMaddr: 0x%x, RAMaddr: 0x%x length: %d activate: %d)\n
+00002d98 l       .rodata.str1.4 00000000 $LC23
+<1>Unable to read from the device\n
+00002e34 l       .rodata.str1.4 00000000 $LC26
+<1>BMI Read SOC Register: Exit\n
+00002de8 l       .rodata.str1.4 00000000 $LC25
+<1>BMI Write SOC Register: Enter (device: 0x%p, address: 0x%x, param: %d)\n
+00002e94 l       .rodata.str1.4 00000000 $LC28
+<1>BMI Read SOC Register: Exit (value: %d)\n
+00002e54 l       .rodata.str1.4 00000000 $LC27
+<1>BMI Read SOC Register: Enter (device: 0x%p, address: 0x%x)\n
+00002efc l       .rodata.str1.4 00000000 $LC30
+<1>BMI Set App Start: Exit\n
+00002ec0 l       .rodata.str1.4 00000000 $LC29
+<1>BMI Set App Start: Enter (device: 0x%p, address: 0x%x)\n
+00002f58 l       .rodata.str1.4 00000000 $LC32
+<1>BMI Execute: Exit (param: %d)\n
+00002f18 l       .rodata.str1.4 00000000 $LC31
+<1>BMI Execute: Enter (device: 0x%p, address: 0x%x, param: %d)\n
+00000004 l       .rodata.cst4   00000000 $LC35
+0x44050000
+00000008 l       .rodata.cst4   00000000 $LC36
+0x48050000
+0000000c l       .rodata.cst4   00000000 $LC37
+0x4c050000
+00002fc4 l       .rodata.str1.4 00000000 $LC34
+<1>BMI Write Memory: Exit\n
+00002f7c l       .rodata.str1.4 00000000 $LC33
+<1>BMI Write Memory: Enter (device: 0x%p, address: 0x%x, length: %d)\n
+00000010 l       .rodata.cst4   00000000 $LC40
+0x50060000
+00000014 l       .rodata.cst4   00000000 $LC41
+0x54060000
+00003028 l       .rodata.str1.4 00000000 $LC39
+<1>BMI Read Memory: Exit\n
+00002fe0 l       .rodata.str1.4 00000000 $LC38
+<1>BMI Read Memory: Enter (device: 0x%p, address: 0x%x, length: %d)\n
+00003204 l       .rodata.str1.4 00000000 $LC48
+<1>BMI Get Target Info: Exit (ver: 0x%x type: 0x%x)\n
+00003044 l       .rodata.str1.4 00000000 $LC42
+<1>BMI Get Target Info: Enter (device: 0x%p)\n
+000031c8 l       .rodata.str1.4 00000000 $LC47
+<1>Unable to read Target Info (%d bytes) from the device\n
+00003074 l       .rodata.str1.4 00000000 $LC43
+<1>Unable to read Target Version from the device\n
+000030a8 l       .rodata.str1.4 00000000 $LC44
+<1>Unable to read Target Info Byte Count from the device\n
+000030e4 l       .rodata.str1.4 00000000 $LC45
+<1>./app1/colman2/ar6k/AR6102-2.2.0.78/AR6kSDK.build_sw.78/host/os/linux/../../bmi/src/bmi.c:%d: Assertion targ_info->target_info_byte_count == sizeof(*targ_info) failed!\n
+00003190 l       .rodata.str1.4 00000000 $LC46
+targ_info->target_info_byte_count == sizeof(*targ_info)
+
+
+
+00000000 l    df *ABS*  00000000 bmi.c
+000002d4 l     O .bss   00000004 pendingEventsFuncCheck
+000002d8 l     O .bss   00000004 word_available.16228
+000002dc l     O .bss   00000004 getPendingEventsFunc.16227
+000002e0 l     O .bss   00000004 cmdCredits.16203
+00000070 l     O .rodata        0000000e __func__.16205
+000002e4 l     O .bss   00000008 data.16185
+000002ec l     O .bss   00000108 data.16161
+00008b40 l     F .text  000001c4 _BMIrompatchChangeActivation
+000003f4 l     O .bss   00000108 data.16124
+000004fc l     O .bss   00000008 data.16105
+00000504 l     O .bss   00000014 data.16082
+00000518 l     O .bss   0000000c data.16060
+00000524 l     O .bss   00000008 data.16039
+0000052c l     O .bss   00000008 data.16021
+00000534 l     O .bss   0000000c data.16001
+00000540 l     O .bss   0000010c data.15974
+0000064c l     O .bss   0000010c data.15942
+

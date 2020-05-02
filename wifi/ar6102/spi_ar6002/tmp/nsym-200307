@@ -1,0 +1,131 @@
+
+spi_ar6002.ko:     file format elf32-tradlittlemips
+
+SYMBOL TABLE:
+00000000 l    d  .reginfo	00000000 .reginfo
+00000000 l    d  .text	00000000 .text
+00000000 l    d  *ABS*	00000000 .rel.text
+00000000 l    d  .rodata	00000000 .rodata
+00000000 l    d  *ABS*	00000000 .rel.rodata
+00000000 l    d  .rodata.str1.4	00000000 .rodata.str1.4
+00000000 l    d  .modinfo	00000000 .modinfo
+00000000 l    d  __versions	00000000 __versions
+00000000 l    d  .data	00000000 .data
+00000000 l    d  *ABS*	00000000 .rel.data
+00000000 l    d  .gnu.linkonce.this_module	00000000 .gnu.linkonce.this_module
+00000000 l    d  .bss	00000000 .bss
+00000000 l    d  .comment	00000000 .comment
+00000024 l    d  .mdebug.abi32	00000000 .mdebug.abi32
+00000000 l    d  .pdr	00000000 .pdr
+00000000 l    d  *ABS*	00000000 .rel.pdr
+00000000 l    d  *ABS*	00000000 .shstrtab
+00000000 l    d  *ABS*	00000000 .symtab
+00000000 l    d  *ABS*	00000000 .strtab
+00000000 l    df *ABS*	00000000 hif.c
+0000002c l     O .rodata	0000000e __func__.16961
+0000127c l     F .text	00000128 hifMaskUnmaskRecvMsg
+0000175c l     F .text	0000034c hifGetPendingEvents
+00000018 l     O .bss	000002a0 hifDevice
+00000274 l     F .text	0000006c hifCleanupDevice
+0000003c l     O .rodata	0000000d __func__.16857
+00000f28 l     F .text	00000178 SPIReadWriteInternal
+00000018 l     O .rodata	00000012 __func__.16985
+00000000 l       .rodata.str1.4	00000000 $LC0
+00000014 l       .rodata.str1.4	00000000 $LC1
+0000004c l       .rodata.str1.4	00000000 $LC2
+000000a8 l       .rodata.str1.4	00000000 $LC3
+000000b8 l       .rodata.str1.4	00000000 $LC4
+000000ec l       .rodata.str1.4	00000000 $LC5
+00000114 l       .rodata.str1.4	00000000 $LC6
+00000198 l       .rodata.str1.4	00000000 $LC7
+000001a8 l       .rodata.str1.4	00000000 $LC8
+000001e4 l       .rodata.str1.4	00000000 $LC11
+000001bc l       .rodata.str1.4	00000000 $LC9
+000001cc l       .rodata.str1.4	00000000 $LC10
+0000020c l       .rodata.str1.4	00000000 $LC13
+000001fc l       .rodata.str1.4	00000000 $LC12
+00000224 l       .rodata.str1.4	00000000 $LC14
+00000278 l       .rodata.str1.4	00000000 $LC17
+000002bc l       .rodata.str1.4	00000000 $LC19
+000002f4 l       .rodata.str1.4	00000000 $LC20
+00000378 l       .rodata.str1.4	00000000 $LC24
+00000334 l       .rodata.str1.4	00000000 $LC22
+00000298 l       .rodata.str1.4	00000000 $LC18
+00000260 l       .rodata.str1.4	00000000 $LC16
+00000310 l       .rodata.str1.4	00000000 $LC21
+0000040c l       .rodata.str1.4	00000000 $LC29
+000003ec l       .rodata.str1.4	00000000 $LC28
+000003c8 l       .rodata.str1.4	00000000 $LC27
+000003b4 l       .rodata.str1.4	00000000 $LC26
+00000390 l       .rodata.str1.4	00000000 $LC25
+00000354 l       .rodata.str1.4	00000000 $LC23
+00000244 l       .rodata.str1.4	00000000 $LC15
+0000042c l       .rodata.str1.4	00000000 $LC30
+00000520 l       .rodata.str1.4	00000000 $LC34
+00000454 l       .rodata.str1.4	00000000 $LC31
+00000478 l       .rodata.str1.4	00000000 $LC32
+00000508 l       .rodata.str1.4	00000000 $LC33
+000005e0 l       .rodata.str1.4	00000000 $LC41
+00000558 l       .rodata.str1.4	00000000 $LC36
+00000568 l       .rodata.str1.4	00000000 $LC37
+00000548 l       .rodata.str1.4	00000000 $LC35
+0000057c l       .rodata.str1.4	00000000 $LC38
+00000598 l       .rodata.str1.4	00000000 $LC39
+000005bc l       .rodata.str1.4	00000000 $LC40
+00000604 l       .rodata.str1.4	00000000 $LC42
+00000754 l       .rodata.str1.4	00000000 $LC49
+00000618 l       .rodata.str1.4	00000000 $LC43
+0000071c l       .rodata.str1.4	00000000 $LC48
+000006c8 l       .rodata.str1.4	00000000 $LC46
+000006f8 l       .rodata.str1.4	00000000 $LC47
+00000644 l       .rodata.str1.4	00000000 $LC44
+000006c0 l       .rodata.str1.4	00000000 $LC45
+00000770 l       .rodata.str1.4	00000000 $LC50
+00000798 l       .rodata.str1.4	00000000 $LC51
+00000000 l    df *ABS*	00000000 spi_ar6002.mod.c
+00000000 l     O .modinfo	00000023 __mod_srcversion31
+00000024 l     O .modinfo	00000009 __module_depends
+00000000 l     O __versions	000001c0 ____versions
+00000030 l     O .modinfo	00000046 __mod_vermagic5
+0000004c g     F .text	00000018 HIFDetachHTC
+00000884 g     F .text	000000e0 hifRWCompletionHandler
+00000000 g     O .gnu.linkonce.this_module	00000160 __this_module
+00000000         *UND*	00000000 debughif
+00000000         *UND*	00000000 stack_force_interrupt_clear
+00001b8c g     F .text	00000100 HIFInit
+00000010 g     F .text	0000003c HIFAttachHTC
+00000964 g     F .text	000000c0 hifAllocateBusRequest
+00000228 g     F .text	0000004c delHifDevice
+00000000         *UND*	00000000 local_bh_enable
+00000668 g     F .text	0000012c HIFUnMaskInterrupt
+00000794 g     F .text	000000f0 hifFreeBusRequest
+00000420 g     F .text	0000004c HIFgetDevice
+00000118 g     F .text	00000110 HIFConfigureDevice
+00000000         *UND*	00000000 local_bh_disable
+00000000         *UND*	00000000 SDIO_RegisterFunction
+00000000 g     F .text	00000008 HIFClaimDevice
+00000008 g     O .data	000000f0 FunctionContext
+000005f8 g     F .text	00000070 HIFAckInterrupt
+00000000         *UND*	00000000 strstr
+00000000 g     O .bss	00000018 osdrvCallbacks
+00000a24 g     F .text	00000504 HIFReadWrite
+00000000         *UND*	00000000 panic
+0000046c g     F .text	00000050 addHifDevice
+000010a0 g     F .text	000001a8 HIFGetLookAhead
+00000000         *UND*	00000000 printk
+000013a4 g     F .text	000003b8 hifDeviceInserted
+00000000         *UND*	00000000 debuglevel
+00000000         *UND*	00000000 memset
+00000064 g     F .text	000000b4 hifIRQHandler
+00000000         *UND*	00000000 SDIO_UnregisterFunction
+00000000 g     O .data	00000008 Ids
+00001248 g     F .text	00000034 hifConfigureSPI
+000004ec g     F .text	0000010c HIFMaskInterrupt
+000002e0 g     F .text	00000140 hifDeviceRemoved
+00000000         *UND*	00000000 SDLIB_IssueConfig
+00001aa8 g     F .text	000000e4 HIFShutDownDevice
+00000000         *UND*	00000000 stack_force_interrupt_get
+000004bc g     F .text	00000030 HIFSpiDumpRegs
+00000008 g     F .text	00000008 HIFReleaseDevice
+
+
