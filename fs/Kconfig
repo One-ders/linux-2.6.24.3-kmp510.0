@@ -940,11 +940,11 @@ config PROC_KCORE
 	depends on PROC_FS && MMU
 
 config PROC_VMCORE
-        bool "/proc/vmcore support (EXPERIMENTAL)"
-        depends on PROC_FS && EXPERIMENTAL && CRASH_DUMP
+	bool "/proc/vmcore support (EXPERIMENTAL)"
+	depends on PROC_FS && EXPERIMENTAL && CRASH_DUMP
 	default y
-        help
-        Exports the dump image of crashed kernel in ELF format.
+	help
+	Exports the dump image of crashed kernel in ELF format.
 
 config PROC_SYSCTL
 	bool "Sysctl support (/proc/sys)" if EMBEDDED
@@ -957,7 +957,7 @@ config PROC_SYSCTL
 	  a recompile of the kernel or reboot of the system.  The primary
 	  interface is through /proc/sys.  If you say Y here a tree of
 	  modifiable sysctl entries will be generated beneath the
-          /proc/sys directory. They are explained in the files
+	  /proc/sys directory. They are explained in the files
 	  in <file:Documentation/sysctl/>.  Note that enabling this
 	  option will enlarge the kernel by at least 8 KB.
 
@@ -1522,8 +1522,8 @@ config UFS_FS
 	  experimental "UFS file system write support", below. Please read the
 	  file <file:Documentation/filesystems/ufs.txt> for more information.
 
-          The recently released UFS2 variant (used in FreeBSD 5.x) is
-          READ-ONLY supported.
+	  The recently released UFS2 variant (used in FreeBSD 5.x) is
+	  READ-ONLY supported.
 
 	  If you only intend to mount files from some other Unix over the
 	  network using NFS, you don't need the UFS file system support (but
@@ -1918,10 +1918,10 @@ config CIFS
 	  If you need to mount to Samba or Windows from this machine, say Y.
 
 config CIFS_STATS
-        bool "CIFS statistics"
-        depends on CIFS
-        help
-          Enabling this option will cause statistics for each server share
+	bool "CIFS statistics"
+	depends on CIFS
+	help
+	  Enabling this option will cause statistics for each server share
 	  mounted by the cifs client to be displayed in /proc/fs/cifs/Stats
 
 config CIFS_STATS2
@@ -1946,7 +1946,7 @@ config CIFS_WEAK_PW_HASH
 	  (since 1997) support stronger NTLM (and even NTLMv2 and Kerberos)
 	  security mechanisms. These hash the password more securely
 	  than the mechanisms used in the older LANMAN version of the
-          SMB protocol needed to establish sessions with old SMB servers.
+	  SMB protocol needed to establish sessions with old SMB servers.
 
 	  Enabling this option allows the cifs module to mount to older
 	  LANMAN based servers such as OS/2 and Windows 95, but such
@@ -1965,26 +1965,26 @@ config CIFS_WEAK_PW_HASH
 	  If unsure, say N.
 
 config CIFS_XATTR
-        bool "CIFS extended attributes"
-        depends on CIFS
-        help
-          Extended attributes are name:value pairs associated with inodes by
-          the kernel or by users (see the attr(5) manual page, or visit
-          <http://acl.bestbits.at/> for details).  CIFS maps the name of
-          extended attributes beginning with the user namespace prefix
-          to SMB/CIFS EAs. EAs are stored on Windows servers without the
-          user namespace prefix, but their names are seen by Linux cifs clients
-          prefaced by the user namespace prefix. The system namespace
-          (used by some filesystems to store ACLs) is not supported at
-          this time.
+	bool "CIFS extended attributes"
+	depends on CIFS
+	help
+	  Extended attributes are name:value pairs associated with inodes by
+	  the kernel or by users (see the attr(5) manual page, or visit
+	  <http://acl.bestbits.at/> for details).  CIFS maps the name of
+	  extended attributes beginning with the user namespace prefix
+	  to SMB/CIFS EAs. EAs are stored on Windows servers without the
+	  user namespace prefix, but their names are seen by Linux cifs clients
+	  prefaced by the user namespace prefix. The system namespace
+	  (used by some filesystems to store ACLs) is not supported at
+	  this time.
 
-          If unsure, say N.
+	  If unsure, say N.
 
 config CIFS_POSIX
-        bool "CIFS POSIX Extensions"
-        depends on CIFS_XATTR
-        help
-          Enabling this option will cause the cifs client to attempt to
+	bool "CIFS POSIX Extensions"
+	depends on CIFS_XATTR
+	help
+	  Enabling this option will cause the cifs client to attempt to
 	  negotiate a newer dialect with servers, such as Samba 3.0.5
 	  or later, that optionally can handle more POSIX like (rather
 	  than Windows like) file behavior.  It also enables
