@@ -470,7 +470,7 @@ config CRYPTO_CRC32C
 	  Castagnoli, et al Cyclic Redundancy-Check Algorithm.  Used
 	  by iSCSI for header and data digests and by others.
 	  See Castagnoli93.  This implementation uses lib/libcrc32c.
-          Module will be crc32c.
+	  Module will be crc32c.
 
 config CRYPTO_CAMELLIA
 	tristate "Camellia cipher algorithms"
