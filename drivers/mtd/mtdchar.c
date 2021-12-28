@@ -531,7 +531,7 @@ static int mtd_ioctl(struct inode *inode, struct file *file,
 	{
 		struct mtd_oob_buf buf;
 		struct mtd_oob_ops ops;
-		
+
 		if (copy_from_user(&buf, argp, sizeof(struct mtd_oob_buf)))
 			return -EFAULT;
 
@@ -576,7 +576,7 @@ static int mtd_ioctl(struct inode *inode, struct file *file,
 		struct mtd_page_buf buf;
 		struct mtd_oob_ops ops;
 
-		memset(&ops, 0, sizeof(ops));	
+		memset(&ops, 0, sizeof(ops));
 #if 1
 		if(!(file->f_mode & 2))
 			return -EPERM;
@@ -596,7 +596,7 @@ static int mtd_ioctl(struct inode *inode, struct file *file,
 
 		if (ret)
 			return ret;
-		
+
 		ops.len = mtd->writesize;
 		ops.ooblen = buf.ooblength;
 		ops.ooboffs = buf.start & (mtd->oobsize - 1);
@@ -626,6 +626,7 @@ static int mtd_ioctl(struct inode *inode, struct file *file,
 		}
 
 		buf.start &= ~(mtd->oobsize - 1);
+
 		ret = mtd->write_oob(mtd, buf.start, &ops);
 
 		if (copy_to_user(argp + 2*sizeof(uint32_t), &ops.retlen,

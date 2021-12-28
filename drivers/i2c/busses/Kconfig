@@ -6,7 +6,7 @@ menu "I2C Hardware Bus support"
 
 config I2C_JZ47XX
 	tristate "JZ47XX I2C Interface support"
-	depends on SOC_JZ4730 || SOC_JZ4740 || JZ4750D_KMP510
+	depends on SOC_JZ4730 || SOC_JZ4740 || JZ4750D_KMP510 || JZ4750D_KMP811
 	help
 	  If you have devices in the Ingenic JZ4730/JZ4740 I2C bus, say yes to
 	  this option. This driver can also be built as a module.  If so, the
@@ -14,7 +14,7 @@ config I2C_JZ47XX
 
 config COLMAN_USE_SOFT_I2C
         bool "use soft mode I2C for the JZ4750D"
-        depends on I2C_JZ47XX || JZ4750D_KMP510
+        depends on I2C_JZ47XX || JZ4750D_KMP510 || JZ4750D_KMP811
         help
           ngslkdursidjsidd
 
@@ -149,7 +149,7 @@ config I2C_ELEKTOR
 	  This supports the PCF8584 ISA bus I2C adapter.  Say Y if you own
 	  such an adapter.
 
-	  This support is also available as a module.  If so, the module 
+	  This support is also available as a module.  If so, the module
 	  will be called i2c-elektor.
 
 config I2C_GPIO
@@ -201,7 +201,7 @@ config I2C_I810
 	select I2C_ALGOBIT
 	help
 	  If you say yes to this option, support will be included for the Intel
-	  810/815 family of mainboard I2C interfaces.  Specifically, the 
+	  810/815 family of mainboard I2C interfaces.  Specifically, the
 	  following versions of the chipset are supported:
 	    i810AA
 	    i810AB
@@ -257,8 +257,8 @@ config I2C_IBM_IIC
 	tristate "IBM PPC 4xx on-chip I2C interface"
 	depends on IBM_OCP
 	help
-	  Say Y here if you want to use IIC peripheral found on 
-	  embedded IBM PPC 4xx based systems. 
+	  Say Y here if you want to use IIC peripheral found on
+	  embedded IBM PPC 4xx based systems.
 
 	  This driver can also be built as a module.  If so, the module
 	  will be called i2c-ibm_iic.
@@ -278,7 +278,7 @@ config I2C_IXP4XX
 	depends on ARCH_IXP4XX
 	select I2C_ALGOBIT
 	help
-	  Say Y here if you have an Intel IXP4xx(420,421,422,425) based 
+	  Say Y here if you have an Intel IXP4xx(420,421,422,425) based
 	  system and are using GPIO lines for an I2C bus.
 
 	  This support is also available as a module. If so, the module
@@ -292,7 +292,7 @@ config I2C_IXP2000
 	depends on ARCH_IXP2000
 	select I2C_ALGOBIT
 	help
-	  Say Y here if you have an Intel IXP2000 (2400, 2800, 2850) based 
+	  Say Y here if you have an Intel IXP2000 (2400, 2800, 2850) based
 	  system and are using GPIO lines for an I2C bus.
 
 	  This support is also available as a module. If so, the module
@@ -377,7 +377,7 @@ config I2C_PARPORT
 	  on the parport driver.  This is meant for embedded systems. Don't say
 	  Y here if you intend to say Y or M there.
 
-	  This support is also available as a module.  If so, the module 
+	  This support is also available as a module.  If so, the module
 	  will be called i2c-parport.
 
 config I2C_PARPORT_LIGHT
@@ -395,12 +395,12 @@ config I2C_PARPORT_LIGHT
 	  the clean but heavy parport handling is not an option.  The
 	  drawback is a reduced portability and the impossibility to
 	  daisy-chain other parallel port devices.
-	  
+
 	  Don't say Y here if you said Y or M to i2c-parport.  Saying M to
 	  both is possible but both modules should not be loaded at the same
 	  time.
 
-	  This support is also available as a module.  If so, the module 
+	  This support is also available as a module.  If so, the module
 	  will be called i2c-parport-light.
 
 config I2C_PASEMI
@@ -421,7 +421,7 @@ config I2C_PROSAVAGE
 	    S3/VIA KM266/VT8375 aka ProSavage8
 	    S3/VIA KM133/VT8365 aka Savage4
 
-	  This support is also available as a module.  If so, the module 
+	  This support is also available as a module.  If so, the module
 	  will be called i2c-prosavage.
 
 config I2C_S3C2410
@@ -436,7 +436,7 @@ config I2C_SAVAGE4
 	depends on PCI && EXPERIMENTAL
 	select I2C_ALGOBIT
 	help
-	  If you say yes to this option, support will be included for the 
+	  If you say yes to this option, support will be included for the
 	  S3 Savage 4 I2C interface.
 
 	  This driver can also be built as a module.  If so, the module
@@ -469,7 +469,7 @@ config SCx200_I2C
 
 	  If you don't know what to do here, say N.
 
-	  This support is also available as a module.  If so, the module 
+	  This support is also available as a module.  If so, the module
 	  will be called scx200_i2c.
 
 	  This driver is deprecated and will be dropped soon. Use i2c-gpio
@@ -500,14 +500,14 @@ config SCx200_ACB
 
 	  If you don't know what to do here, say N.
 
-	  This support is also available as a module.  If so, the module 
+	  This support is also available as a module.  If so, the module
 	  will be called scx200_acb.
 
 config I2C_SIS5595
 	tristate "SiS 5595"
 	depends on PCI
 	help
-	  If you say yes to this option, support will be included for the 
+	  If you say yes to this option, support will be included for the
 	  SiS5595 SMBus (a subset of I2C) interface.
 
 	  This driver can also be built as a module.  If so, the module
@@ -517,7 +517,7 @@ config I2C_SIS630
 	tristate "SiS 630/730"
 	depends on PCI
 	help
-	  If you say yes to this option, support will be included for the 
+	  If you say yes to this option, support will be included for the
 	  SiS630 and SiS730 SMBus (a subset of I2C) interface.
 
 	  This driver can also be built as a module.  If so, the module
@@ -651,7 +651,7 @@ config I2C_PCA_ISA
 	help
 	  This driver supports ISA boards using the Philips PCA 9564
 	  Parallel bus to I2C bus controller
-	  
+
 	  This driver can also be built as a module.  If so, the module
 	  will be called i2c-pca-isa.
 

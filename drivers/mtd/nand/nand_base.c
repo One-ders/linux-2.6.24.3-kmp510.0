@@ -60,11 +60,11 @@ int global_page; /* page index of large page used for nand with multiple planes 
 int global_mafid; /* ID of manufacture */
 struct mtd_info *jz_mtd1 = NULL; /* for 1 plane operation */
 
-/* indicates whether multiple planes operation is used  by all partitions 
+/* indicates whether multiple planes operation is used  by all partitions
    if multiple planes is supported by NAND */
 char all_use_planes = 1;
 
-/* The pointer to the address of block cache for partitions which work 
+/* The pointer to the address of block cache for partitions which work
    over mtdblock-jz */
 extern struct mtd_partition partition_info[]; /* defined in jz47xx_nand.c */
 unsigned char **jz_mtdblock_cache = NULL; /* used by mtdblock-jz.c */
@@ -94,9 +94,9 @@ static struct nand_ecclayout nand_oob_64 = {
 	.eccbytes = 36,
 	.eccpos = {
 		28, 29, 30, 31,
-		32, 33, 34, 35, 36, 37, 38, 39, 
-		40, 41, 42, 43, 44, 45, 46, 47, 
-		48, 49, 50, 51, 52, 53, 54, 55, 
+		32, 33, 34, 35, 36, 37, 38, 39,
+		40, 41, 42, 43, 44, 45, 46, 47,
+		48, 49, 50, 51, 52, 53, 54, 55,
 		56, 57, 58, 59, 60, 61, 62, 63},
 	.oobfree = {
 		{.offset = 2,
@@ -106,8 +106,8 @@ static struct nand_ecclayout nand_oob_64 = {
 	.eccbytes = 28,
 	.eccpos = {
 		24, 25, 26, 27, 28, 29, 30, 31,
-		32, 33, 34, 35, 36, 37, 38, 39, 
-		40, 41, 42, 43, 44, 45, 46, 47, 
+		32, 33, 34, 35, 36, 37, 38, 39,
+		40, 41, 42, 43, 44, 45, 46, 47,
 		48, 49, 50, 51},
 	.oobfree = {
 		{.offset = 2,
@@ -166,9 +166,9 @@ static struct nand_ecclayout nand_oob_128 = {
 	.eccbytes = 104,
 	.eccpos = {
 		 24, 25, 26, 27, 28, 29, 30, 31,
-		 32, 33, 34, 35, 36, 37, 38, 39, 
-		 40, 41, 42, 43, 44, 45, 46, 47, 
-		 48, 49, 50, 51, 52, 53, 54, 55, 
+		 32, 33, 34, 35, 36, 37, 38, 39,
+		 40, 41, 42, 43, 44, 45, 46, 47,
+		 48, 49, 50, 51, 52, 53, 54, 55,
 		 56, 57, 58, 59, 60, 61, 62, 63,
 		 64, 65, 66, 67, 68, 69, 70, 71,
 		 72, 73, 74, 75, 76, 77, 78, 79,
@@ -1055,7 +1055,7 @@ static int nand_read_page_hwecc_rs(struct mtd_info *mtd, struct nand_chip *chip,
 	uint32_t *eccpos = chip->ecc.layout->eccpos;
 	uint32_t page;
 	uint8_t flag = 0;
-	
+
 	page = (buf[3]<<24) + (buf[2]<<16) + (buf[1]<<8) + buf[0];
 
 	chip->cmdfunc(mtd, NAND_CMD_READOOB, 0, page);
@@ -1783,11 +1783,11 @@ static int nand_write_page(struct mtd_info *mtd, struct nand_chip *chip,
 	int status;
 
 	global_page = page;
-	if (chip->planenum > 1)
+	if (chip->planenum > 1) {
 		chip->ecc.write_page(mtd, chip, buf);
-	else {
+	} else {
 		chip->cmdfunc(mtd, NAND_CMD_SEQIN, 0x00, page);
-		
+
 		if (unlikely(raw))
 			chip->ecc.write_page_raw(mtd, chip, buf);
 		else
@@ -1808,7 +1808,7 @@ static int nand_write_page(struct mtd_info *mtd, struct nand_chip *chip,
 #if defined(CONFIG_SOC_JZ4730) || defined(CONFIG_SOC_JZ4740)
  		chip->cmdfunc(mtd, NAND_CMD_PAGEPROG, -1, -1);
 #else
-		if (mtd->flags & MTD_NAND_CPU_MODE) {
+		if ((mtd->flags & MTD_NAND_CPU_MODE) || raw){
 			chip->cmdfunc(mtd, NAND_CMD_PAGEPROG, -1, -1);
 		}
 #endif
@@ -1911,7 +1911,7 @@ static int nand_do_write_ops(struct mtd_info *mtd, loff_mtd_t to,
 	ops->retlen = 0;
 	if (!writelen)
 		return 0;
-	
+
 	/* reject writes, which are not page aligned */
 	if (NOTALIGNED(to) || NOTALIGNED(ops->len)) {
 		printk(KERN_NOTICE "nand_write: "
@@ -1962,7 +1962,7 @@ static int nand_do_write_ops(struct mtd_info *mtd, loff_mtd_t to,
 
 		if (unlikely(oob))
 			oob = nand_fill_oob(chip, oob, ops);
-		
+
 		ret = chip->write_page(mtd, chip, wbuf, page, cached,
 				       (ops->mode == MTD_OOB_RAW));
 		if (ret)
@@ -2041,7 +2041,7 @@ static int nand_do_write_oob(struct mtd_info *mtd, loff_mtd_t to,
 {
 	int chipnr, page, status, len;
 	struct nand_chip *chip = mtd->priv;
-	
+
 	DEBUG(MTD_DEBUG_LEVEL3, "nand_write_oob: to = 0x%08x, len = %i\n",
 	      (unsigned int)to, (int)ops->ooblen);
 
@@ -2049,7 +2049,7 @@ static int nand_do_write_oob(struct mtd_info *mtd, loff_mtd_t to,
 		len = chip->ecc.layout->oobavail;
 	else
 		len = mtd->oobsize;
-	
+
 	/* Do not allow write past end of page */
 	if ((ops->ooboffs + ops->ooblen) > len) {
 		DEBUG(MTD_DEBUG_LEVEL0, "nand_write_oob: "
@@ -2097,7 +2097,7 @@ static int nand_do_write_oob(struct mtd_info *mtd, loff_mtd_t to,
 
 	memset(chip->oob_poi, 0xff, mtd->oobsize);
 	nand_fill_oob(chip, ops->oobbuf, ops);
-		
+
 	status = chip->ecc.write_oob(mtd, chip, page & chip->pagemask);
 	memset(chip->oob_poi, 0xff, mtd->oobsize);
 
@@ -2519,7 +2519,7 @@ static struct nand_flash_dev *nand_get_flash_type(struct mtd_info *mtd,
 	/* Read manufacturer and device IDs */
 	*maf_id = chip->read_byte(mtd);
 	dev_id = chip->read_byte(mtd);
-	
+
 	/* Lookup the flash id */
 	for (i = 0; nand_flash_ids[i].name != NULL; i++) {
 		if (dev_id == nand_flash_ids[i].id) {
@@ -2669,7 +2669,7 @@ int nand_scan_ident(struct mtd_info *mtd, int maxchips)
 
 	/* Read the flash type */
 	type = nand_get_flash_type(mtd, chip, busw, &nand_maf_id);
-	
+
 	global_mafid = nand_maf_id;
 
 	if (IS_ERR(type)) {
@@ -2906,7 +2906,7 @@ int nand_scan_tail(struct mtd_info *mtd)
 	if (chip->options & NAND_SKIP_BBTSCAN)
 		return 0;
 
-        /* Create jz_mtd1 for one plane operation if the NAND support multiple 
+        /* Create jz_mtd1 for one plane operation if the NAND support multiple
 	   planes operation, because some partitions will only use one plane. */
 	if ((chip->planenum == 2) && !all_use_planes) {
 		int i, len, numblocks;

@@ -163,6 +163,7 @@ static int part_write_oob(struct mtd_info *mtd, loff_mtd_t to,
 		return -EINVAL;
 	if (ops->datbuf && to + ops->len > mtd->size)
 		return -EINVAL;
+
 	return part->master->write_oob(part->master, to + part->offset, ops);
 }
 
@@ -418,7 +419,7 @@ int add_mtd_partitions(struct mtd_info *master,
 		cur_offset = slave->offset + slave->mtd.size;
 
 		printk (KERN_NOTICE "0x%09llx-0x%09llx : \"%s\" \"%s\" \"%s\"\n", slave->offset,
-			slave->offset + slave->mtd.size, slave->mtd.name, 
+			slave->offset + slave->mtd.size, slave->mtd.name,
 			((slave->mtd.flags)&MTD_NAND_CPU_MODE)?"cpu_mode":"dma_mode",
 			((slave->mtd.flags)&MTD_MTDBLOCK_JZ_INVALID)?"jz_mtdblock_invalid":"jz_mtdblock_valid");
 

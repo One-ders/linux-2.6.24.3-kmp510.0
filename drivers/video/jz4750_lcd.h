@@ -22,7 +22,7 @@
 struct jz4750_lcd_dma_desc {
 	unsigned int next_desc; 	/* LCDDAx */
 	unsigned int databuf;   	/* LCDSAx */
-	unsigned int frame_id;  	/* LCDFIDx */ 
+	unsigned int frame_id;  	/* LCDFIDx */
 	unsigned int cmd; 		/* LCDCMDx */
 	unsigned int offsize;       	/* Stride Offsize(in word) */
 	unsigned int page_width; 	/* Stride Pagewidth(in word) */
@@ -117,7 +117,9 @@ struct jz4750lcd_info {
 	#define SPCK		(32*3+26)       /*LCD_SCL*/
 	#define SPDA		(32*3+27)       /*LCD_SDA*/
 	#define LCD_RET 	(32*5+2)       /*LCD_DISP_N use for lcd reset*/
-#elif defined(CONFIG_JZ4750D_CETUS) || defined(CONFIG_JZ4750D_KMP510) /* board pavo */
+#elif defined(CONFIG_JZ4750D_CETUS) || \
+	defined(CONFIG_JZ4750D_KMP510) || \
+	defined(CONFIG_JZ4750D_KMP811) /* board pavo */
 	#define SPEN		(32*5+13)       /*LCD_CS*/
 	#define SPCK		(32*5+10)       /*LCD_SCL*/
 	#define SPDA		(32*5+11)       /*LCD_SDA*/
@@ -205,7 +207,7 @@ struct jz4750lcd_info {
 		__gpio_set_pin(SPEN);					\
 		udelay(400);						\
 	} while(0)
-	
+
 #define __lcd_special_pin_init()		\
 	do {						\
 		__gpio_as_output(SPEN); /* use SPDA */	\
@@ -310,7 +312,7 @@ do { \
 		__spi_write_reg1((reg<<2), val); \
 		udelay(100); \
 	}while(0)
-	
+
 	#define __lcd_special_pin_init() \
 	do { \
 		__gpio_as_output(SPEN); /* use SPDA */\
@@ -408,7 +410,7 @@ do { \
 		__spi_write_reg1((reg<<2|2), val); \
 		udelay(100); \
 	}while(0)
-	
+
 	#define __lcd_special_pin_init() \
 	do { \
 		__gpio_as_output(SPEN); /* use SPDA */\
@@ -458,7 +460,7 @@ do { \
 		__spi_write_reg(0x36, 0x20); \
 */
 //	} while (0)	//reg 0x0a is control the display direction:DB0->horizontal level DB1->vertical level
-	
+
 	#define __lcd_special_off() \
 	do { \
 		__spi_write_reg(0x00, 0x03); \
@@ -468,14 +470,14 @@ do { \
 
 #if defined(CONFIG_JZ4750_LCD_TRULY_TFT_GG1P0319LTSW_W)
 static inline void CmdWrite(unsigned int cmd)
-{  
+{
 	while (REG_SLCD_STATE & SLCD_STATE_BUSY); /* wait slcd ready */
 	udelay(30);
 	REG_SLCD_DATA = SLCD_DATA_RS_COMMAND | cmd;
 }
 
 static inline void DataWrite(unsigned int data)
-{  
+{
 	while (REG_SLCD_STATE & SLCD_STATE_BUSY); /* wait slcd ready */
 //	udelay(30);
 	REG_SLCD_DATA = SLCD_DATA_RS_DATA | data;
@@ -484,11 +486,11 @@ static inline void DataWrite(unsigned int data)
 
 static inline void delay(long delay_time)
 {
-	long cnt; 
+	long cnt;
 
 //  delay_time *= (384/8);
 	delay_time *= (43/8);
-	
+
 	for (cnt=0;cnt<delay_time;cnt++)
 	{
 		asm("nop\n"
@@ -519,17 +521,17 @@ static inline void delay(long delay_time)
 
 /*---- LCD Initial ----*/
 static void SlcdInit(void)
-{ 
-  delay(10000);        
+{
+  delay(10000);
   CmdWrite(0x0301); //reset
   delay(10000);
-  CmdWrite(0x0101); 
-  CmdWrite(0x0301); 
-  CmdWrite(0x0008); 
+  CmdWrite(0x0101);
+  CmdWrite(0x0301);
+  CmdWrite(0x0008);
   CmdWrite(0x2201);		//reset
   CmdWrite(0x0000);
   CmdWrite(0x0080);   //0x0020
-  delay(10000);  
+  delay(10000);
 
   CmdWrite(0x2809);
   CmdWrite(0x1900);
@@ -550,7 +552,7 @@ static void SlcdInit(void)
   CmdWrite(0x2070);
   CmdWrite(0x1e81);
   CmdWrite(0x1b01);
-  
+
   CmdWrite(0x0200);
   CmdWrite(0x0504);   //y address increcement
   CmdWrite(0x0D00);		//*240
@@ -600,46 +602,46 @@ static void SlcdInit(void)
   CmdWrite(0x0000);
   CmdWrite(0x01A0);
   CmdWrite(0x3B01);
-  
+
   CmdWrite(0x2809);
-  delay(1000);      
+  delay(1000);
   CmdWrite(0x1900);
-  delay(1000);    
+  delay(1000);
   CmdWrite(0x2110);
-  delay(1000);    
+  delay(1000);
   CmdWrite(0x1805);
-  delay(1000);        
+  delay(1000);
   CmdWrite(0x1E01);
-  delay(1000);        
+  delay(1000);
   CmdWrite(0x1847);
-  delay(1000);        
+  delay(1000);
   CmdWrite(0x1867);
-  delay(1000);        
+  delay(1000);
   CmdWrite(0x18F7);
-  delay(1000);        
-  CmdWrite(0x2100); 
-  delay(1000);     
+  delay(1000);
+  CmdWrite(0x2100);
+  delay(1000);
   CmdWrite(0x2809);
-  delay(1000);      
-  CmdWrite(0x1A05);    
-  delay(1000);       
-  CmdWrite(0x19E8);  
-  delay(1000);    
+  delay(1000);
+  CmdWrite(0x1A05);
+  delay(1000);
+  CmdWrite(0x19E8);
+  delay(1000);
   CmdWrite(0x1F64);
-  delay(1000);      
-  CmdWrite(0x2045); 
-  delay(1000);       
-  CmdWrite(0x1E81);    
-  delay(1000);  
-  CmdWrite(0x1B09); 
-  delay(1000);       
+  delay(1000);
+  CmdWrite(0x2045);
+  delay(1000);
+  CmdWrite(0x1E81);
+  delay(1000);
+  CmdWrite(0x1B09);
+  delay(1000);
   CmdWrite(0x0020);
-  delay(1000);     
+  delay(1000);
   CmdWrite(0x0120);
-  delay(1000);     
-  
+  delay(1000);
+
   CmdWrite(0x3B01);
-  delay(1000); 
+  delay(1000);
 
   /* Set Window(239,319), Set Cursor(239,319) */
   CmdWrite(0x0510);
@@ -653,7 +655,7 @@ static void SlcdInit(void)
   CmdWrite(0x42EF);
   CmdWrite(0x443F);
   CmdWrite(0x4301);
-    
+
 }
 
 #if defined(CONFIG_JZ4750_FUWA)
@@ -727,7 +729,7 @@ do { \
 do { \
 	__lcd_special_off();	 \
 } while (0)
-#elif defined(CONFIG_JZ4750D_KMP510)
+#elif defined(CONFIG_JZ4750D_KMP510) || defined(CONFIG_JZ4750D_KMP811)
 #define __lcd_display_pin_init() \
 do { \
         __gpio_as_output((2*32)+23);     \
