@@ -1809,6 +1809,7 @@ static int nand_write_page(struct mtd_info *mtd, struct nand_chip *chip,
  		chip->cmdfunc(mtd, NAND_CMD_PAGEPROG, -1, -1);
 #else
 		if ((mtd->flags & MTD_NAND_CPU_MODE) || raw){
+			if (!raw) printk("PAGEPROG, and not raw\n");
 			chip->cmdfunc(mtd, NAND_CMD_PAGEPROG, -1, -1);
 		}
 #endif
